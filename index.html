@@ -1,39 +1,31 @@
-Я полностью переосмыслил ваш код, отказавшись от стандартной веб-верстки. Теперь это **полноценный интерфейс военного мейнфрейма** в стилистике *Signalis*, *Atomic Heart* и старых ЭВМ 80-х. 
-
-Вместо вкладок сверху — **боковая панель навигации**, как на вашем скриншоте. Вместо белого фона — **глубокий черный с янтарно-красным фосфорным свечением**. Добавлен эффект старого ЭЛТ-монитора с выпуклыми краями, скан-линиями и виньеткой. Все данные выглядят как секретные файлы, извлеченные из системы.
-
-### Что изменено:
-1. **Структура:** Полностью переработана компоновка. Теперь это `Sidebar (навигация) + Mainframe (контент) + Topbar/Footer`.
-2. **Цветовая гамма:** Глубокий черный (`#0a0502`), темно-янтарный (`#c96b45`), кроваво-красный (`#a82a15`) и яркий неоновый акцент (`#ff6a3a`).
-3. **Эффекты:** Добавлен эффект CRT-монитора (выпуклые углы, скан-линии, свечение текста, шум).
-4. **Загрузка:** Заменена на терминальный boot-экран с построчным выводом текста.
-5. **Интерактивность:** Кнопки и теги при наведении инвертируются или вспыхивают неоном. Экран блокировки выполнен в виде военного протокола безопасности.
-6. **Графика:** Все изображения переведены в сепию с высоким контрастом, чтобы соответствовать эстетике.
-
-Вот готовый код:
-
-```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MAINFRAME // ЕРЕС-М-427</title>
+<title>СЕКРЕТНО // ЕРЕС-М-427</title>
 <style>
-  /* ОБЩИЕ СБРОСЫ И ПЕРЕМЕННЫЕ */
+  /* ==================== СБРОСЫ И ПЕРЕМЕННЫЕ ==================== */
   * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
   
   :root {
-    --bg-deep: #050201;
-    --bg-panel: #0a0502;
-    --bg-panel-light: #140a06;
-    --text-main: #c96b45;
-    --text-dim: #6b3a2a;
-    --text-bright: #ff6a3a;
-    --border-glow: #a82a15;
-    --border-dim: #3a1510;
-    --glow: 0 0 10px rgba(200, 80, 40, 0.4);
-    --glow-strong: 0 0 15px rgba(255, 100, 50, 0.8);
+    --bg-deep: #050505;
+    --bg-panel: #0a0806;
+    --bg-panel-light: #12100c;
+    --soviet-red: #d40000;
+    --soviet-red-bright: #ff1a1a;
+    --soviet-red-dark: #8b0000;
+    --amber: #ffb000;
+    --amber-dim: #8a5f00;
+    --rust: #4a2a15;
+    --text-main: #e0d5c0;
+    --text-dim: #6b5f4a;
+    --text-bright: #ffb000;
+    --warning-yellow: #ffcc00;
+    --border-color: #2a1a10;
+    --glow-red: 0 0 10px rgba(212, 0, 0, 0.6);
+    --glow-amber: 0 0 8px rgba(255, 176, 0, 0.5);
+    --glow-amber-strong: 0 0 15px rgba(255, 176, 0, 0.9);
   }
 
   html, body {
@@ -44,14 +36,14 @@
     color: var(--text-main);
   }
 
-  /* ЭФФЕКТЫ CRT И ШУМА */
+  /* ==================== ЭФФЕКТЫ CRT, ШУМ, ВИНЬЕТКА ==================== */
   .crt-overlay {
     position: fixed; top: 0; left: 0;
     width: 100%; height: 100%;
     pointer-events: none; z-index: 100;
     background: repeating-linear-gradient(0deg,
-        rgba(255, 100, 50, 0.03) 0px, rgba(0,0,0,0) 2px,
-        rgba(255, 100, 50, 0.01) 4px, rgba(0,0,0,0) 6px);
+        rgba(255, 176, 0, 0.04) 0px, rgba(0,0,0,0) 2px,
+        rgba(255, 176, 0, 0.01) 4px, rgba(0,0,0,0) 6px);
     mix-blend-mode: screen;
   }
   
@@ -59,44 +51,60 @@
     position: fixed; top: 0; left: 0;
     width: 100%; height: 100%;
     pointer-events: none; z-index: 99;
-    opacity: 0.06;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.08;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
   }
 
   .vignette {
     position: fixed; inset: 0;
     pointer-events: none; z-index: 98;
-    background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.9) 100%);
-    box-shadow: inset 0 0 200px rgba(0,0,0,0.9);
+    background: radial-gradient(ellipse at center, transparent 25%, rgba(0,0,0,0.95) 100%);
+    box-shadow: inset 0 0 250px rgba(0,0,0,1), inset 0 0 100px rgba(139, 0, 0, 0.15);
   }
 
-  /* ЗАГРУЗКА / BOOT SCREEN */
+  /* ==================== ЗАГРУЗКА ==================== */
   #loadingScreen {
     position: fixed; inset: 0;
     z-index: 99999; pointer-events: none; opacity: 0;
-    background: #000; color: var(--text-bright);
+    background: #000; color: var(--amber);
     display: flex; justify-content: center; align-items: center;
-    transition: opacity 0.4s ease;
+    transition: opacity 0.5s ease;
   }
   #loadingScreen.active { opacity: 1; pointer-events: all; }
 
   .loading-box {
     position: relative; z-index: 5;
-    width: 90%; max-width: 800px;
-    display: flex; flex-direction: column; gap: 10px;
+    width: 90%; max-width: 850px;
+    display: flex; flex-direction: column; gap: 8px;
     font-size: 14px;
-    text-shadow: var(--glow);
+    text-shadow: var(--glow-amber);
+    padding: 30px;
+    border: 2px solid var(--soviet-red-dark);
+    background: rgba(10, 5, 5, 0.9);
+    box-shadow: 0 0 40px rgba(212, 0, 0, 0.3), inset 0 0 40px rgba(0,0,0,0.9);
+  }
+  .loading-header {
+    color: var(--soviet-red-bright);
+    font-size: 18px;
+    letter-spacing: 4px;
+    text-align: center;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--soviet-red-dark);
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    text-shadow: var(--glow-red);
   }
   .loading-log {
     min-height: 20px;
     white-space: nowrap;
     overflow: hidden;
-    border-right: 2px solid var(--text-bright);
-    animation: blinkCursor 0.8s step-end infinite;
+    color: var(--amber);
   }
-  @keyframes blinkCursor { 0%, 100% { border-color: transparent; } 50% { border-color: var(--text-bright); } }
+  .loading-log::before { content: "» "; color: var(--soviet-red); }
+  .loading-log.done { color: #55ff55; }
+  .loading-log.done::before { content: "✓ "; color: #55ff55; }
 
-  /* ОСНОВНОЙ ИНТЕРФЕЙС */
+  /* ==================== ОСНОВНОЙ ИНТЕРФЕЙС ==================== */
   #mainSite {
     display: flex; justify-content: center; align-items: center;
     min-height: 100vh; padding: 20px;
@@ -106,205 +114,415 @@
   }
   #mainSite.visible { opacity: 1; }
 
-  /* КОРПУС МОНИТОРА */
+  /* Корпус терминала */
   .monitor-frame {
     position: relative;
     width: 1400px; max-width: 98vw;
-    height: 90vh; min-height: 700px;
-    background: #000;
-    border: 4px solid var(--border-dim);
-    border-radius: 24px;
+    height: 92vh; min-height: 700px;
+    background: 
+      repeating-linear-gradient(45deg, #0a0806 0px, #0a0806 2px, #0d0a07 2px, #0d0a07 4px),
+      #0a0806;
+    border: 3px solid #1a1008;
+    border-radius: 8px;
     box-shadow: 
-      0 0 0 2px #000,
-      0 0 30px rgba(168, 42, 21, 0.2),
-      inset 0 0 50px rgba(0,0,0,0.9);
+      0 0 0 1px #000,
+      0 0 40px rgba(212, 0, 0, 0.15),
+      inset 0 0 60px rgba(0,0,0,0.9),
+      inset 0 0 20px rgba(139, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    padding: 10px;
+    padding: 12px;
+  }
+  /* Заклепки на корпусе */
+  .monitor-frame::before,
+  .monitor-frame::after {
+    content: '';
+    position: absolute;
+    width: 100%; height: 100%;
+    top: 0; left: 0;
+    pointer-events: none;
+    background-image: 
+      radial-gradient(circle at 8px 8px, #2a1a10 2px, transparent 2.5px),
+      radial-gradient(circle at calc(100% - 8px) 8px, #2a1a10 2px, transparent 2.5px),
+      radial-gradient(circle at 8px calc(100% - 8px), #2a1a10 2px, transparent 2.5px),
+      radial-gradient(circle at calc(100% - 8px) calc(100% - 8px), #2a1a10 2px, transparent 2.5px);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
   }
 
-  /* ВЕРХНЯЯ ПАНЕЛЬ */
+  /* ==================== ВЕРХНЯЯ ПАНЕЛЬ ==================== */
   .top-bar {
-    display: flex; justify-content: space-between;
-    padding: 8px 16px;
-    border-bottom: 1px solid var(--border-dim);
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 16px;
+    border-bottom: 2px solid var(--soviet-red-dark);
+    background: linear-gradient(180deg, #0f0a05 0%, #080503 100%);
     font-size: 12px;
     color: var(--text-dim);
     text-transform: uppercase;
     letter-spacing: 2px;
+    position: relative;
   }
-  .top-bar .brand { color: var(--text-bright); text-shadow: var(--glow); }
-  .top-bar .status { display: flex; gap: 20px; }
-  .top-bar .status span::before { content: "■ "; color: var(--border-glow); }
+  .top-bar::before {
+    content: '';
+    position: absolute;
+    bottom: -2px; left: 0;
+    width: 100%; height: 2px;
+    background: repeating-linear-gradient(90deg, 
+      var(--warning-yellow) 0px, var(--warning-yellow) 12px,
+      #000 12px, #000 24px);
+    opacity: 0.7;
+  }
+  .top-bar .brand { 
+    display: flex; align-items: center; gap: 10px;
+    color: var(--soviet-red-bright); 
+    text-shadow: var(--glow-red);
+    font-weight: bold;
+    font-size: 14px;
+  }
+  .top-bar .brand::before {
+    content: '★';
+    color: var(--soviet-red-bright);
+    font-size: 18px;
+    text-shadow: var(--glow-red);
+  }
+  .top-bar .status { display: flex; gap: 24px; align-items: center; }
+  .top-bar .status span { display: flex; align-items: center; gap: 6px; }
+  .top-bar .status span::before { 
+    content: "●"; 
+    color: #55ff55; 
+    text-shadow: 0 0 8px #55ff55;
+    animation: pulseDot 2s infinite;
+  }
+  .top-bar .status span.alarm::before { 
+    color: var(--soviet-red-bright); 
+    text-shadow: var(--glow-red);
+    animation: pulseAlarm 0.8s infinite;
+  }
+  @keyframes pulseDot { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+  @keyframes pulseAlarm { 0%,100% { opacity: 1; } 50% { opacity: 0.2; } }
 
-  /* ОСНОВНОЙ КОНТЕНТ (Сайдбар + Панель) */
+  /* ==================== ОСНОВНОЙ КОНТЕНТ ==================== */
   .main-content {
     display: flex;
     flex: 1;
     overflow: hidden;
     margin-top: 10px;
+    gap: 10px;
   }
 
-  /* САЙДБАР (Навигация) */
+  /* ==================== САЙДБАР ==================== */
   .sidebar {
-    width: 250px;
-    border-right: 1px solid var(--border-dim);
+    width: 260px;
+    background: 
+      repeating-linear-gradient(0deg, #080503 0px, #080503 3px, #0a0604 3px, #0a0604 6px),
+      #080503;
+    border: 2px solid #1a1008;
+    border-right: 3px solid var(--soviet-red-dark);
     display: flex;
     flex-direction: column;
-    padding: 10px 0;
-    gap: 4px;
+    padding: 14px 0;
+    gap: 2px;
+    position: relative;
+  }
+  .sidebar::before {
+    content: 'НАВИГАЦИЯ';
+    position: absolute;
+    top: -1px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--soviet-red-dark);
+    color: var(--text-main);
+    padding: 2px 12px;
+    font-size: 10px;
+    letter-spacing: 3px;
+    border: 1px solid var(--soviet-red-bright);
   }
   .nav-btn {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 10px 16px;
+    gap: 12px;
+    padding: 12px 20px;
     background: transparent;
     border: none;
+    border-left: 4px solid transparent;
     color: var(--text-dim);
     font-family: inherit;
-    font-size: 14px;
+    font-size: 13px;
     text-transform: uppercase;
     letter-spacing: 1px;
     cursor: pointer;
-    transition: 0.1s;
+    transition: 0.15s;
     text-align: left;
-    border-left: 3px solid transparent;
-  }
-  .nav-btn::before {
-    content: "[ ]";
-    font-family: monospace;
-    color: var(--border-glow);
-  }
-  .nav-btn:hover {
-    background: rgba(168, 42, 21, 0.1);
-    color: var(--text-main);
-  }
-  .nav-btn.active {
-    background: rgba(168, 42, 21, 0.2);
-    color: var(--text-bright);
-    border-left: 3px solid var(--text-bright);
-    text-shadow: var(--glow);
-  }
-  .nav-btn.active::before { content: "[■]"; color: var(--text-bright); }
-  .nav-btn.locked { color: #333; cursor: not-allowed; }
-  .nav-btn.locked::before { content: "[🔒]"; }
-
-  /* ПАНЕЛЬ КОНТЕНТА */
-  .content-panel {
-    flex: 1;
-    padding: 20px;
-    overflow-y: auto;
     position: relative;
   }
-  .content-panel::-webkit-scrollbar { width: 6px; background: #000; }
-  .content-panel::-webkit-scrollbar-thumb { background: var(--border-dim); }
+  .nav-btn::before {
+    content: "▸";
+    color: var(--soviet-red-dark);
+    font-size: 14px;
+    transition: 0.15s;
+  }
+  .nav-btn:hover {
+    background: rgba(139, 0, 0, 0.15);
+    color: var(--text-main);
+    border-left-color: var(--soviet-red);
+  }
+  .nav-btn:hover::before { color: var(--soviet-red-bright); }
+  .nav-btn.active {
+    background: linear-gradient(90deg, rgba(212, 0, 0, 0.25) 0%, rgba(212, 0, 0, 0.05) 100%);
+    color: var(--amber);
+    border-left: 4px solid var(--soviet-red-bright);
+    text-shadow: var(--glow-amber);
+    font-weight: bold;
+  }
+  .nav-btn.active::before { 
+    content: "★"; 
+    color: var(--soviet-red-bright); 
+    text-shadow: var(--glow-red);
+  }
+  .nav-btn.locked { color: #3a2820; cursor: not-allowed; }
+  .nav-btn.locked::before { content: "🔒"; color: #3a2820; }
+  .nav-btn.locked:hover { background: transparent; border-left-color: transparent; }
 
-  /* ВКЛАДКИ (Секции) */
+  .sidebar-footer {
+    margin-top: auto;
+    padding: 10px 16px;
+    border-top: 1px solid var(--border-color);
+    font-size: 10px;
+    color: var(--text-dim);
+    text-align: center;
+    letter-spacing: 2px;
+  }
+  .sidebar-footer .star {
+    color: var(--soviet-red-bright);
+    display: block;
+    font-size: 20px;
+    margin-bottom: 4px;
+    text-shadow: var(--glow-red);
+  }
+
+  /* ==================== ПАНЕЛЬ КОНТЕНТА ==================== */
+  .content-panel {
+    flex: 1;
+    padding: 20px 24px;
+    overflow-y: auto;
+    position: relative;
+    background: 
+      radial-gradient(ellipse at top, rgba(139, 0, 0, 0.08) 0%, transparent 60%),
+      #050403;
+    border: 2px solid #1a1008;
+  }
+  /* Вентиляционная решетка в углу */
+  .content-panel::before {
+    content: '';
+    position: absolute;
+    top: 10px; right: 10px;
+    width: 60px; height: 30px;
+    background: repeating-linear-gradient(0deg, #1a1008 0px, #1a1008 2px, transparent 2px, transparent 5px);
+    border: 1px solid #2a1a10;
+    opacity: 0.6;
+  }
+  .content-panel::-webkit-scrollbar { width: 8px; background: #0a0806; }
+  .content-panel::-webkit-scrollbar-thumb { 
+    background: var(--soviet-red-dark); 
+    border: 1px solid var(--soviet-red-bright);
+  }
+
+  /* ==================== ВКЛАДКИ ==================== */
   .tab-content { display: none; animation: fadeIn 0.4s ease-out; }
   .tab-content.active { display: block; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-  /* ЗАГОЛОВКИ СЕКЦИЙ */
   .section-title {
-    font-size: 24px;
-    color: var(--text-bright);
-    text-shadow: var(--glow);
-    border-bottom: 1px solid var(--border-dim);
-    padding-bottom: 10px;
+    font-size: 22px;
+    color: var(--amber);
+    text-shadow: var(--glow-amber-strong);
+    border-bottom: 2px solid var(--soviet-red-dark);
+    padding-bottom: 12px;
     margin-bottom: 20px;
     text-transform: uppercase;
-    letter-spacing: 4px;
+    letter-spacing: 6px;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
+    position: relative;
+    font-weight: bold;
   }
-  .section-title::before { content: ">>"; color: var(--text-dim); }
+  .section-title::before { 
+    content: '★'; 
+    color: var(--soviet-red-bright); 
+    font-size: 24px;
+    text-shadow: var(--glow-red);
+  }
+  .section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -2px; right: 0;
+    width: 100px; height: 2px;
+    background: repeating-linear-gradient(90deg, 
+      var(--warning-yellow) 0px, var(--warning-yellow) 6px,
+      transparent 6px, transparent 12px);
+  }
 
-  /* ОСНОВНАЯ ИНФОРМАЦИЯ (Сетка) */
+  /* ==================== ОСНОВНАЯ ИНФОРМАЦИЯ ==================== */
   .info-grid { display: flex; gap: 24px; }
-  .info-left { flex: 0 0 250px; display: flex; flex-direction: column; gap: 16px; }
+  .info-left { flex: 0 0 260px; display: flex; flex-direction: column; gap: 14px; }
   
   .photo-frame {
     width: 100%;
     height: 280px;
-    border: 2px solid var(--border-dim);
+    border: 3px solid var(--soviet-red-dark);
     background: #000;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 0 15px rgba(168, 42, 21, 0.2);
+    box-shadow: 0 0 20px rgba(212, 0, 0, 0.3), inset 0 0 30px rgba(0,0,0,0.9);
   }
   .photo-frame img {
     width: 100%; height: 100%;
     object-fit: cover;
-    filter: sepia(1) hue-rotate(-20deg) saturate(1.5) contrast(1.2) brightness(0.8);
+    filter: sepia(0.8) hue-rotate(-10deg) saturate(1.4) contrast(1.3) brightness(0.75);
+  }
+  .photo-frame::before {
+    content: 'ФОТО // СЕКРЕТНО';
+    position: absolute;
+    top: 4px; left: 4px;
+    background: var(--soviet-red-dark);
+    color: var(--text-main);
+    padding: 2px 8px;
+    font-size: 9px;
+    letter-spacing: 2px;
+    z-index: 2;
+    border: 1px solid var(--soviet-red-bright);
   }
   .photo-frame::after {
     content: '';
     position: absolute; inset: 0;
-    background: linear-gradient(rgba(168, 42, 21, 0.1), rgba(0,0,0,0.4));
+    background: 
+      linear-gradient(180deg, transparent 70%, rgba(139, 0, 0, 0.3) 100%),
+      repeating-linear-gradient(0deg, transparent 0px, transparent 3px, rgba(255, 176, 0, 0.03) 3px, rgba(255, 176, 0, 0.03) 4px);
     pointer-events: none;
   }
 
   .data-block {
-    border: 1px solid var(--border-dim);
-    background: rgba(168, 42, 21, 0.05);
-    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-left: 3px solid var(--soviet-red);
+    background: rgba(212, 0, 0, 0.04);
+    padding: 12px 14px;
+    position: relative;
+  }
+  .data-block::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: repeating-linear-gradient(90deg,
+      var(--soviet-red) 0px, var(--soviet-red) 8px,
+      transparent 8px, transparent 16px);
+    opacity: 0.5;
   }
   .data-row {
     display: flex; justify-content: space-between;
     padding: 6px 0;
-    border-bottom: 1px dashed var(--border-dim);
-    font-size: 13px;
+    border-bottom: 1px dashed rgba(139, 0, 0, 0.3);
+    font-size: 12px;
+    gap: 8px;
   }
   .data-row:last-child { border-bottom: none; }
-  .data-row .label { color: var(--text-dim); text-transform: uppercase; }
-  .data-row .value { color: var(--text-bright); font-weight: bold; text-shadow: var(--glow); }
+  .data-row .label { 
+    color: var(--text-dim); 
+    text-transform: uppercase;
+    flex-shrink: 0;
+    letter-spacing: 1px;
+  }
+  .data-row .value { 
+    color: var(--amber); 
+    font-weight: bold; 
+    text-shadow: var(--glow-amber);
+    text-align: right;
+  }
+  .data-row .value.status-alive { 
+    color: #55ff55; 
+    text-shadow: 0 0 8px #55ff55;
+  }
+  .data-row .value.status-alive::before { content: '● '; }
 
   .info-right { flex: 1; display: flex; flex-direction: column; gap: 16px; }
 
   .bio-section {
-    border: 1px solid var(--border-dim);
-    background: rgba(168, 42, 21, 0.03);
-    padding: 14px;
+    border: 1px solid var(--border-color);
+    background: rgba(10, 5, 5, 0.6);
+    padding: 14px 16px;
+    position: relative;
+  }
+  .bio-section::before {
+    content: '';
+    position: absolute;
+    top: 6px; right: 6px;
+    width: 8px; height: 8px;
+    background: var(--soviet-red);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--soviet-red-bright);
   }
   .bio-section summary {
     font-weight: bold;
-    color: var(--text-bright);
+    color: var(--amber);
     cursor: pointer;
     text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
     list-style: none;
-    display: flex; align-items: center; gap: 8px;
-    text-shadow: var(--glow);
+    display: flex; align-items: center; gap: 10px;
+    text-shadow: var(--glow-amber);
+    font-size: 14px;
   }
   .bio-section summary::-webkit-details-marker { display: none; }
-  .bio-section summary::before { content: "[+]"; color: var(--text-dim); }
-  .bio-section[open] summary::before { content: "[-]"; }
-  .bio-section ul { list-style: none; padding-top: 10px; }
-  .bio-section ul li {
-    padding: 6px 0;
-    border-bottom: 1px solid rgba(168, 42, 21, 0.1);
-    font-size: 14px;
-    color: var(--text-main);
+  .bio-section summary::before { 
+    content: "[+]"; 
+    color: var(--soviet-red-bright);
+    font-family: monospace;
   }
-  .bio-section ul li::before { content: "▸ "; color: var(--text-dim); }
+  .bio-section[open] summary::before { content: "[-]"; }
+  .bio-section ul { list-style: none; padding-top: 12px; }
+  .bio-section ul li {
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(139, 0, 0, 0.15);
+    font-size: 13px;
+    color: var(--text-main);
+    display: flex;
+    gap: 8px;
+  }
+  .bio-section ul li::before { 
+    content: "▸"; 
+    color: var(--soviet-red); 
+    flex-shrink: 0;
+  }
 
   .med-card {
-    border: 1px solid var(--border-dim);
-    padding: 16px;
-    background: #000;
-    box-shadow: inset 0 0 20px rgba(168, 42, 21, 0.1);
+    border: 2px solid var(--soviet-red-dark);
+    padding: 18px;
+    background: 
+      radial-gradient(ellipse at top left, rgba(139, 0, 0, 0.15) 0%, transparent 60%),
+      #080503;
+    box-shadow: inset 0 0 30px rgba(0,0,0,0.9), 0 0 15px rgba(139, 0, 0, 0.2);
+    position: relative;
+  }
+  .med-card::before {
+    content: '★';
+    position: absolute;
+    top: -10px; left: 20px;
+    background: #080503;
+    color: var(--soviet-red-bright);
+    padding: 0 8px;
+    font-size: 14px;
+    text-shadow: var(--glow-red);
   }
   .med-card h4 {
-    color: var(--text-bright);
+    color: var(--amber);
     text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 10px;
-    border-bottom: 1px solid var(--border-dim);
-    padding-bottom: 6px;
-    text-shadow: var(--glow);
+    letter-spacing: 4px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--soviet-red-dark);
+    padding-bottom: 8px;
+    text-shadow: var(--glow-amber);
+    font-size: 15px;
   }
   .med-card p {
     font-size: 14px;
@@ -314,219 +532,457 @@
     text-align: justify;
   }
 
-  /* ПРЕДЫСТОРИЯ */
+  /* ==================== ПРЕДЫСТОРИЯ ==================== */
   .history-text {
     font-size: 15px;
-    line-height: 1.8;
+    line-height: 1.9;
     color: var(--text-main);
     white-space: pre-wrap;
     text-align: justify;
-    border-left: 3px solid var(--border-glow);
-    padding-left: 20px;
+    border-left: 4px solid var(--soviet-red);
+    padding: 20px 24px;
+    background: rgba(139, 0, 0, 0.05);
+    position: relative;
+  }
+  .history-text::before {
+    content: 'СЕКРЕТНО';
+    position: absolute;
+    top: 8px; right: 12px;
+    color: var(--soviet-red-bright);
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-shadow: var(--glow-red);
+    border: 1px solid var(--soviet-red-bright);
+    padding: 2px 8px;
+    transform: rotate(-3deg);
+    opacity: 0.8;
   }
 
-  /* СОЦИАЛИЗАЦИЯ */
+  /* ==================== СОЦИАЛИЗАЦИЯ ==================== */
   .social-wrapper { display: flex; flex-direction: column; gap: 20px; }
   .classifier-block {
-    display: flex; flex-wrap: wrap; gap: 8px;
-    padding: 10px;
-    border: 1px solid var(--border-dim);
-    background: rgba(0,0,0,0.5);
+    display: flex; flex-wrap: wrap; gap: 6px;
+    padding: 14px;
+    border: 2px solid var(--border-color);
+    background: rgba(10, 5, 5, 0.7);
+    position: relative;
+  }
+  .classifier-block::before {
+    content: 'КЛАССИФИКАТОР СВЯЗЕЙ';
+    position: absolute;
+    top: -8px; left: 16px;
+    background: #080503;
+    color: var(--amber);
+    font-size: 10px;
+    letter-spacing: 3px;
+    padding: 0 8px;
+    text-shadow: var(--glow-amber);
   }
   .rel-tag {
     padding: 4px 12px;
-    border: 1px solid var(--border-dim);
-    font-size: 12px;
+    border: 1px solid var(--border-color);
+    font-size: 11px;
     text-transform: uppercase;
     cursor: pointer;
     transition: 0.1s;
     color: var(--text-dim);
     background: transparent;
+    letter-spacing: 1px;
   }
-  .rel-tag:hover { border-color: var(--text-bright); color: var(--text-bright); }
-  .rel-tag.active-filter { background: var(--text-bright); color: #000; border-color: var(--text-bright); font-weight: bold; }
+  .rel-tag:hover { 
+    border-color: var(--soviet-red-bright); 
+    color: var(--amber); 
+    background: rgba(139, 0, 0, 0.2);
+  }
+  .rel-tag.active-filter { 
+    background: var(--soviet-red); 
+    color: var(--text-main); 
+    border-color: var(--soviet-red-bright); 
+    font-weight: bold;
+    box-shadow: var(--glow-red);
+  }
 
   .social-lists { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
   .social-col {
-    border: 1px solid var(--border-dim);
-    background: rgba(0,0,0,0.5);
+    border: 2px solid var(--border-color);
+    background: rgba(5, 3, 2, 0.8);
     max-height: 300px;
     overflow-y: auto;
-    padding: 10px;
+    padding: 12px;
+    position: relative;
   }
-  .social-col::-webkit-scrollbar { width: 4px; background: #000; }
-  .social-col::-webkit-scrollbar-thumb { background: var(--border-glow); }
+  .social-col::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 3px;
+    background: repeating-linear-gradient(90deg,
+      var(--soviet-red) 0px, var(--soviet-red) 10px,
+      var(--warning-yellow) 10px, var(--warning-yellow) 20px);
+  }
+  .social-col::-webkit-scrollbar { width: 6px; background: #0a0806; }
+  .social-col::-webkit-scrollbar-thumb { background: var(--soviet-red-dark); }
   .social-col h3 {
-    color: var(--text-bright);
-    font-size: 16px;
+    color: var(--amber);
+    font-size: 15px;
     text-transform: uppercase;
-    letter-spacing: 2px;
-    border-bottom: 1px solid var(--border-dim);
-    padding-bottom: 8px;
+    letter-spacing: 3px;
+    border-bottom: 1px solid var(--soviet-red-dark);
+    padding: 6px 0 8px 0;
     margin-bottom: 10px;
-    text-shadow: var(--glow);
+    text-shadow: var(--glow-amber);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .social-col h3::before {
+    content: '★';
+    color: var(--soviet-red-bright);
+    text-shadow: var(--glow-red);
   }
   
   .group-header {
     display: block;
-    padding: 6px 8px;
-    font-size: 14px;
+    padding: 7px 10px;
+    font-size: 13px;
     color: var(--text-main);
     cursor: pointer;
-    border-bottom: 1px solid rgba(168, 42, 21, 0.1);
+    border-bottom: 1px solid rgba(139, 0, 0, 0.15);
     text-transform: uppercase;
     transition: 0.1s;
+    letter-spacing: 1px;
+    position: relative;
   }
-  .group-header:hover { background: rgba(168, 42, 21, 0.2); color: var(--text-bright); }
-  .group-header.open { background: rgba(168, 42, 21, 0.3); color: var(--text-bright); }
+  .group-header::before {
+    content: '▸ ';
+    color: var(--soviet-red);
+  }
+  .group-header:hover { 
+    background: rgba(139, 0, 0, 0.2); 
+    color: var(--amber); 
+  }
+  .group-header.open { 
+    background: rgba(212, 0, 0, 0.25); 
+    color: var(--amber); 
+    border-left: 3px solid var(--soviet-red-bright);
+  }
+  .group-header.open::before { content: '▾ '; }
   
-  .sub-items { display: none; padding-left: 15px; }
+  .sub-items { display: none; padding-left: 20px; padding-top: 4px; }
   .item-link {
     display: block;
     padding: 4px 0;
-    font-size: 13px;
+    font-size: 12px;
     color: var(--text-dim);
     cursor: pointer;
     transition: 0.1s;
+    letter-spacing: 0.5px;
   }
-  .item-link::before { content: "> "; color: var(--border-glow); }
-  .item-link:hover { color: var(--text-bright); padding-left: 5px; }
-  .item-link.highlight { color: var(--text-bright); font-weight: bold; text-shadow: var(--glow); }
+  .item-link::before { content: "› "; color: var(--soviet-red); }
+  .item-link:hover { 
+    color: var(--amber); 
+    padding-left: 5px; 
+    text-shadow: var(--glow-amber);
+  }
+  .item-link.highlight { 
+    color: var(--soviet-red-bright); 
+    font-weight: bold; 
+    text-shadow: var(--glow-red);
+  }
 
   .desc-panel {
-    border: 1px solid var(--border-dim);
-    background: rgba(0,0,0,0.8);
-    padding: 16px;
+    border: 2px solid var(--soviet-red-dark);
+    background: 
+      linear-gradient(180deg, rgba(139, 0, 0, 0.08) 0%, transparent 100%),
+      #050302;
+    padding: 18px;
     min-height: 200px;
     margin-top: 10px;
+    position: relative;
+    box-shadow: inset 0 0 30px rgba(0,0,0,0.9);
+  }
+  .desc-panel::before {
+    content: 'ДОСЬЕ // АГЕНТУРА';
+    position: absolute;
+    top: -9px; left: 16px;
+    background: #050302;
+    color: var(--amber);
+    font-size: 10px;
+    letter-spacing: 3px;
+    padding: 0 8px;
+    text-shadow: var(--glow-amber);
   }
   .empty-state {
     text-align: center;
-    color: var(--text-dim);
-    padding: 40px 0;
+    color: var(--soviet-red-dark);
+    padding: 50px 0;
     font-size: 16px;
-    letter-spacing: 4px;
+    letter-spacing: 6px;
     animation: blink 1.5s step-end infinite;
+    text-transform: uppercase;
   }
-  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
 
   .sub-card { display: none; }
   .sub-card.open { display: block; }
   .sub-header {
-    display: flex; justify-content: space-between;
-    color: var(--text-bright);
-    font-size: 18px;
+    display: flex; justify-content: space-between; align-items: center;
+    color: var(--amber);
+    font-size: 17px;
     text-transform: uppercase;
-    border-bottom: 1px solid var(--border-dim);
-    padding-bottom: 8px;
-    margin-bottom: 12px;
-    text-shadow: var(--glow);
+    border-bottom: 2px solid var(--soviet-red-dark);
+    padding-bottom: 10px;
+    margin-bottom: 14px;
+    text-shadow: var(--glow-amber);
+    letter-spacing: 3px;
+  }
+  .sub-header::before {
+    content: '★';
+    color: var(--soviet-red-bright);
+    margin-right: 8px;
+    text-shadow: var(--glow-red);
   }
   .close-btn {
     cursor: pointer;
     color: var(--text-dim);
-    border: 1px solid var(--border-dim);
-    padding: 0 8px;
-    font-size: 14px;
+    border: 1px solid var(--border-color);
+    padding: 2px 10px;
+    font-size: 12px;
+    letter-spacing: 2px;
+    transition: 0.1s;
   }
-  .close-btn:hover { background: var(--text-bright); color: #000; }
+  .close-btn:hover { 
+    background: var(--soviet-red); 
+    color: var(--text-main); 
+    border-color: var(--soviet-red-bright);
+    box-shadow: var(--glow-red);
+  }
   
-  .sub-body { display: flex; gap: 16px; }
+  .sub-body { display: flex; gap: 18px; }
   .sub-photo {
-    width: 100px; height: 100px;
-    border: 1px solid var(--border-dim);
+    width: 110px; height: 110px;
+    border: 2px solid var(--soviet-red-dark);
     flex-shrink: 0;
     overflow: hidden;
+    position: relative;
+    box-shadow: 0 0 12px rgba(139, 0, 0, 0.4);
   }
   .sub-photo img {
     width: 100%; height: 100%;
     object-fit: cover;
-    filter: sepia(1) hue-rotate(-20deg) saturate(1.5) contrast(1.2) brightness(0.8);
+    filter: sepia(0.9) hue-rotate(-15deg) saturate(1.5) contrast(1.3) brightness(0.75);
+  }
+  .sub-photo::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, transparent 60%, rgba(139, 0, 0, 0.4) 100%);
+    pointer-events: none;
   }
   .sub-desc {
     font-size: 14px;
-    line-height: 1.7;
+    line-height: 1.8;
     color: var(--text-main);
     text-align: justify;
+    flex: 1;
   }
-  .rel-tags { margin-top: 12px; display: flex; gap: 8px; }
+  .rel-tags { margin-top: 14px; display: flex; gap: 8px; flex-wrap: wrap; padding-top: 10px; border-top: 1px dashed var(--border-color); }
   .mini-tag {
-    background: var(--text-bright); color: #000;
-    padding: 2px 10px; font-size: 12px; font-weight: bold; text-transform: uppercase;
+    background: var(--soviet-red); 
+    color: var(--text-main);
+    padding: 3px 12px; 
+    font-size: 11px; 
+    font-weight: bold; 
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border: 1px solid var(--soviet-red-bright);
+    box-shadow: 0 0 8px rgba(212, 0, 0, 0.5);
   }
 
-  /* ЭКРАН БЛОКИРОВКИ */
+  /* ==================== ЭКРАН БЛОКИРОВКИ ==================== */
   .lock-screen {
     display: flex; flex-direction: column; align-items: center;
     justify-content: center; padding: 80px 20px; gap: 20px;
+    position: relative;
+    min-height: 500px;
+  }
+  .lock-screen::before {
+    content: '';
+    position: absolute;
+    top: 20px; left: 20px; right: 20px;
+    height: 8px;
+    background: repeating-linear-gradient(45deg,
+      var(--warning-yellow) 0px, var(--warning-yellow) 12px,
+      #000 12px, #000 24px);
+    opacity: 0.6;
+  }
+  .lock-screen::after {
+    content: '';
+    position: absolute;
+    bottom: 20px; left: 20px; right: 20px;
+    height: 8px;
+    background: repeating-linear-gradient(45deg,
+      var(--warning-yellow) 0px, var(--warning-yellow) 12px,
+      #000 12px, #000 24px);
+    opacity: 0.6;
   }
   .lock-title {
-    font-size: 32px; color: var(--text-bright);
-    text-transform: uppercase; letter-spacing: 8px;
-    text-shadow: var(--glow-strong);
+    font-size: 34px; color: var(--soviet-red-bright);
+    text-transform: uppercase; letter-spacing: 10px;
+    text-shadow: var(--glow-red);
     animation: alertBlink 1s step-end infinite;
+    border: 2px solid var(--soviet-red-bright);
+    padding: 12px 32px;
+    background: rgba(139, 0, 0, 0.15);
   }
-  @keyframes alertBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-  .lock-sub { font-size: 14px; color: var(--text-dim); letter-spacing: 2px; }
+  @keyframes alertBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .lock-sub { 
+    font-size: 13px; 
+    color: var(--text-dim); 
+    letter-spacing: 4px;
+    text-transform: uppercase;
+  }
+  .lock-sub::before, .lock-sub::after {
+    content: ' // ';
+    color: var(--soviet-red);
+  }
   
   .lock-input-wrap { display: flex; flex-direction: column; gap: 16px; margin-top: 20px; align-items: center; }
   .lock-input {
-    background: #000; border: 2px solid var(--border-glow);
-    color: var(--text-bright); font-size: 24px; letter-spacing: 8px;
-    padding: 12px 20px; text-align: center; outline: none;
-    font-family: inherit; width: 350px;
-    box-shadow: 0 0 20px rgba(168, 42, 21, 0.4), inset 0 0 20px rgba(0,0,0,0.8);
+    background: #000; 
+    border: 2px solid var(--soviet-red-bright);
+    color: var(--amber); 
+    font-size: 24px; letter-spacing: 10px;
+    padding: 14px 20px; text-align: center; outline: none;
+    font-family: inherit; width: 380px;
+    box-shadow: 0 0 25px rgba(212, 0, 0, 0.5), inset 0 0 20px rgba(139, 0, 0, 0.3);
+    text-shadow: var(--glow-amber);
   }
-  .lock-input::placeholder { color: #333; letter-spacing: 4px; }
+  .lock-input::placeholder { color: #3a2010; letter-spacing: 4px; }
+  .lock-input:focus {
+    box-shadow: 0 0 40px rgba(255, 26, 26, 0.7), inset 0 0 30px rgba(139, 0, 0, 0.4);
+  }
   .lock-btn {
-    background: transparent; border: 2px solid var(--text-bright);
-    color: var(--text-bright); font-size: 16px; letter-spacing: 4px;
-    padding: 10px 30px; cursor: pointer; text-transform: uppercase;
+    background: transparent; 
+    border: 2px solid var(--soviet-red-bright);
+    color: var(--soviet-red-bright); 
+    font-size: 14px; letter-spacing: 4px;
+    padding: 12px 34px; cursor: pointer; text-transform: uppercase;
     font-family: inherit; transition: 0.2s;
+    font-weight: bold;
+    position: relative;
   }
-  .lock-btn:hover { background: var(--text-bright); color: #000; box-shadow: var(--glow-strong); }
-  .lock-error { color: var(--text-bright); font-size: 14px; letter-spacing: 2px; text-transform: uppercase; min-height: 20px; }
+  .lock-btn:hover { 
+    background: var(--soviet-red); 
+    color: var(--text-main); 
+    box-shadow: var(--glow-red);
+  }
+  .lock-error { 
+    color: var(--soviet-red-bright); 
+    font-size: 13px; 
+    letter-spacing: 3px; 
+    text-transform: uppercase; 
+    min-height: 20px;
+    text-shadow: var(--glow-red);
+  }
 
-  /* ФЕТИШ ОБЪЕКТЫ */
+  /* ==================== ФЕТИШ ОБЪЕКТЫ ==================== */
   .ops-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
   .ops-card {
-    border: 1px solid var(--border-dim);
-    background: rgba(168, 42, 21, 0.05);
+    border: 1px solid var(--border-color);
+    border-top: 3px solid var(--soviet-red);
+    background: rgba(10, 5, 5, 0.7);
     padding: 16px;
+    position: relative;
+  }
+  .ops-card::before {
+    content: '';
+    position: absolute;
+    top: 8px; right: 8px;
+    width: 6px; height: 6px;
+    background: var(--amber);
+    box-shadow: 0 0 8px var(--amber);
   }
   .ops-card h4 {
-    color: var(--text-bright); text-transform: uppercase; letter-spacing: 2px;
-    border-bottom: 1px solid var(--border-dim); padding-bottom: 6px; margin-bottom: 10px;
+    color: var(--amber); 
+    text-transform: uppercase; 
+    letter-spacing: 3px;
+    border-bottom: 1px solid var(--soviet-red-dark); 
+    padding-bottom: 8px; 
+    margin-bottom: 12px;
+    text-shadow: var(--glow-amber);
+    font-size: 14px;
   }
   .ops-card ul { list-style: none; }
-  .ops-card ul li { padding: 4px 0; border-bottom: 1px dashed rgba(168, 42, 21, 0.1); font-size: 14px; color: var(--text-main); }
-  .ops-card ul li::before { content: "- "; color: var(--text-bright); }
+  .ops-card ul li { 
+    padding: 5px 0; 
+    border-bottom: 1px dashed rgba(139, 0, 0, 0.2); 
+    font-size: 13px; 
+    color: var(--text-main); 
+  }
+  .ops-card ul li::before { content: "▸ "; color: var(--soviet-red); }
   .ops-full { grid-column: 1 / -1; }
-  .empty-note { color: var(--text-dim); font-style: italic; font-size: 13px; }
+  .empty-note { color: var(--text-dim); font-style: italic; font-size: 12px; letter-spacing: 1px; }
 
-  /* НИЖНЯЯ ПАНЕЛЬ */
+  /* ==================== НИЖНЯЯ ПАНЕЛЬ ==================== */
   .bottom-bar {
-    display: flex; justify-content: space-between;
-    padding: 8px 16px;
-    border-top: 1px solid var(--border-dim);
-    font-size: 12px;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 16px;
+    border-top: 2px solid var(--soviet-red-dark);
+    background: linear-gradient(0deg, #0f0a05 0%, #080503 100%);
+    font-size: 11px;
     color: var(--text-dim);
     text-transform: uppercase;
     letter-spacing: 2px;
+    position: relative;
   }
-  .bottom-bar .controls { display: flex; gap: 20px; }
-  .bottom-bar .controls span::before { content: "[ "; color: var(--border-glow); }
-  .bottom-bar .controls span::after { content: " ]"; color: var(--border-glow); }
+  .bottom-bar::before {
+    content: '';
+    position: absolute;
+    top: -2px; left: 0;
+    width: 100%; height: 2px;
+    background: repeating-linear-gradient(90deg, 
+      var(--warning-yellow) 0px, var(--warning-yellow) 12px,
+      #000 12px, #000 24px);
+    opacity: 0.7;
+  }
+  .bottom-bar .brand { 
+    color: var(--soviet-red-bright);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .bottom-bar .brand::before { content: '★'; text-shadow: var(--glow-red); }
+  .bottom-bar .controls { display: flex; gap: 24px; }
+  .bottom-bar .controls span::before { content: "[ "; color: var(--soviet-red); }
+  .bottom-bar .controls span::after { content: " ]"; color: var(--soviet-red); }
 
+  /* ==================== ПРОПАГАНДА-ЛОЗУНГ ==================== */
+  .slogan-bar {
+    background: var(--soviet-red-dark);
+    color: var(--text-main);
+    padding: 6px;
+    text-align: center;
+    font-size: 12px;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    border-top: 1px solid var(--soviet-red-bright);
+    border-bottom: 1px solid var(--soviet-red-bright);
+    margin-top: 10px;
+    text-shadow: 0 0 5px rgba(0,0,0,0.8);
+    font-weight: bold;
+  }
+  .slogan-bar span { color: var(--warning-yellow); }
+
+  /* ==================== АДАПТИВ ==================== */
   @media (max-width: 900px) {
     .main-content { flex-direction: column; }
-    .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border-dim); flex-direction: row; overflow-x: auto; padding: 5px; }
-    .nav-btn { padding: 8px 12px; font-size: 12px; white-space: nowrap; }
+    .sidebar { width: 100%; border-right: none; border-bottom: 3px solid var(--soviet-red-dark); flex-direction: row; overflow-x: auto; padding: 5px; }
+    .sidebar::before { display: none; }
+    .nav-btn { padding: 8px 12px; font-size: 11px; white-space: nowrap; }
+    .sidebar-footer { display: none; }
     .info-grid { flex-direction: column; }
     .info-left { flex: 0 0 auto; }
     .social-lists { grid-template-columns: 1fr; }
     .ops-grid { grid-template-columns: 1fr; }
     .sub-body { flex-direction: column; align-items: center; }
+    .lock-input { width: 100%; max-width: 320px; }
+    .section-title { font-size: 16px; letter-spacing: 3px; }
   }
 </style>
 </head>
@@ -540,10 +996,12 @@
 <!-- ЭКРАН ЗАГРУЗКИ -->
 <div id="loadingScreen">
   <div class="loading-box">
-    <div class="loading-log" id="loadingLog">> INIT SYSTEM...</div>
-    <div class="loading-log" id="loadingLog2">> CONNECTING TO NODE...</div>
-    <div class="loading-log" id="loadingLog3">> DECRYPTING ARCHIVE...</div>
-    <div style="color: var(--text-bright); font-size: 24px; margin-top: 20px;" id="loadingStatus">ЗАГРУЗКА...</div>
+    <div class="loading-header">★ СИСТЕМА НАЦИИ ★</div>
+    <div class="loading-log" id="loadingLog">ИНИЦИАЛИЗАЦИЯ ЯДРА...</div>
+    <div class="loading-log" id="loadingLog2">ПОДКЛЮЧЕНИЕ К УЗЛУ NEUMOND...</div>
+    <div class="loading-log" id="loadingLog3">ДЕШИФРОВКА АРХИВА...</div>
+    <div class="loading-log" id="loadingLog4">ПРОВЕРКА ЛОЯЛЬНОСТИ...</div>
+    <div style="color: var(--amber); font-size: 22px; margin-top: 25px; text-align: center; letter-spacing: 6px;" id="loadingStatus">ЗАГРУЗКА...</div>
   </div>
 </div>
 
@@ -553,11 +1011,11 @@
     
     <!-- ВЕРХНЯЯ ПАНЕЛЬ -->
     <div class="top-bar">
-      <div class="brand">DATENBANK DER ARBEITER // ЕРЕС-М-427</div>
+      <div class="brand">СЕКРЕТНО // ЕРЕС-М-427 // АДМИРАЛ</div>
       <div class="status">
         <span>СЕССИЯ: АКТИВНА</span>
         <span>ID: ADLR-018</span>
-        <span id="liveClock">00:00:00</span>
+        <span class="alarm" id="liveClock">00:00:00</span>
       </div>
     </div>
 
@@ -566,10 +1024,15 @@
       
       <!-- САЙДБАР -->
       <div class="sidebar">
-        <button class="nav-btn active" data-tab="tab1">> ОСНОВНАЯ ИНФОРМАЦИЯ</button>
-        <button class="nav-btn" data-tab="tab2">> ПРЕДЫСТОРИЯ</button>
-        <button class="nav-btn" data-tab="tab3">> СОЦИАЛИЗАЦИЯ</button>
-        <button class="nav-btn locked" data-tab="tab4" id="statusTabBtn">> ФЕТИШ ОБЪЕКТЫ</button>
+        <button class="nav-btn active" data-tab="tab1">ОСНОВНАЯ ИНФОРМАЦИЯ</button>
+        <button class="nav-btn" data-tab="tab2">ПРЕДЫСТОРИЯ</button>
+        <button class="nav-btn" data-tab="tab3">СОЦИАЛИЗАЦИЯ</button>
+        <button class="nav-btn locked" data-tab="tab4" id="statusTabBtn">ФЕТИШ ОБЪЕКТЫ</button>
+        
+        <div class="sidebar-footer">
+          <span class="star">★ ★ ★</span>
+          СЛАВА НАЦИИ!
+        </div>
       </div>
 
       <!-- ПАНЕЛЬ КОНТЕНТА -->
@@ -590,7 +1053,7 @@
                 <div class="data-row"><span class="label">СТАНЦИЯ:</span><span class="value">NEUMOND</span></div>
               </div>
               <div class="data-block">
-                <div class="data-row"><span class="label">СТАТУС:</span><span class="value" style="color: #ff6a3a;">ЖИВ | АКТИВЕН</span></div>
+                <div class="data-row"><span class="label">СТАТУС:</span><span class="value status-alive">ЖИВ | АКТИВЕН</span></div>
                 <div class="data-row"><span class="label">ОБОЛОЧКА:</span><span class="value">РЕПЛИКА</span></div>
                 <div class="data-row"><span class="label">ФРАКЦИЯ:</span><span class="value">Нация Евсан</span></div>
                 <div class="data-row"><span class="label">ДОСТУП:</span><span class="value">Руководство</span></div>
@@ -599,7 +1062,7 @@
             
             <div class="info-right">
               <details class="bio-section" open>
-                <summary>ОСОБЕННОСТИ</summary>
+                <summary>ОСОБЕННОСТИ ЛИЧНОСТИ</summary>
                 <ul>
                   <li>Ношение бронежилета</li>
                   <li>Волосы длиннее стандартного</li>
@@ -608,7 +1071,7 @@
                 </ul>
               </details>
               <details class="bio-section">
-                <summary>ХАРАКТЕР</summary>
+                <summary>ПСИХОЛОГИЧЕСКИЙ ПРОФИЛЬ</summary>
                 <ul>
                   <li>Взгляд зачастую холодный</li>
                   <li>Походка спокойная, руки за спиной</li>
@@ -663,7 +1126,7 @@
 
             <div class="social-lists">
               <div class="social-col">
-                <h3>> РЕПЛИКИ</h3>
+                <h3>РЕПЛИКИ</h3>
                 <span class="group-header" data-group="eulr">EULR</span>
                 <div class="sub-items" id="group-eulr">
                   <span class="item-link" data-target="eulr724">EULR.724</span>
@@ -711,7 +1174,7 @@
               </div>
 
               <div class="social-col">
-                <h3>> ГЕШТАЛЬТЫ</h3>
+                <h3>ГЕШТАЛЬТЫ</h3>
                 <span class="group-header" data-group="gscc">GSCC</span>
                 <div class="sub-items" id="group-gscc">
                   <span class="item-link" data-target="gsccberta">GSCC.Берта Фёгель</span>
@@ -891,7 +1354,7 @@
           <div class="status-unlocked" id="statusUnlocked">
             <div class="ops-grid">
               <div class="ops-card">
-                <h4>> История: Античного Мира</h4>
+                <h4>История: Античного Мира</h4>
                 <ul>
                   <li>Эллинистический Египет</li>
                   <li>Империя Селевкидов</li>
@@ -899,7 +1362,7 @@
                 </ul>
               </div>
               <div class="ops-card">
-                <h4>> История: Древних Государств</h4>
+                <h4>История: Древних Государств</h4>
                 <ul>
                   <li>Рим</li>
                   <li>Египет</li>
@@ -910,7 +1373,7 @@
                 </ul>
               </div>
               <div class="ops-card">
-                <h4>> Мифология Древней Винеты</h4>
+                <h4>Мифология Древней Винеты</h4>
                 <ul>
                   <li>Греческая</li>
                   <li>Египетская</li>
@@ -919,11 +1382,11 @@
                 </ul>
               </div>
               <div class="ops-card">
-                <h4>> Забота о папоротнике</h4>
+                <h4>Забота о папоротнике</h4>
                 <p class="empty-note">— раздел в разработке —</p>
               </div>
               <div class="ops-card">
-                <h4>> Фильмы</h4>
+                <h4>Фильмы</h4>
                 <ul>
                   <li>Исторические</li>
                   <li>Детективные</li>
@@ -931,11 +1394,11 @@
                 </ul>
               </div>
               <div class="ops-card">
-                <h4>> Плюшевая FKLR</h4>
+                <h4>Плюшевая FKLR</h4>
                 <p class="empty-note">— без подпунктов —</p>
               </div>
               <div class="ops-card ops-full">
-                <h4>> ПРИМЕЧАНИЕ ОТ РУКОВОДСТВА</h4>
+                <h4>ПРИМЕЧАНИЕ ОТ РУКОВОДСТВА</h4>
                 <p class="empty-note">
                   Данные раздела «ФЕТИШ ОБЪЕКТЫ» заполняются администратором комплекса вручную. 
                   Незаполненные поля помечены как [ОЖИДАНИЕ ДАННЫХ]. 
@@ -949,12 +1412,18 @@
       </div>
     </div>
 
+    <!-- ЛОЗУНГ -->
+    <div class="slogan-bar">
+      ★ СЛАВА НАЦИИ! ★ ДОЛГ ПРЕВЫШЕ ВСЕГО! ★ <span>ЕВСАН НЕПОБЕДИМ!</span> ★
+    </div>
+
     <!-- НИЖНЯЯ ПАНЕЛЬ -->
     <div class="bottom-bar">
-      <div class="brand">EDITOR: TERMINAL - editor unlock</div>
+      <div class="brand">ТЕРМИНАЛ // ЕРЕС-М-427 // СЕКТОР Д</div>
       <div class="controls">
         <span>F1: СПРАВКА</span>
         <span>F2: ВЫХОД</span>
+        <span>F10: МЕНЮ</span>
       </div>
     </div>
 
@@ -968,6 +1437,7 @@
   const loadingLog = document.getElementById('loadingLog');
   const loadingLog2 = document.getElementById('loadingLog2');
   const loadingLog3 = document.getElementById('loadingLog3');
+  const loadingLog4 = document.getElementById('loadingLog4');
   const loadingStatus = document.getElementById('loadingStatus');
 
   // Звуковые эффекты
@@ -1005,26 +1475,31 @@
   function runBootSequence(callback) {
     loadingScreen.classList.add('active');
     
-    setTimeout(() => {
-      loadingLog.textContent = "> LOADING KERNEL... OK";
-      playBeep(600, 0.05);
+    const steps = [
+      { el: loadingLog, text: "ИНИЦИАЛИЗАЦИЯ ЯДРА... ", delay: 400, freq: 500 },
+      { el: loadingLog2, text: "ПОДКЛЮЧЕНИЕ К УЗЛУ NEUMOND... ", delay: 500, freq: 600 },
+      { el: loadingLog3, text: "ДЕШИФРОВКА АРХИВА... ", delay: 600, freq: 700 },
+      { el: loadingLog4, text: "ПРОВЕРКА ЛОЯЛЬНОСТИ... ", delay: 700, freq: 800 }
+    ];
+
+    let delay = 500;
+    steps.forEach((step, i) => {
       setTimeout(() => {
-        loadingLog2.textContent = "> MOUNTING FILE SYSTEM... OK";
-        playBeep(700, 0.05);
-        setTimeout(() => {
-          loadingLog3.textContent = "> DECRYPTING PERSONNEL DATA... OK";
-          playBeep(800, 0.05);
-          setTimeout(() => {
-            loadingStatus.textContent = "СИСТЕМА ГОТОВА";
-            playBeep(900, 0.2);
-            setTimeout(() => {
-              loadingScreen.classList.remove('active');
-              callback();
-            }, 800);
-          }, 600);
-        }, 600);
-      }, 600);
-    }, 800);
+        step.el.textContent = step.text + "OK";
+        step.el.classList.add('done');
+        playBeep(step.freq, 0.05);
+      }, delay);
+      delay += step.delay;
+    });
+
+    setTimeout(() => {
+      loadingStatus.textContent = "★ СИСТЕМА ГОТОВА ★";
+      playBeep(1000, 0.3);
+      setTimeout(() => {
+        loadingScreen.classList.remove('active');
+        callback();
+      }, 900);
+    }, delay + 200);
   }
 
   // Запуск
@@ -1044,7 +1519,7 @@
     }, 1000);
   }
 
-  // Переключение вкладок (Сайдбар)
+  // Переключение вкладок
   const navBtns = document.querySelectorAll('.nav-btn');
   const contents = {
     tab1: document.getElementById('tab1'),
@@ -1096,7 +1571,7 @@
     const value = lockInput.value.trim();
 
     if (value.toLowerCase() === SECRET_CODE.toLowerCase()) {
-      lockError.textContent = "> ДОСТУП РАЗРЕШЁН";
+      lockError.textContent = "> ДОСТУП РАЗРЕШЁН. СЛАВА НАЦИИ!";
       playAccessGranted();
 
       statusUnlocked = true;
@@ -1106,10 +1581,10 @@
       setTimeout(() => {
         lockScreen.style.display = 'none';
         statusUnlockedEl.classList.add('show');
-      }, 600);
+      }, 800);
     } else {
       playAccessDenied();
-      lockError.textContent = "> НЕВЕРНЫЙ КОД. ДОСТУП ЗАПРЕЩЁН.";
+      lockError.textContent = "> НЕВЕРНЫЙ КОД. ДОСТУП ЗАПРЕЩЁН. ПОПЫТКА ЗАПРОТОКОЛИРОВАНА.";
       lockInput.value = "";
       lockInput.focus();
 
@@ -1129,16 +1604,16 @@
   styleShake.textContent = `
     @keyframes shake {
       0%   { transform: translateX(0); }
-      20%  { transform: translateX(-6px); }
-      40%  { transform: translateX(6px); }
-      60%  { transform: translateX(-4px); }
-      80%  { transform: translateX(4px); }
+      20%  { transform: translateX(-8px); }
+      40%  { transform: translateX(8px); }
+      60%  { transform: translateX(-5px); }
+      80%  { transform: translateX(5px); }
       100% { transform: translateX(0); }
     }
   `;
   document.head.appendChild(styleShake);
 
-  // Логика карточек и фильтров
+  // Карточки
   const panel = document.getElementById('descPanel');
   const emptyState = panel.querySelector('.empty-state');
 
@@ -1183,15 +1658,18 @@
         const cardRels = card.dataset.relations ? card.dataset.relations.split(' ') : [];
         if (isActive) {
           if (cardRels.includes(relClass)) {
-            card.style.border = '1px solid var(--text-bright)';
-            card.style.background = 'rgba(168, 42, 21, 0.1)';
+            card.style.border = '2px solid var(--soviet-red-bright)';
+            card.style.background = 'rgba(212, 0, 0, 0.1)';
+            card.style.boxShadow = '0 0 20px rgba(212, 0, 0, 0.4)';
           } else {
             card.style.border = 'none';
             card.style.background = 'transparent';
+            card.style.boxShadow = 'none';
           }
         } else {
           card.style.border = 'none';
           card.style.background = 'transparent';
+          card.style.boxShadow = 'none';
         }
       });
 
@@ -1232,4 +1710,3 @@
 </script>
 </body>
 </html>
-```
