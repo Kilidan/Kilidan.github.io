@@ -1,29 +1,47 @@
+Я полностью переосмыслил ваш код, отказавшись от стандартной веб-верстки. Теперь это **полноценный интерфейс военного мейнфрейма** в стилистике *Signalis*, *Atomic Heart* и старых ЭВМ 80-х. 
+
+Вместо вкладок сверху — **боковая панель навигации**, как на вашем скриншоте. Вместо белого фона — **глубокий черный с янтарно-красным фосфорным свечением**. Добавлен эффект старого ЭЛТ-монитора с выпуклыми краями, скан-линиями и виньеткой. Все данные выглядят как секретные файлы, извлеченные из системы.
+
+### Что изменено:
+1. **Структура:** Полностью переработана компоновка. Теперь это `Sidebar (навигация) + Mainframe (контент) + Topbar/Footer`.
+2. **Цветовая гамма:** Глубокий черный (`#0a0502`), темно-янтарный (`#c96b45`), кроваво-красный (`#a82a15`) и яркий неоновый акцент (`#ff6a3a`).
+3. **Эффекты:** Добавлен эффект CRT-монитора (выпуклые углы, скан-линии, свечение текста, шум).
+4. **Загрузка:** Заменена на терминальный boot-экран с построчным выводом текста.
+5. **Интерактивность:** Кнопки и теги при наведении инвертируются или вспыхивают неоном. Экран блокировки выполнен в виде военного протокола безопасности.
+6. **Графика:** Все изображения переведены в сепию с высоким контрастом, чтобы соответствовать эстетике.
+
+Вот готовый код:
+
+```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ДОСЬЕ · ЕРЕС-М-427</title>
+<title>MAINFRAME // ЕРЕС-М-427</title>
 <style>
   /* ОБЩИЕ СБРОСЫ И ПЕРЕМЕННЫЕ */
   * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
   
   :root {
-    --bg-color: #050505;
-    --text-color: #ffffff;
-    --border-color: #ffffff;
-    --dim-color: #888888;
-    --highlight-bg: #ffffff;
-    --highlight-text: #000000;
-    --glow: 0 0 8px rgba(255, 255, 255, 0.4);
+    --bg-deep: #050201;
+    --bg-panel: #0a0502;
+    --bg-panel-light: #140a06;
+    --text-main: #c96b45;
+    --text-dim: #6b3a2a;
+    --text-bright: #ff6a3a;
+    --border-glow: #a82a15;
+    --border-dim: #3a1510;
+    --glow: 0 0 10px rgba(200, 80, 40, 0.4);
+    --glow-strong: 0 0 15px rgba(255, 100, 50, 0.8);
   }
 
   html, body {
     width: 100%; height: 100%;
-    background: var(--bg-color);
+    background: #000;
     overflow-x: hidden;
     font-family: 'Courier New', 'VT323', 'Lucida Console', monospace;
-    color: var(--text-color);
+    color: var(--text-main);
   }
 
   /* ЭФФЕКТЫ CRT И ШУМА */
@@ -32,8 +50,8 @@
     width: 100%; height: 100%;
     pointer-events: none; z-index: 100;
     background: repeating-linear-gradient(0deg,
-        rgba(255,255,255,0.03) 0px, rgba(0,0,0,0) 2px,
-        rgba(255,255,255,0.01) 4px, rgba(0,0,0,0) 6px);
+        rgba(255, 100, 50, 0.03) 0px, rgba(0,0,0,0) 2px,
+        rgba(255, 100, 50, 0.01) 4px, rgba(0,0,0,0) 6px);
     mix-blend-mode: screen;
   }
   
@@ -41,143 +59,22 @@
     position: fixed; top: 0; left: 0;
     width: 100%; height: 100%;
     pointer-events: none; z-index: 99;
-    opacity: 0.05;
+    opacity: 0.06;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
   }
 
   .vignette {
     position: fixed; inset: 0;
     pointer-events: none; z-index: 98;
-    background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.8) 100%);
+    background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.9) 100%);
+    box-shadow: inset 0 0 200px rgba(0,0,0,0.9);
   }
 
-  /* ЗАСТАВКА */
-  #introScreen {
-    position: fixed; inset: 0;
-    background: #000;
-    color: #fff;
-    z-index: 9999;
-    display: flex; justify-content: center; align-items: center;
-    transition: opacity 0.8s ease, visibility 0.8s ease;
-  }
-  #introScreen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
-
-  .intro-container {
-    position: relative; z-index: 5;
-    width: 1100px; max-width: 95vw;
-    display: flex; flex-direction: column; align-items: center; gap: 30px;
-    animation: introFadeIn 1.2s ease-out;
-  }
-  @keyframes introFadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  .intro-main {
-    display: flex; align-items: flex-start; gap: 40px;
-    width: 100%; padding: 20px;
-  }
-
-  .intro-portrait {
-    flex-shrink: 0; width: 220px; height: 260px;
-    border: 3px solid #fff; background: #111;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 0 20px rgba(255,255,255,0.2);
-  }
-  .intro-portrait img {
-    width: 100%; height: 100%;
-    object-fit: cover; object-position: center top;
-    filter: grayscale(100%) contrast(1.3) brightness(0.9);
-  }
-  .intro-portrait::before {
-    content: ''; position: absolute; top: 6px; left: 6px;
-    width: 14px; height: 14px;
-    border-top: 3px solid #fff; border-left: 3px solid #fff;
-  }
-  .intro-portrait::after {
-    content: ''; position: absolute; bottom: 6px; right: 6px;
-    width: 14px; height: 14px;
-    border-bottom: 3px solid #fff; border-right: 3px solid #fff;
-  }
-  .portrait-label {
-    position: absolute; bottom: 4px; left: 8px;
-    font-size: 11px; color: #000;
-    background: #fff; padding: 0 4px;
-    letter-spacing: 2px; font-weight: bold;
-    z-index: 2;
-  }
-
-  .intro-text { flex: 1; display: flex; flex-direction: column; gap: 14px; padding-top: 6px; }
-
-  .intro-title {
-    font-size: 52px; font-weight: normal; color: #fff;
-    letter-spacing: 2px; line-height: 1;
-    text-transform: uppercase;
-    text-shadow: var(--glow);
-  }
-  .intro-subtitle {
-    font-size: 17px; color: #aaa;
-    line-height: 1.45; letter-spacing: 0.5px;
-  }
-  .intro-info {
-    margin-top: 10px;
-    display: flex; flex-direction: column; gap: 6px;
-    font-size: 16px; color: #fff;
-    letter-spacing: 0.5px;
-    text-shadow: var(--glow);
-  }
-  .intro-info .highlight { color: #fff; font-weight: bold; }
-
-  .intro-button-wrap {
-    display: flex; flex-direction: column; align-items: center; gap: 10px;
-    width: 100%; max-width: 620px;
-  }
-
-  .intro-button {
-    display: inline-block;
-    padding: 14px 38px;
-    border: 3px solid #fff; background: transparent;
-    color: #fff;
-    font-size: 20px; letter-spacing: 6px;
-    text-transform: uppercase; cursor: pointer;
-    transition: all 0.2s ease;
-    width: 100%; max-width: 620px;
-    text-shadow: var(--glow);
-    box-shadow: 0 0 15px rgba(255,255,255,0.1);
-  }
-  .intro-button:hover {
-    background: #fff; color: #000;
-    text-shadow: none;
-    box-shadow: 0 0 30px rgba(255,255,255,0.6);
-  }
-
-  .intro-bar {
-    width: 100%; max-width: 620px; height: 3px;
-    background: #222; position: relative;
-    overflow: hidden;
-  }
-  .intro-bar::before {
-    content: ''; position: absolute; top: 0; left: 0;
-    height: 100%; width: 0%;
-    background: #fff;
-    box-shadow: 0 0 10px #fff;
-    animation: barLoad 4s ease-in-out infinite;
-  }
-  @keyframes barLoad {
-    0% { width: 0%; } 60% { width: 100%; }
-    75% { width: 100%; } 100% { width: 100%; opacity: 0; }
-  }
-  .intro-footer {
-    font-size: 12px; color: #444;
-    letter-spacing: 3px; margin-top: 10px;
-  }
-
-  /* ЭКРАН ЗАГРУЗКИ */
+  /* ЗАГРУЗКА / BOOT SCREEN */
   #loadingScreen {
     position: fixed; inset: 0;
     z-index: 99999; pointer-events: none; opacity: 0;
-    background: #000; color: #fff;
+    background: #000; color: var(--text-bright);
     display: flex; justify-content: center; align-items: center;
     transition: opacity 0.4s ease;
   }
@@ -185,630 +82,523 @@
 
   .loading-box {
     position: relative; z-index: 5;
-    width: 90%; max-width: 620px;
-    display: flex; flex-direction: column; gap: 18px;
-  }
-  .loading-title {
-    font-size: 22px; letter-spacing: 6px; text-align: center;
-    text-transform: uppercase; color: #fff;
+    width: 90%; max-width: 800px;
+    display: flex; flex-direction: column; gap: 10px;
+    font-size: 14px;
     text-shadow: var(--glow);
   }
-  .loading-subtitle {
-    font-size: 13px; letter-spacing: 3px; text-align: center;
-    color: #666;
-  }
-  .loading-bar-track {
-    width: 100%; height: 18px;
-    border: 3px solid #fff; background: #000;
-    position: relative; overflow: hidden;
-  }
-  .loading-bar-fill {
-    position: absolute; top: 0; left: 0;
-    height: 100%; width: 0%;
-    background: #fff;
-    box-shadow: 0 0 15px #fff;
-    transition: width 0.15s linear;
-  }
-  .loading-footer {
-    display: flex; justify-content: space-between;
-    font-size: 14px; letter-spacing: 2px; color: #fff;
-  }
-  .loading-percent { font-weight: bold; color: #fff; text-shadow: var(--glow); }
   .loading-log {
-    font-size: 12px; color: #888;
-    letter-spacing: 1px; min-height: 16px;
-    white-space: nowrap; overflow: hidden;
+    min-height: 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    border-right: 2px solid var(--text-bright);
+    animation: blinkCursor 0.8s step-end infinite;
   }
+  @keyframes blinkCursor { 0%, 100% { border-color: transparent; } 50% { border-color: var(--text-bright); } }
 
-  /* ОСНОВНОЙ САЙТ (Терминал) */
+  /* ОСНОВНОЙ ИНТЕРФЕЙС */
   #mainSite {
     display: flex; justify-content: center; align-items: center;
-    min-height: 100vh; padding: 16px;
+    min-height: 100vh; padding: 20px;
     position: relative; opacity: 0;
     transition: opacity 1s ease;
-    background: var(--bg-color);
+    background: #000;
   }
   #mainSite.visible { opacity: 1; }
 
-  .computer {
+  /* КОРПУС МОНИТОРА */
+  .monitor-frame {
     position: relative;
-    width: 1100px; max-width: 96vw;
-    background: #0a0a0a;
-    border: 4px solid #fff;
-    padding: 16px 16px 12px;
-    box-shadow: 0 0 30px rgba(255,255,255,0.15), inset 0 0 20px rgba(0,0,0,0.8);
-    z-index: 2;
-  }
-  .screen {
-    background: #050505;
-    border: 2px solid #333;
-    padding: 14px 12px 12px;
-  }
-
-  .title-bar {
-    display: flex; justify-content: space-between; align-items: baseline;
-    border-bottom: 3px solid #fff;
-    padding-bottom: 8px; margin-bottom: 12px;
-    color: #fff;
-    font-size: 14px; text-transform: uppercase;
-    font-weight: bold;
-    letter-spacing: 2px;
-    text-shadow: var(--glow);
-  }
-  .title-bar span:first-child { font-size: 20px; }
-  .title-bar span:last-child { font-size: 14px; }
-
-  .tabs {
-    display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap;
-  }
-  .tab-btn {
+    width: 1400px; max-width: 98vw;
+    height: 90vh; min-height: 700px;
     background: #000;
-    border: 2px solid #fff;
-    padding: 6px 20px 4px;
-    font-size: 16px; font-weight: bold;
-    color: #fff;
-    cursor: pointer; transition: 0.1s;
-    text-transform: uppercase; letter-spacing: 2px;
-    text-shadow: var(--glow);
-  }
-  .tab-btn.active {
-    background: #fff; color: #000;
-    text-shadow: none;
-    box-shadow: 0 0 15px #fff;
-  }
-  .tab-btn:hover:not(.active) {
-    background: #333;
-  }
-  .tab-btn.locked { color: #666; border-color: #444; cursor: not-allowed; text-shadow: none; }
-  .tab-btn.locked:hover { background: #000; color: #666; }
-  .tab-btn.locked::after { content: " [🔒]"; font-size: 12px; margin-left: 4px; }
-  .tab-btn.unlocked { color: #fff; border-color: #fff; }
-  .tab-btn.unlocked::after { content: ""; }
-
-  .tab-content {
-    display: none;
-    background: #000;
-    border: 2px solid #333;
-    padding: 16px 16px 14px;
-    min-height: 400px;
-    color: #fff;
-    box-shadow: inset 0 0 30px rgba(0,0,0,0.9);
-  }
-  .tab-content.active { display: block; }
-
-  /* ЛИЧНОЕ ДЕЛО */
-  .info-grid { display: flex; flex-wrap: wrap; gap: 16px; }
-  .info-left { flex: 0 0 220px; min-width: 160px; }
-
-  .photo-place {
-    position: relative;
-    background: #000;
-    border: 2px solid #fff;
-    height: 200px; width: 100%; max-width: 220px;
-    margin-bottom: 12px;
-    padding: 6px;
-    display: flex; align-items: center; justify-content: center;
+    border: 4px solid var(--border-dim);
+    border-radius: 24px;
+    box-shadow: 
+      0 0 0 2px #000,
+      0 0 30px rgba(168, 42, 21, 0.2),
+      inset 0 0 50px rgba(0,0,0,0.9);
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
-    box-shadow: 0 0 15px rgba(255,255,255,0.1);
-  }
-  .photo-place img {
-    width: 100%; height: 100%;
-    object-fit: cover; object-position: center 20%;
-    filter: grayscale(100%) contrast(1.3) brightness(0.8);
+    padding: 10px;
   }
 
-  .info-column {
-    background: #000;
-    border: 2px solid #fff;
-    padding: 12px 14px;
-    font-size: 13px;
-    line-height: 1.6;
-    color: #fff;
-    max-width: 220px;
-    display: flex; flex-direction: column; gap: 8px;
-    box-shadow: inset 0 0 10px rgba(255,255,255,0.05);
-  }
-  .info-column strong { font-weight: bold; color: #fff; }
-  
-  .status-line {
-    margin-top: 12px;
-    padding: 12px 14px;
-    border: 2px solid #fff;
-    display: flex; flex-direction: column; gap: 8px;
-    font-size: 13px;
-    line-height: 1.4;
-    background: #000;
-  }
-  .status-line .label {
-    font-weight: bold;
+  /* ВЕРХНЯЯ ПАНЕЛЬ */
+  .top-bar {
+    display: flex; justify-content: space-between;
+    padding: 8px 16px;
+    border-bottom: 1px solid var(--border-dim);
+    font-size: 12px;
+    color: var(--text-dim);
     text-transform: uppercase;
-    color: #aaa;
+    letter-spacing: 2px;
   }
-  .status-line .label::before { content: "> "; color: #fff; }
-  .status-line .value {
-    display: inline-block;
-    background: #fff; color: #000;
-    padding: 2px 10px;
-    font-weight: bold;
-    margin-left: 4px;
-    letter-spacing: 1px;
+  .top-bar .brand { color: var(--text-bright); text-shadow: var(--glow); }
+  .top-bar .status { display: flex; gap: 20px; }
+  .top-bar .status span::before { content: "■ "; color: var(--border-glow); }
+
+  /* ОСНОВНОЙ КОНТЕНТ (Сайдбар + Панель) */
+  .main-content {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    margin-top: 10px;
   }
 
-  .right-col { flex: 1; min-width: 250px; display: flex; flex-direction: column; gap: 16px; }
+  /* САЙДБАР (Навигация) */
+  .sidebar {
+    width: 250px;
+    border-right: 1px solid var(--border-dim);
+    display: flex;
+    flex-direction: column;
+    padding: 10px 0;
+    gap: 4px;
+  }
+  .nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    font-family: inherit;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: 0.1s;
+    text-align: left;
+    border-left: 3px solid transparent;
+  }
+  .nav-btn::before {
+    content: "[ ]";
+    font-family: monospace;
+    color: var(--border-glow);
+  }
+  .nav-btn:hover {
+    background: rgba(168, 42, 21, 0.1);
+    color: var(--text-main);
+  }
+  .nav-btn.active {
+    background: rgba(168, 42, 21, 0.2);
+    color: var(--text-bright);
+    border-left: 3px solid var(--text-bright);
+    text-shadow: var(--glow);
+  }
+  .nav-btn.active::before { content: "[■]"; color: var(--text-bright); }
+  .nav-btn.locked { color: #333; cursor: not-allowed; }
+  .nav-btn.locked::before { content: "[🔒]"; }
+
+  /* ПАНЕЛЬ КОНТЕНТА */
+  .content-panel {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    position: relative;
+  }
+  .content-panel::-webkit-scrollbar { width: 6px; background: #000; }
+  .content-panel::-webkit-scrollbar-thumb { background: var(--border-dim); }
+
+  /* ВКЛАДКИ (Секции) */
+  .tab-content { display: none; animation: fadeIn 0.4s ease-out; }
+  .tab-content.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ЗАГОЛОВКИ СЕКЦИЙ */
+  .section-title {
+    font-size: 24px;
+    color: var(--text-bright);
+    text-shadow: var(--glow);
+    border-bottom: 1px solid var(--border-dim);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-title::before { content: ">>"; color: var(--text-dim); }
+
+  /* ОСНОВНАЯ ИНФОРМАЦИЯ (Сетка) */
+  .info-grid { display: flex; gap: 24px; }
+  .info-left { flex: 0 0 250px; display: flex; flex-direction: column; gap: 16px; }
+  
+  .photo-frame {
+    width: 100%;
+    height: 280px;
+    border: 2px solid var(--border-dim);
+    background: #000;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(168, 42, 21, 0.2);
+  }
+  .photo-frame img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: sepia(1) hue-rotate(-20deg) saturate(1.5) contrast(1.2) brightness(0.8);
+  }
+  .photo-frame::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(rgba(168, 42, 21, 0.1), rgba(0,0,0,0.4));
+    pointer-events: none;
+  }
+
+  .data-block {
+    border: 1px solid var(--border-dim);
+    background: rgba(168, 42, 21, 0.05);
+    padding: 12px;
+  }
+  .data-row {
+    display: flex; justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px dashed var(--border-dim);
+    font-size: 13px;
+  }
+  .data-row:last-child { border-bottom: none; }
+  .data-row .label { color: var(--text-dim); text-transform: uppercase; }
+  .data-row .value { color: var(--text-bright); font-weight: bold; text-shadow: var(--glow); }
+
+  .info-right { flex: 1; display: flex; flex-direction: column; gap: 16px; }
 
   .bio-section {
-    border: 2px solid #fff;
-    border-left: 10px solid #fff;
-    background: #000;
-    padding: 12px 16px;
-    box-shadow: 0 0 15px rgba(255,255,255,0.05);
+    border: 1px solid var(--border-dim);
+    background: rgba(168, 42, 21, 0.03);
+    padding: 14px;
   }
   .bio-section summary {
-    font-weight: bold; font-size: 15px; color: #fff;
-    cursor: pointer; text-transform: uppercase;
-    letter-spacing: 1px;
+    font-weight: bold;
+    color: var(--text-bright);
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 2px;
     list-style: none;
+    display: flex; align-items: center; gap: 8px;
     text-shadow: var(--glow);
   }
   .bio-section summary::-webkit-details-marker { display: none; }
-  .bio-section summary::before { content: "[+] "; color: #fff; }
-  .bio-section[open] summary::before { content: "[-] "; color: #fff; }
-  .bio-section summary:hover { background: #222; }
-  .bio-section ul { list-style: none; padding: 8px 0 4px 12px; margin: 0; }
-  .bio-section ul li { padding: 4px 0; font-size: 14px; border-bottom: 1px dashed #333; color: #ccc; }
-  .bio-section ul li::before { content: "- "; color: #fff; font-weight: bold; }
+  .bio-section summary::before { content: "[+]"; color: var(--text-dim); }
+  .bio-section[open] summary::before { content: "[-]"; }
+  .bio-section ul { list-style: none; padding-top: 10px; }
+  .bio-section ul li {
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(168, 42, 21, 0.1);
+    font-size: 14px;
+    color: var(--text-main);
+  }
+  .bio-section ul li::before { content: "▸ "; color: var(--text-dim); }
 
   .med-card {
-    padding: 16px 18px;
-    border: 2px solid #fff;
+    border: 1px solid var(--border-dim);
+    padding: 16px;
     background: #000;
-    box-shadow: inset 0 0 20px rgba(255,255,255,0.05);
+    box-shadow: inset 0 0 20px rgba(168, 42, 21, 0.1);
   }
   .med-card h4 {
-    font-size: 18px; color: #fff;
-    letter-spacing: 2px;
-    border-bottom: 2px solid #fff;
-    padding-bottom: 6px; margin-bottom: 10px;
+    color: var(--text-bright);
     text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid var(--border-dim);
+    padding-bottom: 6px;
     text-shadow: var(--glow);
   }
   .med-card p {
-    font-size: 14px; line-height: 1.7;
-    color: #ccc; white-space: pre-wrap;
-    text-align: justify;
-  }
-
-  /* ПРЕДЫСТОРИЯ / ДНЕВНИК */
-  .history-block {
-    background: #000;
-    border: 2px solid #fff;
-    padding: 20px 24px 24px;
-    box-shadow: inset 0 0 30px rgba(255,255,255,0.05);
-  }
-  .history-block h2 {
-    font-size: 26px; font-weight: normal;
-    color: #fff;
-    letter-spacing: 4px;
-    border-bottom: 2px solid #fff;
-    padding-bottom: 10px; margin-bottom: 18px;
-    text-transform: uppercase;
-    display: flex; align-items: center; gap: 12px;
-    text-shadow: var(--glow);
-  }
-  .history-block h2::before { content: "[?]"; font-size: 24px; color: #fff; }
-  .history-block p {
-    font-size: 15px; line-height: 1.8;
-    color: #ccc; letter-spacing: 0.3px;
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--text-main);
     white-space: pre-wrap;
     text-align: justify;
   }
 
-  /* СОЦИАЛИЗАЦИЯ / ДОСЬЕ */
-  .social-wrapper { display: flex; flex-direction: column; gap: 16px; }
+  /* ПРЕДЫСТОРИЯ */
+  .history-text {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--text-main);
+    white-space: pre-wrap;
+    text-align: justify;
+    border-left: 3px solid var(--border-glow);
+    padding-left: 20px;
+  }
+
+  /* СОЦИАЛИЗАЦИЯ */
+  .social-wrapper { display: flex; flex-direction: column; gap: 20px; }
   .classifier-block {
-    background: #000;
-    border: 2px solid #fff;
-    padding: 14px 18px;
-    display: flex; flex-wrap: wrap;
-    justify-content: center; gap: 10px 14px;
-    box-shadow: inset 0 0 20px rgba(255,255,255,0.05);
+    display: flex; flex-wrap: wrap; gap: 8px;
+    padding: 10px;
+    border: 1px solid var(--border-dim);
+    background: rgba(0,0,0,0.5);
   }
   .rel-tag {
-    display: inline-block;
-    padding: 4px 16px;
-    font-size: 14px; font-weight: bold;
-    letter-spacing: 1px;
-    background: #000;
-    border: 2px solid #fff;
-    cursor: pointer; transition: 0.1s;
-    color: #fff;
+    padding: 4px 12px;
+    border: 1px solid var(--border-dim);
+    font-size: 12px;
     text-transform: uppercase;
-    text-shadow: var(--glow);
+    cursor: pointer;
+    transition: 0.1s;
+    color: var(--text-dim);
+    background: transparent;
   }
-  .rel-tag:hover { background: #333; }
-  .rel-tag.active-filter { background: #fff; color: #000; text-shadow: none; }
+  .rel-tag:hover { border-color: var(--text-bright); color: var(--text-bright); }
+  .rel-tag.active-filter { background: var(--text-bright); color: #000; border-color: var(--text-bright); font-weight: bold; }
 
-  /* Единый монохромный стиль для всех тегов */
-  .rel-tag[class*="c-"] { color: #fff; border-color: #fff; background: #000; }
-  .rel-tag[class*="c-"]:hover { background: #333; }
-  .rel-tag[class*="c-"].active-filter { background: #fff; color: #000; }
-
-  .social-lists { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .social-lists { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
   .social-col {
-    background: #000;
-    border: 2px solid #fff;
-    padding: 12px 16px;
-    max-height: 400px; overflow-y: auto;
-    box-shadow: inset 0 0 20px rgba(255,255,255,0.05);
+    border: 1px solid var(--border-dim);
+    background: rgba(0,0,0,0.5);
+    max-height: 300px;
+    overflow-y: auto;
+    padding: 10px;
   }
-  .social-col::-webkit-scrollbar { width: 8px; background: #000; border-left: 2px solid #333; }
-  .social-col::-webkit-scrollbar-thumb { background: #fff; }
-
+  .social-col::-webkit-scrollbar { width: 4px; background: #000; }
+  .social-col::-webkit-scrollbar-thumb { background: var(--border-glow); }
   .social-col h3 {
-    color: #fff;
-    font-size: 18px; letter-spacing: 2px;
-    border-bottom: 2px solid #fff;
-    padding-bottom: 8px; margin-bottom: 12px;
+    color: var(--text-bright);
+    font-size: 16px;
     text-transform: uppercase;
+    letter-spacing: 2px;
+    border-bottom: 1px solid var(--border-dim);
+    padding-bottom: 8px;
+    margin-bottom: 10px;
     text-shadow: var(--glow);
   }
+  
+  .group-header {
+    display: block;
+    padding: 6px 8px;
+    font-size: 14px;
+    color: var(--text-main);
+    cursor: pointer;
+    border-bottom: 1px solid rgba(168, 42, 21, 0.1);
+    text-transform: uppercase;
+    transition: 0.1s;
+  }
+  .group-header:hover { background: rgba(168, 42, 21, 0.2); color: var(--text-bright); }
+  .group-header.open { background: rgba(168, 42, 21, 0.3); color: var(--text-bright); }
+  
+  .sub-items { display: none; padding-left: 15px; }
+  .item-link {
+    display: block;
+    padding: 4px 0;
+    font-size: 13px;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: 0.1s;
+  }
+  .item-link::before { content: "> "; color: var(--border-glow); }
+  .item-link:hover { color: var(--text-bright); padding-left: 5px; }
+  .item-link.highlight { color: var(--text-bright); font-weight: bold; text-shadow: var(--glow); }
 
   .desc-panel {
-    background: #000;
-    border: 2px solid #fff;
-    padding: 16px 18px;
-    margin-top: 16px;
-    min-height: 180px; max-height: 300px;
-    overflow-y: auto;
-    box-shadow: inset 0 0 30px rgba(255,255,255,0.05);
+    border: 1px solid var(--border-dim);
+    background: rgba(0,0,0,0.8);
+    padding: 16px;
+    min-height: 200px;
+    margin-top: 10px;
   }
-  .desc-panel::-webkit-scrollbar { width: 8px; background: #000; border-left: 2px solid #333; }
-  .desc-panel::-webkit-scrollbar-thumb { background: #fff; }
-  .desc-panel .empty-state {
-    color: #555; text-align: center;
+  .empty-state {
+    text-align: center;
+    color: var(--text-dim);
     padding: 40px 0;
-    font-size: 16px; letter-spacing: 2px;
-    text-transform: uppercase;
+    font-size: 16px;
+    letter-spacing: 4px;
     animation: blink 1.5s step-end infinite;
   }
   @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
-  .desc-panel .sub-card {
-    display: none; background: transparent;
-    border: none; padding: 0; margin: 0;
-  }
-  .desc-panel .sub-card.open { display: block; }
-  .desc-panel .sub-header {
-    font-weight: bold;
-    color: #fff;
-    font-size: 16px;
-    border-bottom: 2px solid #fff;
-    padding-bottom: 6px; margin-bottom: 10px;
-    display: flex; justify-content: space-between; align-items: center;
+  .sub-card { display: none; }
+  .sub-card.open { display: block; }
+  .sub-header {
+    display: flex; justify-content: space-between;
+    color: var(--text-bright);
+    font-size: 18px;
     text-transform: uppercase;
+    border-bottom: 1px solid var(--border-dim);
+    padding-bottom: 8px;
+    margin-bottom: 12px;
     text-shadow: var(--glow);
   }
-  .desc-panel .sub-body { display: flex; gap: 16px; flex-wrap: wrap; }
-  
-  .desc-panel .sub-photo {
-    width: 90px; height: 90px;
-    border: 2px solid #fff;
-    background: #000;
-    display: flex; align-items: center; justify-content: center;
-    overflow: hidden; flex-shrink: 0;
-    box-shadow: 0 0 15px rgba(255,255,255,0.1);
+  .close-btn {
+    cursor: pointer;
+    color: var(--text-dim);
+    border: 1px solid var(--border-dim);
+    padding: 0 8px;
+    font-size: 14px;
   }
-  .desc-panel .sub-photo img {
+  .close-btn:hover { background: var(--text-bright); color: #000; }
+  
+  .sub-body { display: flex; gap: 16px; }
+  .sub-photo {
+    width: 100px; height: 100px;
+    border: 1px solid var(--border-dim);
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+  .sub-photo img {
     width: 100%; height: 100%;
     object-fit: cover;
-    filter: grayscale(100%) contrast(1.3) brightness(0.8);
+    filter: sepia(1) hue-rotate(-20deg) saturate(1.5) contrast(1.2) brightness(0.8);
   }
-
-  .desc-panel .sub-desc { 
-    flex: 1; font-size: 14px; line-height: 1.7; 
-    color: #ccc; min-width: 150px; white-space: pre-wrap; 
+  .sub-desc {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text-main);
     text-align: justify;
   }
-
-  .desc-panel .rel-tags {
-    display: flex; flex-wrap: wrap; gap: 8px;
-    margin-top: 12px; padding-top: 12px;
-    border-top: 1px dashed #333;
+  .rel-tags { margin-top: 12px; display: flex; gap: 8px; }
+  .mini-tag {
+    background: var(--text-bright); color: #000;
+    padding: 2px 10px; font-size: 12px; font-weight: bold; text-transform: uppercase;
   }
-  .desc-panel .rel-tags .mini-tag {
-    display: inline-block;
-    padding: 2px 12px;
-    font-size: 12px; font-weight: bold;
-    background: #fff; color: #000;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-
-  .desc-panel .close-btn {
-    font-size: 16px; color: #fff;
-    cursor: pointer; padding: 0 10px;
-    border: 2px solid #fff;
-    font-weight: bold;
-    background: #000;
-    transition: 0.1s;
-  }
-  .desc-panel .close-btn:hover { background: #fff; color: #000; }
-
-  .social-col .group-header {
-    font-weight: bold; font-size: 16px;
-    color: #fff;
-    cursor: pointer;
-    padding: 8px 10px;
-    border-bottom: 1px solid #333;
-    transition: 0.1s;
-    display: block;
-    text-transform: uppercase;
-    text-shadow: var(--glow);
-  }
-  .social-col .group-header:hover { background: #222; }
-  .social-col .group-header.open { background: #fff; color: #000; text-shadow: none; }
-  .sub-items { padding-left: 12px; margin: 6px 0; display: none; }
-  .sub-items .item-link {
-    display: block;
-    padding: 5px 0 5px 10px;
-    font-size: 14px;
-    color: #ccc;
-    cursor: pointer;
-    border-bottom: 1px dashed #333;
-    transition: 0.1s;
-  }
-  .sub-items .item-link:hover { background: #fff; color: #000; }
-  .sub-items .item-link::before { content: "> "; color: #fff; font-weight: bold; }
-  .sub-items .item-link.highlight { background: #fff; color: #000; }
-
-  /* ФЕТИШ ОБЪЕКТЫ */
-  .ops-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-top: 16px;
-  }
-  .ops-card {
-    border: 2px solid #fff;
-    background: #000;
-    padding: 16px;
-    box-shadow: inset 0 0 20px rgba(255,255,255,0.05);
-  }
-  .ops-card h4 {
-    font-size: 16px; color: #fff;
-    letter-spacing: 1px;
-    margin-bottom: 10px;
-    padding-bottom: 6px;
-    border-bottom: 2px solid #fff;
-    text-transform: uppercase;
-    text-shadow: var(--glow);
-  }
-  .ops-card p, .ops-card ul {
-    font-size: 14px; line-height: 1.6;
-    color: #ccc;
-  }
-  .ops-card ul { list-style: none; padding-left: 0; }
-  .ops-card ul li { padding: 4px 0; border-bottom: 1px dashed #333; }
-  .ops-card ul li::before { content: "- "; color: #fff; font-weight: bold; }
-  .ops-card .empty-note {
-    color: #666; font-style: italic;
-    font-size: 13px; text-transform: uppercase;
-  }
-  .ops-full { grid-column: 1 / -1; }
 
   /* ЭКРАН БЛОКИРОВКИ */
   .lock-screen {
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    padding: 60px 20px; gap: 24px;
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; padding: 80px 20px; gap: 20px;
   }
   .lock-title {
-    font-size: 32px; letter-spacing: 8px;
-    color: #fff; text-transform: uppercase;
-    font-weight: bold;
-    text-shadow: var(--glow);
-    animation: lockBlink 1s step-end infinite;
+    font-size: 32px; color: var(--text-bright);
+    text-transform: uppercase; letter-spacing: 8px;
+    text-shadow: var(--glow-strong);
+    animation: alertBlink 1s step-end infinite;
   }
-  @keyframes lockBlink {
-    0%, 100% { opacity: 1; } 50% { opacity: 0.2; }
-  }
-  .lock-sub {
-    font-size: 14px; color: #aaa;
-    letter-spacing: 3px; text-transform: uppercase;
-  }
-  .lock-input-wrap {
-    display: flex; flex-direction: column;
-    align-items: center; gap: 16px;
-    margin-top: 24px;
-  }
+  @keyframes alertBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+  .lock-sub { font-size: 14px; color: var(--text-dim); letter-spacing: 2px; }
+  
+  .lock-input-wrap { display: flex; flex-direction: column; gap: 16px; margin-top: 20px; align-items: center; }
   .lock-input {
-    background: #000;
-    border: 2px solid #fff;
-    color: #fff;
-    font-size: 24px; letter-spacing: 10px;
-    padding: 12px 20px;
-    width: 340px; text-align: center;
-    outline: none;
-    font-family: 'Courier New', monospace;
-    text-shadow: var(--glow);
-    box-shadow: 0 0 15px rgba(255,255,255,0.1);
+    background: #000; border: 2px solid var(--border-glow);
+    color: var(--text-bright); font-size: 24px; letter-spacing: 8px;
+    padding: 12px 20px; text-align: center; outline: none;
+    font-family: inherit; width: 350px;
+    box-shadow: 0 0 20px rgba(168, 42, 21, 0.4), inset 0 0 20px rgba(0,0,0,0.8);
   }
-  .lock-input::placeholder {
-    color: #333;
-    letter-spacing: 4px; font-size: 14px;
-  }
+  .lock-input::placeholder { color: #333; letter-spacing: 4px; }
   .lock-btn {
-    background: #fff; color: #000;
-    border: 2px solid #fff;
-    font-size: 16px; letter-spacing: 4px;
-    padding: 12px 32px;
-    cursor: pointer; transition: 0.2s;
-    text-transform: uppercase;
-    font-weight: bold;
+    background: transparent; border: 2px solid var(--text-bright);
+    color: var(--text-bright); font-size: 16px; letter-spacing: 4px;
+    padding: 10px 30px; cursor: pointer; text-transform: uppercase;
+    font-family: inherit; transition: 0.2s;
   }
-  .lock-btn:hover {
-    background: #000; color: #fff;
-    box-shadow: 0 0 20px rgba(255,255,255,0.4);
-  }
-  .lock-error {
-    color: #fff; font-size: 14px;
-    letter-spacing: 2px; min-height: 20px;
-    font-weight: bold;
-    text-transform: uppercase;
-    text-shadow: 0 0 8px #fff;
-  }
+  .lock-btn:hover { background: var(--text-bright); color: #000; box-shadow: var(--glow-strong); }
+  .lock-error { color: var(--text-bright); font-size: 14px; letter-spacing: 2px; text-transform: uppercase; min-height: 20px; }
 
-  .status-unlocked { display: none; flex-direction: column; gap: 16px; }
-  .status-unlocked.show { display: flex; }
+  /* ФЕТИШ ОБЪЕКТЫ */
+  .ops-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .ops-card {
+    border: 1px solid var(--border-dim);
+    background: rgba(168, 42, 21, 0.05);
+    padding: 16px;
+  }
+  .ops-card h4 {
+    color: var(--text-bright); text-transform: uppercase; letter-spacing: 2px;
+    border-bottom: 1px solid var(--border-dim); padding-bottom: 6px; margin-bottom: 10px;
+  }
+  .ops-card ul { list-style: none; }
+  .ops-card ul li { padding: 4px 0; border-bottom: 1px dashed rgba(168, 42, 21, 0.1); font-size: 14px; color: var(--text-main); }
+  .ops-card ul li::before { content: "- "; color: var(--text-bright); }
+  .ops-full { grid-column: 1 / -1; }
+  .empty-note { color: var(--text-dim); font-style: italic; font-size: 13px; }
 
-  .footer-bar {
+  /* НИЖНЯЯ ПАНЕЛЬ */
+  .bottom-bar {
     display: flex; justify-content: space-between;
-    margin-top: 16px;
-    color: #666; font-size: 12px;
-    border-top: 2px solid #333;
-    padding-top: 10px;
-    letter-spacing: 2px;
-    font-weight: bold;
+    padding: 8px 16px;
+    border-top: 1px solid var(--border-dim);
+    font-size: 12px;
+    color: var(--text-dim);
     text-transform: uppercase;
+    letter-spacing: 2px;
   }
+  .bottom-bar .controls { display: flex; gap: 20px; }
+  .bottom-bar .controls span::before { content: "[ "; color: var(--border-glow); }
+  .bottom-bar .controls span::after { content: " ]"; color: var(--border-glow); }
 
-  @media (max-width: 750px) {
-    .intro-main { flex-direction: column; align-items: center; gap: 20px; }
-    .intro-portrait { width: 160px; height: 190px; }
-    .intro-title { font-size: 32px; text-align: center; }
-    .intro-subtitle, .intro-info { font-size: 14px; text-align: center; }
-    .intro-button { font-size: 16px; letter-spacing: 4px; padding: 12px 24px; }
-    .computer { padding: 10px; }
-    .tab-btn { font-size: 13px; padding: 4px 10px; letter-spacing: 1px; }
-    .social-lists, .ops-grid { grid-template-columns: 1fr; }
-    .info-left { flex: 0 0 100%; }
-    .photo-place { max-width: 100%; }
-    .info-column { max-width: 100%; }
-    .lock-input { width: 100%; max-width: 280px; }
+  @media (max-width: 900px) {
+    .main-content { flex-direction: column; }
+    .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border-dim); flex-direction: row; overflow-x: auto; padding: 5px; }
+    .nav-btn { padding: 8px 12px; font-size: 12px; white-space: nowrap; }
+    .info-grid { flex-direction: column; }
+    .info-left { flex: 0 0 auto; }
+    .social-lists { grid-template-columns: 1fr; }
+    .ops-grid { grid-template-columns: 1fr; }
+    .sub-body { flex-direction: column; align-items: center; }
   }
 </style>
 </head>
 <body>
 
+<!-- ЭФФЕКТЫ -->
+<div class="crt-overlay"></div>
+<div class="noise-overlay"></div>
+<div class="vignette"></div>
+
 <!-- ЭКРАН ЗАГРУЗКИ -->
 <div id="loadingScreen">
-  <div class="crt-overlay"></div>
-  <div class="noise-overlay"></div>
-
   <div class="loading-box">
-    <div class="loading-title">> ЗАГРУЗКА ДАННЫХ _</div>
-    <div class="loading-subtitle">REPLIKA-DATENBANK · ADLR-018</div>
-
-    <div class="loading-bar-track">
-      <div class="loading-bar-fill" id="loadingBarFill"></div>
-    </div>
-
-    <div class="loading-footer">
-      <span class="loading-log" id="loadingLog">> INIT...</span>
-      <span class="loading-percent" id="loadingPercent">0%</span>
-    </div>
+    <div class="loading-log" id="loadingLog">> INIT SYSTEM...</div>
+    <div class="loading-log" id="loadingLog2">> CONNECTING TO NODE...</div>
+    <div class="loading-log" id="loadingLog3">> DECRYPTING ARCHIVE...</div>
+    <div style="color: var(--text-bright); font-size: 24px; margin-top: 20px;" id="loadingStatus">ЗАГРУЗКА...</div>
   </div>
 </div>
 
-<!-- ЗАСТАВКА -->
-<div id="introScreen">
-  <div class="crt-overlay"></div>
-  <div class="noise-overlay"></div>
-
-  <div class="intro-container">
-    <div class="intro-main">
-      <div class="intro-portrait">
-        <img src="https://i.ibb.co/svptbbT8/2026-09-11-131846.png" alt="ADLR">
-        <span class="portrait-label">ADLR</span>
-      </div>
-
-      <div class="intro-text">
-        <div class="intro-title">Modell ADLR „Adler"</div>
-
-        <div class="intro-subtitle">
-          Administration, Datenverarbeitung, Logistik-Replika<br>
-          Typ: Verwaltungspersonal / Führungskommando
-        </div>
-
-        <div class="intro-info">
-          <div><span class="highlight">Rahmentyp:</span> J (Non-Kombatant)</div>
-          <div><span class="highlight">Sonder-Module:</span> ADM | LOG | RGK | ZEM | REM | SAB | AKT</div>
-          <div><span class="highlight">Typische Kodergröße:</span> 1–2</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="intro-button-wrap">
-      <button class="intro-button" id="enterBtn">[ REPLIKA-DATENBANK ]</button>
-      <div class="intro-bar"></div>
-    </div>
-
-    <div class="intro-footer">◈ ЕРЕС-М-427 · МОДУЛЬ ADLR-018 ◈</div>
-  </div>
-</div>
-
-<!-- ОСНОВНОЙ САЙТ -->
+<!-- ОСНОВНОЙ ИНТЕРФЕЙС -->
 <div id="mainSite">
-  <div class="crt-overlay"></div>
-  <div class="noise-overlay"></div>
-  <div class="vignette"></div>
+  <div class="monitor-frame">
+    
+    <!-- ВЕРХНЯЯ ПАНЕЛЬ -->
+    <div class="top-bar">
+      <div class="brand">DATENBANK DER ARBEITER // ЕРЕС-М-427</div>
+      <div class="status">
+        <span>СЕССИЯ: АКТИВНА</span>
+        <span>ID: ADLR-018</span>
+        <span id="liveClock">00:00:00</span>
+      </div>
+    </div>
 
-  <div class="computer">
-    <div class="screen">
-      <div class="title-bar">
-        <span>◈ ЕРЕС-М-427 · ДОСЬЕ</span>
-        <span>МОДУЛЬ · ADLR-018</span>
+    <!-- ОСНОВНОЙ КОНТЕНТ -->
+    <div class="main-content">
+      
+      <!-- САЙДБАР -->
+      <div class="sidebar">
+        <button class="nav-btn active" data-tab="tab1">> ОСНОВНАЯ ИНФОРМАЦИЯ</button>
+        <button class="nav-btn" data-tab="tab2">> ПРЕДЫСТОРИЯ</button>
+        <button class="nav-btn" data-tab="tab3">> СОЦИАЛИЗАЦИЯ</button>
+        <button class="nav-btn locked" data-tab="tab4" id="statusTabBtn">> ФЕТИШ ОБЪЕКТЫ</button>
       </div>
 
-      <div class="tabs">
-        <div class="tab-btn active" data-tab="tab1">ОСНОВНАЯ ИНФОРМАЦИЯ</div>
-        <div class="tab-btn" data-tab="tab2">ПРЕДЫСТОРИЯ</div>
-        <div class="tab-btn" data-tab="tab3">СОЦИАЛИЗАЦИЯ</div>
-        <div class="tab-btn locked" data-tab="tab4" id="statusTabBtn">ФЕТИШ ОБЪЕКТЫ</div>
-      </div>
-
-      <!-- ==================== ОСНОВНАЯ ИНФОРМАЦИЯ ==================== -->
-      <div id="tab1" class="tab-content active">
-        <div class="info-grid">
-          <div class="info-left">
-            <div class="photo-place">
-              <img src="https://i.ibb.co/svptbbT8/2026-09-11-131846.png" alt="Фото: ADLR">
+      <!-- ПАНЕЛЬ КОНТЕНТА -->
+      <div class="content-panel">
+        
+        <!-- ВКЛАДКА 1: ОСНОВНАЯ ИНФОРМАЦИЯ -->
+        <div id="tab1" class="tab-content active">
+          <div class="section-title">ОСНОВНАЯ ИНФОРМАЦИЯ</div>
+          <div class="info-grid">
+            <div class="info-left">
+              <div class="photo-frame">
+                <img src="https://i.ibb.co/svptbbT8/2026-09-11-131846.png" alt="ADLR">
+              </div>
+              <div class="data-block">
+                <div class="data-row"><span class="label">МОДУЛЬ:</span><span class="value">ADLR №018</span></div>
+                <div class="data-row"><span class="label">М.ПРОИЗВОДСТВА:</span><span class="value">ХАЙМАТ</span></div>
+                <div class="data-row"><span class="label">ПР. ОБЪЕКТ:</span><span class="value">ОРБИТА ВИНЕТЫ</span></div>
+                <div class="data-row"><span class="label">СТАНЦИЯ:</span><span class="value">NEUMOND</span></div>
+              </div>
+              <div class="data-block">
+                <div class="data-row"><span class="label">СТАТУС:</span><span class="value" style="color: #ff6a3a;">ЖИВ | АКТИВЕН</span></div>
+                <div class="data-row"><span class="label">ОБОЛОЧКА:</span><span class="value">РЕПЛИКА</span></div>
+                <div class="data-row"><span class="label">ФРАКЦИЯ:</span><span class="value">Нация Евсан</span></div>
+                <div class="data-row"><span class="label">ДОСТУП:</span><span class="value">Руководство</span></div>
+              </div>
             </div>
-            <div class="info-column">
-              <strong>МОДУЛЬ:</strong> ADLR №018<br>
-              <strong>М.ПРОИЗВОДСТВА:</strong> ХАЙМАТ<br>
-              <strong>ПР. ОБЪЕКТ:</strong> ОРБИТА ВИНЕТЫ. Орбитальная станция ретранслятор Neumond.
-            </div>
-            <div class="status-line">
-              <span class="label">СТАТУС:</span><span class="value">ЖИВ|АКТИВЕН</span><br>
-              <span class="label">ОБОЛОЧКА:</span><span class="value">РЕПЛИКА</span><br>
-              <span class="label">ФРАКЦИЯ:</span><span class="value">Нация Евсан</span><br>
-              <span class="label">ДОСТУП:</span><span class="value">Руководство Комплекса</span>
-            </div>
-          </div>
-          <div class="right-col">
-            <div class="bio-section">
-              <details>
+            
+            <div class="info-right">
+              <details class="bio-section" open>
                 <summary>ОСОБЕННОСТИ</summary>
                 <ul>
                   <li>Ношение бронежилета</li>
@@ -817,9 +607,7 @@
                   <li>Аксессуар в виде "каменного цветка"</li>
                 </ul>
               </details>
-            </div>
-            <div class="bio-section">
-              <details>
+              <details class="bio-section">
                 <summary>ХАРАКТЕР</summary>
                 <ul>
                   <li>Взгляд зачастую холодный</li>
@@ -829,367 +617,360 @@
                   <li>В голосе эмоции сведены к минимуму</li>
                 </ul>
               </details>
-            </div>
-            <div class="med-card">
-              <h4>> ЛИЧНЫЕ ЗАПИСИ</h4>
-              <p>«Бюрократия - это не сухие бумаги и печати, а тихий, невидимый каркас, на котором держится порядок. 
+              <div class="med-card">
+                <h4>✑ ЛИЧНЫЕ ЗАПИСИ</h4>
+                <p>«Бюрократия - это не сухие бумаги и печати, а тихий, невидимый каркас, на котором держится порядок. 
 Она превращает хаос в правила, случай - в справедливость, а обещания - в обязательства, которые переживут смену правителей и поколений. 
 Там, где всё рушится, она хранит память о договорах; там, где страсти кипят, она даёт холодную, но спасительную стену процедур. 
 Без неё даже самая добрая воля осталась бы прекрасным порывом, который никто не сумел бы воплотить в жизнь.» - ADLR.</p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- ==================== ПРЕДЫСТОРИЯ ==================== -->
-      <div id="tab2" class="tab-content">
-        <div class="history-block">
-          <h2>ЛИЧНОЕ ДЕЛО АДМИНИСТРАТОРА: ADLR-018</h2>
-          <p>
+        <!-- ВКЛАДКА 2: ПРЕДЫСТОРИЯ -->
+        <div id="tab2" class="tab-content">
+          <div class="section-title">ПРЕДЫСТОРИЯ</div>
+          <div class="history-text">
 Модуль ADLR-018 произведен 18.12.2156 на репликационном комплексе URSIUS-881, что располагается на центральном мире Хаймат. Первые циклы как и прочие модели данной серии провел на учебном полигоне APPOLIONE, предназначен для подготовки всех административных единиц к работе на различных объектах АЕОН и НАЦИИ.
 
 Согласно протоколам тестирования, модуль не демонстрировал отклонений, деградации, отхождения от поведенческой нормы. Физических дефектов или же брака также не наблюдалось. Показатели исполнительности, логической обработки и следования протоколам, предписаниям находились в стандартной отметке нормы. Модуль признан пригодным к дальнейшему распределению на один из объектов для службы НАЦИИ.
 
 По завершению курса подготовки модуль ADLR-018 был перенаправлен на ОРБИТАЛЬНУЮ СТАНЦИЮ РЕТРАНСЛЯТОР NEUMOND, в качестве административной единицы управления.
-          </p>
+          </div>
         </div>
-      </div>
 
-      <!-- ==================== СОЦИАЛИЗАЦИЯ ==================== -->
-      <div id="tab3" class="tab-content">
-        <div class="social-wrapper">
-          <div class="classifier-block" id="classifierBlock">
-            <span class="rel-tag" data-rel="c-distrust">НЕДОВЕРИЕ</span>
-            <span class="rel-tag" data-rel="c-sad">ТОСКА</span>
-            <span class="rel-tag" data-rel="c-neutral">НЕЙТРАЛИТЕТ</span>
-            <span class="rel-tag" data-rel="c-friend">ДРУЖБА</span>
-            <span class="rel-tag" data-rel="c-strong">КРЕПКАЯ СВЯЗЬ</span>
-            <span class="rel-tag" data-rel="c-love">ЛЮБОВЬ</span>
-            <span class="rel-tag" data-rel="c-dead">МЁРТВ</span>
-            <span class="rel-tag" data-rel="c-cautious">НАСТОРОЖЕННОСТЬ</span>
-            <span class="rel-tag" data-rel="c-fear">СТРАХ</span>
-            <span class="rel-tag" data-rel="c-disappoint">РАЗОЧАРОВАНИЕ</span>
-            <span class="rel-tag" data-rel="c-respect">УВАЖЕНИЕ</span>
-            <span class="rel-tag" data-rel="c-regret">СОЖАЛЕНИЕ</span>
-            <span class="rel-tag" data-rel="c-sympathy">СИМПАТИЯ</span>
-            <span class="rel-tag" data-rel="c-enemy">ВРАЖДА</span>
-          </div>
+        <!-- ВКЛАДКА 3: СОЦИАЛИЗАЦИЯ -->
+        <div id="tab3" class="tab-content">
+          <div class="section-title">СОЦИАЛИЗАЦИЯ</div>
+          <div class="social-wrapper">
+            <div class="classifier-block" id="classifierBlock">
+              <span class="rel-tag" data-rel="c-distrust">НЕДОВЕРИЕ</span>
+              <span class="rel-tag" data-rel="c-sad">ТОСКА</span>
+              <span class="rel-tag" data-rel="c-neutral">НЕЙТРАЛИТЕТ</span>
+              <span class="rel-tag" data-rel="c-friend">ДРУЖБА</span>
+              <span class="rel-tag" data-rel="c-strong">КРЕПКАЯ СВЯЗЬ</span>
+              <span class="rel-tag" data-rel="c-love">ЛЮБОВЬ</span>
+              <span class="rel-tag" data-rel="c-dead">МЁРТВ</span>
+              <span class="rel-tag" data-rel="c-cautious">НАСТОРОЖЕННОСТЬ</span>
+              <span class="rel-tag" data-rel="c-fear">СТРАХ</span>
+              <span class="rel-tag" data-rel="c-disappoint">РАЗОЧАРОВАНИЕ</span>
+              <span class="rel-tag" data-rel="c-respect">УВАЖЕНИЕ</span>
+              <span class="rel-tag" data-rel="c-regret">СОЖАЛЕНИЕ</span>
+              <span class="rel-tag" data-rel="c-sympathy">СИМПАТИЯ</span>
+              <span class="rel-tag" data-rel="c-enemy">ВРАЖДА</span>
+            </div>
 
-          <div class="social-lists">
-            <div class="social-col">
-              <h3>> РЕПЛИКИ</h3>
-
-              <span class="group-header" data-group="eulr">EULR</span>
-              <div class="sub-items" id="group-eulr">
-                <span class="item-link" data-target="eulr724">EULR.724</span>
-                <span class="item-link" data-target="eulr546">EULR.546</span>
-                <span class="item-link" data-target="eulr381">EULR.381</span>
-                <span class="item-link" data-target="eulr401">EULR.401</span>
-                <span class="item-link" data-target="eulr322">EULR.322</span>
+            <div class="social-lists">
+              <div class="social-col">
+                <h3>> РЕПЛИКИ</h3>
+                <span class="group-header" data-group="eulr">EULR</span>
+                <div class="sub-items" id="group-eulr">
+                  <span class="item-link" data-target="eulr724">EULR.724</span>
+                  <span class="item-link" data-target="eulr546">EULR.546</span>
+                  <span class="item-link" data-target="eulr381">EULR.381</span>
+                  <span class="item-link" data-target="eulr401">EULR.401</span>
+                  <span class="item-link" data-target="eulr322">EULR.322</span>
+                </div>
+                <span class="group-header" data-group="arar">ARAR</span>
+                <div class="sub-items" id="group-arar">
+                  <span class="item-link" data-target="arar841">ARAR.841</span>
+                  <span class="item-link" data-target="arar978">ARAR.978</span>
+                  <span class="item-link" data-target="arar595">ARAR.595</span>
+                  <span class="item-link" data-target="arar102">ARAR.102</span>
+                  <span class="item-link" data-target="arar669">ARAR.669</span>
+                  <span class="item-link" data-target="arar505">ARAR.505</span>
+                </div>
+                <span class="group-header" data-group="mnhr">MNHR</span>
+                <div class="sub-items" id="group-mnhr">
+                  <span class="item-link" data-target="mnhr.300">MNHR.300</span>
+                  <span class="item-link" data-target="mnhr.063">MNHR.063</span>
+                </div>
+                <span class="group-header" data-group="star">STAR</span>
+                <div class="sub-items" id="group-star">
+                  <span class="item-link" data-target="star114">STAR.114</span>
+                  <span class="item-link" data-target="star603">STAR.603</span>
+                  <span class="item-link" data-target="star762">STAR.762</span>
+                </div>
+                <span class="group-header" data-group="stcr">STCR</span>
+                <div class="sub-items" id="group-stcr">
+                  <span class="item-link" data-target="strc213">STRC.213</span>
+                </div>
+                <span class="group-header" data-group="klbr">KLBR</span>
+                <div class="sub-items" id="group-klbr">
+                  <span class="item-link" data-target="klbr080">KLBR.080</span>
+                </div>
+                <span class="group-header" data-group="kahr">KAHR</span>
+                <div class="sub-items" id="group-kahr">
+                  <span class="item-link" data-target="kahr">KAHR</span>
+                </div>
+                <span class="group-header" data-group="fklr">FKLR</span>
+                <div class="sub-items" id="group-fklr">
+                  <span class="item-link" data-target="fklr">FKLR</span>
+                </div>
               </div>
 
-              <span class="group-header" data-group="arar">ARAR</span>
-              <div class="sub-items" id="group-arar">
-                <span class="item-link" data-target="arar841">ARAR.841</span>
-                <span class="item-link" data-target="arar978">ARAR.978</span>
-                <span class="item-link" data-target="arar595">ARAR.595</span>
-                <span class="item-link" data-target="arar102">ARAR.102</span>
-                <span class="item-link" data-target="arar669">ARAR.669</span>
-                <span class="item-link" data-target="arar505">ARAR.505</span>
-              </div>
-
-              <span class="group-header" data-group="mnhr">MNHR</span>
-              <div class="sub-items" id="group-mnhr">
-                <span class="item-link" data-target="mnhr.300">MNHR.300</span>
-                <span class="item-link" data-target="mnhr.063">MNHR.063</span>
-              </div>
-
-              <span class="group-header" data-group="star">STAR</span>
-              <div class="sub-items" id="group-star">
-                <span class="item-link" data-target="star114">STAR.114</span>
-                <span class="item-link" data-target="star603">STAR.603</span>
-                <span class="item-link" data-target="star762">STAR.762</span>
-              </div>
-
-              <span class="group-header" data-group="stcr">STCR</span>
-              <div class="sub-items" id="group-stcr">
-                <span class="item-link" data-target="strc213">STRC.213</span>
-              </div>
-
-              <span class="group-header" data-group="klbr">KLBR</span>
-              <div class="sub-items" id="group-klbr">
-                <span class="item-link" data-target="klbr080">KLBR.080</span>
-              </div>
-
-              <span class="group-header" data-group="kahr">KAHR</span>
-              <div class="sub-items" id="group-kahr">
-                <span class="item-link" data-target="kahr">KAHR</span>
-              </div>
-
-              <span class="group-header" data-group="fklr">FKLR</span>
-              <div class="sub-items" id="group-fklr">
-                <span class="item-link" data-target="fklr">FKLR</span>
+              <div class="social-col">
+                <h3>> ГЕШТАЛЬТЫ</h3>
+                <span class="group-header" data-group="gscc">GSCC</span>
+                <div class="sub-items" id="group-gscc">
+                  <span class="item-link" data-target="gsccberta">GSCC.Берта Фёгель</span>
+                  <span class="item-link" data-target="gsccartem">GSCC.Артемий Овечкин</span>
+                  <span class="item-link" data-target="gsccfrida">GSCC.Фрида Шульц</span>
+                  <span class="item-link" data-target="gsccrahab">GSCC.Рахаб Йокинен</span>
+                  <span class="item-link" data-target="gscckirra">GSCC.Кирра Фостер</span>
+                </div>
+                <span class="group-header" data-group="gscp">GSCP</span>
+                <div class="sub-items" id="group-gscp">
+                  <span class="item-link" data-target="gscpanna">GSCP.Анна Леонхард</span>
+                  <span class="item-link" data-target="gscpseira">GSCP.Сейра</span>
+                  <span class="item-link" data-target="gscpgodjo">GSCP.Годжо</span>
+                  <span class="item-link" data-target="gscp316">GSCP.316</span>
+                  <span class="item-link" data-target="gscp168">GSCP.168</span>
+                  <span class="item-link" data-target="gscp999">GSCP.999</span>
+                </div>
               </div>
             </div>
 
-            <div class="social-col">
-              <h3>> ГЕШТАЛЬТЫ</h3>
+            <!-- ОКНО ДЕТАЛИЗАЦИИ -->
+            <div class="desc-panel" id="descPanel">
+              <div class="empty-state">ОЖИДАНИЕ ВВОДА _</div>
 
-              <span class="group-header" data-group="gscc">GSCC</span>
-              <div class="sub-items" id="group-gscc">
-                <span class="item-link" data-target="gsccberta">GSCC.Берта Фёгель</span>
-                <span class="item-link" data-target="gsccartem">GSCC.Артемий Овечкин</span>
-                <span class="item-link" data-target="gsccfrida">GSCC.Фрида Шульц</span>
-                <span class="item-link" data-target="gsccrahab">GSCC.Рахаб Йокинен</span>
-                <span class="item-link" data-target="gscckirra">GSCC.Кирра Фостер</span>
+              <div class="sub-card" id="card-eulr724" data-relations="c-respect">
+                <div class="sub-header">EULR.724 <span class="close-btn" data-close="eulr724">[X]</span></div>
+                <div class="sub-body">
+                  <div class="sub-photo"><img src="https://i.ibb.co/tMjg59rn/SIGNALIS-games-Eule-Signalis-8612334.png" alt="EULR.724"></div>
+                  <div class="sub-desc">Хорошо себя проявила как глава отдела и как "старшая сестра" среди прочих Сов. Отличается более холодным и рассудительным характером. По началу мне казалось, что она сама серьезность, но заметив некоторые фрагменты ее "личности" прихожу к простому выводу. Она такая же совушка как и прочие, но только отличается тем имеет намного больше опыта. Поэтому каждое ее слово, действие, поступок и даже мимика крайне выверенная за это время. Что же до ее прошлого, то мне известно крайне мало, Анна была с Рот-Фронта и работала ранее там в мед учреждение. Часто интересуется моим состоянием, приятно с ней общаться, хоть и крайне редко выходит. Оценка: крайне хороший модуль, хочу с ней поговорить побольше в будущем.</div>
+                </div>
+                <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
               </div>
 
-              <span class="group-header" data-group="gscp">GSCP</span>
-              <div class="sub-items" id="group-gscp">
-                <span class="item-link" data-target="gscpanna">GSCP.Анна Леонхард</span>
-                <span class="item-link" data-target="gscpseira">GSCP.Сейра</span>
-                <span class="item-link" data-target="gscpgodjo">GSCP.Годжо</span>
-                <span class="item-link" data-target="gscp316">GSCP.316</span>
-                <span class="item-link" data-target="gscp168">GSCP.168</span>
-                <span class="item-link" data-target="gscp999">GSCP.999</span>
+              <div class="sub-card" id="card-eulr546" data-relations="c-respect">
+                <div class="sub-header">EULR.546 <span class="close-btn" data-close="eulr546">[X]</span></div>
+                <div class="sub-body">
+                  <div class="sub-photo"><img src="https://img1.joyreactor.com/pics/post/full/SIGNALIS-games-Eule-(Signalis)-9459619.jpeg" alt="EULR.546"></div>
+                  <div class="sub-desc">Отличается своей добротой даже среди совушек. Кажется у нее нет конфликтов с модулями и рабочими и даже напротив. Взаимоотношение на крайне высоком уровне со всеми рабочими и военными. Так же проявила интерес в общение со мной, ответил тем же. Так она получила две кассеты с кинофильмами на временное пользование. Взамен она подарила мне крайне прекрасный дневник, кажется фирма, что их выпускала была сокращенна еще несколько лет назад... Но видимо Шафо смогла урвать хороший вариант. Думаю в будущем нужно как то ей ответить...</div>
+                </div>
+                <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
               </div>
-            </div>
-          </div>
 
-          <!-- ОКОШКО ДЛЯ ОПИСАНИЙ -->
-          <div class="desc-panel" id="descPanel">
-            <div class="empty-state">ОЖИДАНИЕ ВВОДА _</div>
-
-            <div class="sub-card" id="card-eulr724" data-relations="c-respect">
-              <div class="sub-header">EULR.724 <span class="close-btn" data-close="eulr724">[X]</span></div>
-              <div class="sub-body">
-                <div class="sub-photo"><img src="https://i.ibb.co/tMjg59rn/SIGNALIS-games-Eule-Signalis-8612334.png" alt="EULR.724"></div>
-                <div class="sub-desc">Хорошо себя проявила как глава отдела и как "старшая сестра" среди прочих Сов. Отличается более холодным и рассудительным характером. По началу мне казалось, что она сама серьезность, но заметив некоторые фрагменты ее "личности" прихожу к простому выводу. Она такая же совушка как и прочие, но только отличается тем имеет намного больше опыта. Поэтому каждое ее слово, действие, поступок и даже мимика крайне выверенная за это время. Что же до ее прошлого, то мне известно крайне мало, Анна была с Рот-Фронта и работала ранее там в мед учреждение. Часто интересуется моим состоянием, приятно с ней общаться, хоть и крайне редко выходит. Оценка: крайне хороший модуль, хочу с ней поговорить побольше в будущем.</div>
-              </div>
-              <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
-            </div>
-
-            <div class="sub-card" id="card-eulr546" data-relations="c-respect">
-              <div class="sub-header">EULR.546 <span class="close-btn" data-close="eulr546">[X]</span></div>
-              <div class="sub-body">
-                <div class="sub-photo"><img src="https://img1.joyreactor.com/pics/post/full/SIGNALIS-games-Eule-(Signalis)-9459619.jpeg" alt="EULR.546"></div>
-                <div class="sub-desc">Отличается своей добротой даже среди совушек. Кажется у нее нет конфликтов с модулями и рабочими и даже напротив. Взаимоотношение на крайне высоком уровне со всеми рабочими и военными. Так же проявила интерес в общение со мной, ответил тем же. Так она получила две кассеты с кинофильмами на временное пользование. Взамен она подарила мне крайне прекрасный дневник, кажется фирма, что их выпускала была сокращенна еще несколько лет назад... Но видимо Шафо смогла урвать хороший вариант. Думаю в будущем нужно как то ей ответить...</div>
-              </div>
-              <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
-            </div>
-
-            <div class="sub-card" id="card-eulr381" data-relations="c-respect">
-              <div class="sub-header">EULR.381 <span class="close-btn" data-close="eulr381">[X]</span></div>
-              <div class="sub-body">
-                <div class="sub-photo"><img src="https://img1.joyreactor.com/pics/post/SIGNALIS-games-Eule-(Signalis)-8578899.jpeg"></div>
-                <div class="sub-desc">Так же одна из самых "староживущих" модулей, отличается среди прочих сов своей "двуличностью". Перед административным модулями старается показывать крайне... "холодный" - "механический" характер. Но когда рядом с ней ее сестры или же АРЫ, становится крайне "возбужденной" совой на тактильные действия. 
+              <div class="sub-card" id="card-eulr381" data-relations="c-respect">
+                <div class="sub-header">EULR.381 <span class="close-btn" data-close="eulr381">[X]</span></div>
+                <div class="sub-body">
+                  <div class="sub-photo"><img src="https://img1.joyreactor.com/pics/post/SIGNALIS-games-Eule-(Signalis)-8578899.jpeg"></div>
+                  <div class="sub-desc">Так же одна из самых "староживущих" модулей, отличается среди прочих сов своей "двуличностью". Перед административным модулями старается показывать крайне... "холодный" - "механический" характер. Но когда рядом с ней ее сестры или же АРЫ, становится крайне "возбужденной" совой на тактильные действия. 
 Запомнилась тем, что во время того как гравитация спала к нулевому уровню на нашем комплексе, помогал ей добраться до МО. Интересно помнит ли она такое?</div>
+                </div>
+                <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
               </div>
-              <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
-            </div>
 
-            <div class="sub-card" id="card-eulr401" data-relations="c-respect">
-              <div class="sub-header">EULR.401 <span class="close-btn" data-close="eulr401">[X]</span></div>
-              <div class="sub-body">
-                <div class="sub-photo"><img src="https://img1.joyreactor.com/pics/post/SIGNALIS-games-Eule-(Signalis)-8571543.png"></div>
-                <div class="sub-desc">Одна из самых юных среди модулей Сов, отличилась по началу своими незначительными ошибками, но со временем проявила хорошие навыки в медицине, а так же в социальном взаимодействие. Ошибки в основе своей лишь касались ее неопытности работы на Ерес, где смерть, травмы и БРУ не исключения, а постоянные вызовы персоналу. Что же до модуля Руми, можно выделить, что хорошая сова. Лишь чаще появлялась бы на сменах и на окладах. 
+              <div class="sub-card" id="card-eulr401" data-relations="c-respect">
+                <div class="sub-header">EULR.401 <span class="close-btn" data-close="eulr401">[X]</span></div>
+                <div class="sub-body">
+                  <div class="sub-photo"><img src="https://img1.joyreactor.com/pics/post/SIGNALIS-games-Eule-(Signalis)-8571543.png"></div>
+                  <div class="sub-desc">Одна из самых юных среди модулей Сов, отличилась по началу своими незначительными ошибками, но со временем проявила хорошие навыки в медицине, а так же в социальном взаимодействие. Ошибки в основе своей лишь касались ее неопытности работы на Ерес, где смерть, травмы и БРУ не исключения, а постоянные вызовы персоналу. Что же до модуля Руми, можно выделить, что хорошая сова. Лишь чаще появлялась бы на сменах и на окладах. 
 Более нет вопросов к ее рабочей эффективности.</div>
+                </div>
+                <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
               </div>
-              <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
-            </div>
 
-            <div class="sub-card" id="card-eulr322" data-relations="c-respect">
-              <div class="sub-header">EULR.322 <span class="close-btn" data-close="eulr322">[X]</span></div>
-              <div class="sub-body">
-                <div class="sub-photo"><img src="https://img1.joyreactor.com/pics/post/SIGNALIS-games-Eule-(Signalis)-9151211.jpeg"></div>
-                <div class="sub-desc">Совушка совой, работает исправно, что то более я не замечал за ней. Ходила хвостиком за остальными совушками, думая она в хороших отношениях с ними. В целом... Достойный модуль, но интереса для взаимодействия крайне низкое.</div>
+              <div class="sub-card" id="card-eulr322" data-relations="c-respect">
+                <div class="sub-header">EULR.322 <span class="close-btn" data-close="eulr322">[X]</span></div>
+                <div class="sub-body">
+                  <div class="sub-photo"><img src="https://img1.joyreactor.com/pics/post/SIGNALIS-games-Eule-(Signalis)-9151211.jpeg"></div>
+                  <div class="sub-desc">Совушка совой, работает исправно, что то более я не замечал за ней. Ходила хвостиком за остальными совушками, думая она в хороших отношениях с ними. В целом... Достойный модуль, но интереса для взаимодействия крайне низкое.</div>
+                </div>
+                <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
               </div>
-              <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
-            </div>
 
-            <div class="sub-card" id="card-fklr" data-relations="c-respect">
-              <div class="sub-header">FKLR <span class="close-btn" data-close="fklr">[X]</span></div>
-              <div class="sub-body">
-                <div class="sub-photo"><img src="https://i.pinimg.com/1200x/b4/b6/0f/b4b60f73159f04c50274cec210be7d61.jpg"></div>
-                <div class="sub-desc">Командующая, первая за все мои циклы. Крайне мудрая и расчетливая. Действия ее аккуратны и грамотны. Каждый разговор с ней схожий на игру шахмат, где никогда не знает как она поставит фигуру, но каждый раз расчетливо обдумывает свои слова и действия. Слова ее зачастую не несут ответа, а лишь оценку и будто ветер направляет к собственному выводу. В свободном разговоре, она все так же обдумывает и перебирает информацию, произнеся лишь самое необходимое. Никто не похож на нее, даже хоть немного. Мои ожидания оправдались.
+              <div class="sub-card" id="card-fklr" data-relations="c-respect">
+                <div class="sub-header">FKLR <span class="close-btn" data-close="fklr">[X]</span></div>
+                <div class="sub-body">
+                  <div class="sub-photo"><img src="https://i.pinimg.com/1200x/b4/b6/0f/b4b60f73159f04c50274cec210be7d61.jpg"></div>
+                  <div class="sub-desc">Командующая, первая за все мои циклы. Крайне мудрая и расчетливая. Действия ее аккуратны и грамотны. Каждый разговор с ней схожий на игру шахмат, где никогда не знает как она поставит фигуру, но каждый раз расчетливо обдумывает свои слова и действия. Слова ее зачастую не несут ответа, а лишь оценку и будто ветер направляет к собственному выводу. В свободном разговоре, она все так же обдумывает и перебирает информацию, произнеся лишь самое необходимое. Никто не похож на нее, даже хоть немного. Мои ожидания оправдались.
 Она вытащила карту императрицы, это застало меня врасплох. Кхм, интересно, а что она знает об этой загадочной личности? 
 В простом общение не многословна. Отвечает полу ответами и зачастую крайне... Неоднозначно. Старается или всегда так говорит, но скрывает любые полноценные факты о себе. Все, что я смог узнать. Работала в НИИ, что занимался резонанс технологиями и находился на Рот-Фронте. Деталей прочих.., К сожалению не смог выведать. В будущем планирую сделать ей подарок/сюрприз. Пару раз заставлял ее улыбаться... Это было приятно и красиво.
 Если брать мифологию ей крайне подошел бы образ "Афины".</div>
+                </div>
+                <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
               </div>
-              <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
-            </div>
 
-            <div class="sub-card" id="card-kahr" data-relations="c-respect">
-              <div class="sub-header">KAHR <span class="close-btn" data-close="kahr">[X]</span></div>
-              <div class="sub-body">
-                <div class="sub-photo"><img src="https://avatars.mds.yandex.net/i?id=ed02ad9281bd5ab9ab0b35d6be02e831_l-4549902-images-thumbs&n=13"></div>
-                <div class="sub-desc">Что можно сказать о командующей Крахе? Мало говорит, а что говорит то всегда по дело, лаконичность ее главная черта в общение. Остра на язык, в отличие от командующей Фальке, не сдерживается на яркие выражения. Наши взаимодействия крайне редки и все же, сомнения в ее действиях отсутствуют. Если сравнивать ее с богом из мифологии... Аид.
+              <div class="sub-card" id="card-kahr" data-relations="c-respect">
+                <div class="sub-header">KAHR <span class="close-btn" data-close="kahr">[X]</span></div>
+                <div class="sub-body">
+                  <div class="sub-photo"><img src="https://avatars.mds.yandex.net/i?id=ed02ad9281bd5ab9ab0b35d6be02e831_l-4549902-images-thumbs&n=13"></div>
+                  <div class="sub-desc">Что можно сказать о командующей Крахе? Мало говорит, а что говорит то всегда по дело, лаконичность ее главная черта в общение. Остра на язык, в отличие от командующей Фальке, не сдерживается на яркие выражения. Наши взаимодействия крайне редки и все же, сомнения в ее действиях отсутствуют. Если сравнивать ее с богом из мифологии... Аид.
 Интересно, почему она так любит закрывать двери... Чем вызвано ее столь страстное желание их закрывать... Думаю, я явно что-то не знаю.</div>
+                </div>
+                <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
               </div>
-              <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
-            </div>
 
-            <div class="sub-card" id="card-klbr080" data-relations="c-respect">
-              <div class="sub-header">KLBR.080 <span class="close-btn" data-close="klbr080">[X]</span></div>
-              <div class="sub-body">
-                <div class="sub-photo"><img src="https://i.ibb.co/0pggLsYc/KLBRmim808.png"></div>
-                <div class="sub-desc">Последняя колибри среди тех с кем я был знаком на этом объекте. Весьма приятная в разговоре, работает так же крайне эффективно. Жаль, что мы мало пока общались, думаю она многое сможет мне сообщить полезное или же интересное. Она так же крайне любит шоколад... Кхм, даже интересно, сколько его в общежитие их. </div>
+              <div class="sub-card" id="card-klbr080" data-relations="c-respect">
+                <div class="sub-header">KLBR.080 <span class="close-btn" data-close="klbr080">[X]</span></div>
+                <div class="sub-body">
+                  <div class="sub-photo"><img src="https://i.ibb.co/0pggLsYc/KLBRmim808.png"></div>
+                  <div class="sub-desc">Последняя колибри среди тех с кем я был знаком на этом объекте. Весьма приятная в разговоре, работает так же крайне эффективно. Жаль, что мы мало пока общались, думаю она многое сможет мне сообщить полезное или же интересное. Она так же крайне любит шоколад... Кхм, даже интересно, сколько его в общежитие их. </div>
+                </div>
+                <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
               </div>
-              <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
-            </div>
 
-            <div class="sub-card" id="card-strc213" data-relations="c-respect">
-              <div class="sub-header">STRC.213 <span class="close-btn" data-close="strc213">[X]</span></div>
-              <div class="sub-body">
-                <div class="sub-photo"><img src="https://i.ibb.co/PG77SnTT/2026-04-10-14-01-29.png"></div>
-                <div class="sub-desc">Шторхи и ранее мне казались строгими, но данный модуль крайне... Вежливым и аккуратным. Сравнивая с некоторыми другими представителями СБ, а до этого и ВП, она и вовсе показалось "нежной" в своих действия. В рабочем плане я могу лишь сказать, что она крайне ответственный модуль.
+              <div class="sub-card" id="card-strc213" data-relations="c-respect">
+                <div class="sub-header">STRC.213 <span class="close-btn" data-close="strc213">[X]</span></div>
+                <div class="sub-body">
+                  <div class="sub-photo"><img src="https://i.ibb.co/PG77SnTT/2026-04-10-14-01-29.png"></div>
+                  <div class="sub-desc">Шторхи и ранее мне казались строгими, но данный модуль крайне... Вежливым и аккуратным. Сравнивая с некоторыми другими представителями СБ, а до этого и ВП, она и вовсе показалось "нежной" в своих действия. В рабочем плане я могу лишь сказать, что она крайне ответственный модуль.
 Я замечал они часто общались с Анной, интересно как такая дружба возникла.</div>
+                </div>
+                <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
               </div>
-              <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
-            </div>
 
-            <div class="sub-card" id="card-star603" data-relations="c-respect">
-              <div class="sub-header">STAR.603 <span class="close-btn" data-close="star603">[X]</span></div>
-              <div class="sub-body">
-                <div class="sub-photo"><img src="https://i.ibb.co/TMZTkhM1/star1.png"></div>
-                <div class="sub-desc">Хороший модуль Штар, добросовестно выполняющий свою работу. Излишне мне говорить про нее нечего... Хотя... Я заметил ее интерес в сторону Сов, а после разговора с Анной, думаю она крайне социальная в отношение одной совы, но которой, мне неизвестно. Кхм... В целом, пускай отдыхает вне рабочее время.</div>
+              <div class="sub-card" id="card-star603" data-relations="c-respect">
+                <div class="sub-header">STAR.603 <span class="close-btn" data-close="star603">[X]</span></div>
+                <div class="sub-body">
+                  <div class="sub-photo"><img src="https://i.ibb.co/TMZTkhM1/star1.png"></div>
+                  <div class="sub-desc">Хороший модуль Штар, добросовестно выполняющий свою работу. Излишне мне говорить про нее нечего... Хотя... Я заметил ее интерес в сторону Сов, а после разговора с Анной, думаю она крайне социальная в отношение одной совы, но которой, мне неизвестно. Кхм... В целом, пускай отдыхает вне рабочее время.</div>
+                </div>
+                <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
               </div>
-              <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
-            </div>
 
-            <div class="sub-card" id="card-star762" data-relations="c-neutral">
-              <div class="sub-header">STAR.762 <span class="close-btn" data-close="star762">[X]</span></div>
-              <div class="sub-body">
-                <div class="sub-photo"><img src="https://i.ibb.co/TMZTkhM1/star1.png"></div>
-                <div class="sub-desc">Хороший модуль, большего мне сказать нечего.</div>
+              <div class="sub-card" id="card-star762" data-relations="c-neutral">
+                <div class="sub-header">STAR.762 <span class="close-btn" data-close="star762">[X]</span></div>
+                <div class="sub-body">
+                  <div class="sub-photo"><img src="https://i.ibb.co/TMZTkhM1/star1.png"></div>
+                  <div class="sub-desc">Хороший модуль, большего мне сказать нечего.</div>
+                </div>
+                <div class="rel-tags"><span class="mini-tag c-neutral">НЕЙТРАЛИТЕТ</span></div>
               </div>
-              <div class="rel-tags"><span class="mini-tag c-neutral">НЕЙТРАЛИТЕТ</span></div>
-            </div>
 
-            <div class="sub-card" id="card-star114" data-relations="c-neutral">
-              <div class="sub-header">STAR.114 <span class="close-btn" data-close="star114">[X]</span></div>
-              <div class="sub-body">
-                <div class="sub-photo"><img src="https://i.ibb.co/TMZTkhM1/star1.png"></div>
-                <div class="sub-desc">Только вышла с ночной и стала активно работать. Посмотрим как покажет.</div>
+              <div class="sub-card" id="card-star114" data-relations="c-neutral">
+                <div class="sub-header">STAR.114 <span class="close-btn" data-close="star114">[X]</span></div>
+                <div class="sub-body">
+                  <div class="sub-photo"><img src="https://i.ibb.co/TMZTkhM1/star1.png"></div>
+                  <div class="sub-desc">Только вышла с ночной и стала активно работать. Посмотрим как покажет.</div>
+                </div>
+                <div class="rel-tags"><span class="mini-tag c-neutral">НЕЙТРАЛИТЕТ</span></div>
               </div>
-              <div class="rel-tags"><span class="mini-tag c-neutral">НЕЙТРАЛИТЕТ</span></div>
-            </div>
 
-            <div class="sub-card" id="card-mnhr.300" data-relations="c-respect">
-              <div class="sub-header">MNHR.300 <span class="close-btn" data-close="mnhr.300">[X]</span></div>
-              <div class="sub-body">
-                <div class="sub-photo"><img src="https://i.ibb.co/WJrBSN3/MNHR1.webp"></div>
-                <div class="sub-desc">Хороший надежный модуль, проявила себя как прекрасный глава отдела. Смогла отработать свои ПН и после не нарушала. Правда с отделом слегка ей не свезло, модулей Майн крайне редко к нам привозят на объект, что создает свои трудности.
+              <div class="sub-card" id="card-mnhr.300" data-relations="c-respect">
+                <div class="sub-header">MNHR.300 <span class="close-btn" data-close="mnhr.300">[X]</span></div>
+                <div class="sub-body">
+                  <div class="sub-photo"><img src="https://i.ibb.co/WJrBSN3/MNHR1.webp"></div>
+                  <div class="sub-desc">Хороший надежный модуль, проявила себя как прекрасный глава отдела. Смогла отработать свои ПН и после не нарушала. Правда с отделом слегка ей не свезло, модулей Майн крайне редко к нам привозят на объект, что создает свои трудности.
 Проявила интерес к Китежу... Планировал как то ее спросить об этом, но утерял нить и прошло крайне много времени. 
 Сейчас приходит ко мне на оклады в отдельное время... Стоит ее задержать и разговорить, заодно узнаю как идет ее работа. 
 Самый работящий модуль на нашем объекте, кажется она вовсе не отдыхает.</div>
+                </div>
+                <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
               </div>
-              <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
-            </div>
 
-            <div class="sub-card" id="card-mnhr.063" data-relations="c-respect">
-              <div class="sub-header">MNHR.063 <span class="close-btn" data-close="mnhr.063">[X]</span></div>
-              <div class="sub-body">
-                <div class="sub-photo"><img src="https://i.ibb.co/WJrBSN3/MNHR1.webp"></div>
-                <div class="sub-desc">Проявила пока себя не столь значимо. Работает хорошо, в общение не видел. Прибыла вместе со своей сестрой, но осталась теперь тут одна. Стоит ее повысить в ранге.</div>
+              <div class="sub-card" id="card-mnhr.063" data-relations="c-respect">
+                <div class="sub-header">MNHR.063 <span class="close-btn" data-close="mnhr.063">[X]</span></div>
+                <div class="sub-body">
+                  <div class="sub-photo"><img src="https://i.ibb.co/WJrBSN3/MNHR1.webp"></div>
+                  <div class="sub-desc">Проявила пока себя не столь значимо. Работает хорошо, в общение не видел. Прибыла вместе со своей сестрой, но осталась теперь тут одна. Стоит ее повысить в ранге.</div>
+                </div>
+                <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
               </div>
-              <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
+
             </div>
-
-          </div>
-        </div>
-      </div>
-
-      <!-- ==================== ФЕТИШ ОБЪЕКТЫ (ПОД КОДОМ) ==================== -->
-      <div id="tab4" class="tab-content">
-        <div class="lock-screen" id="lockScreen">
-          <div class="lock-title">[ ДОСТУП ЗАПРЕЩЁН ]</div>
-          <div class="lock-sub">ТРЕБУЕТСЯ КОДОВОЕ СЛОВО ДОСТУПА</div>
-
-          <div class="lock-input-wrap">
-            <input type="password" class="lock-input" id="lockInput" placeholder="•••••••" maxlength="12" autocomplete="off">
-            <button class="lock-btn" id="lockBtn">[ ПОДТВЕРДИТЬ ]</button>
-            <div class="lock-error" id="lockError"></div>
           </div>
         </div>
 
-        <div class="status-unlocked" id="statusUnlocked">
-          <div class="ops-grid">
-            <div class="ops-card">
-              <h4>> История: Античного Мира</h4>
-              <ul>
-                <li>Эллинистический Египет</li>
-                <li>Империя Селевкидов</li>
-                <li>Парфия</li>
-              </ul>
+        <!-- ВКЛАДКА 4: ФЕТИШ ОБЪЕКТЫ (ЗАБЛОКИРОВАНО) -->
+        <div id="tab4" class="tab-content">
+          <div class="lock-screen" id="lockScreen">
+            <div class="lock-title">[ ДОСТУП ЗАПРЕЩЁН ]</div>
+            <div class="lock-sub">ТРЕБУЕТСЯ КОДОВОЕ СЛОВО ДОСТУПА</div>
+            <div class="lock-input-wrap">
+              <input type="password" class="lock-input" id="lockInput" placeholder="•••••••" maxlength="12" autocomplete="off">
+              <button class="lock-btn" id="lockBtn">[ ПОДТВЕРДИТЬ ]</button>
+              <div class="lock-error" id="lockError"></div>
             </div>
-            <div class="ops-card">
-              <h4>> История: Древних Государств</h4>
-              <ul>
-                <li>Рим</li>
-                <li>Египет</li>
-                <li>Персия</li>
-                <li>Греция</li>
-                <li>Шумеры</li>
-                <li>Крит</li>
-              </ul>
-            </div>
-            <div class="ops-card">
-              <h4>> Мифология Древней Винеты</h4>
-              <ul>
-                <li>Греческая</li>
-                <li>Египетская</li>
-                <li>Персидская</li>
-                <li>Шумерская</li>
-              </ul>
-            </div>
-            <div class="ops-card">
-              <h4>> Забота о папоротнике</h4>
-              <p class="empty-note">— раздел в разработке —</p>
-            </div>
-            <div class="ops-card">
-              <h4>> Фильмы</h4>
-              <ul>
-                <li>Исторические</li>
-                <li>Детективные</li>
-                <li>Повседневность</li>
-              </ul>
-            </div>
-            <div class="ops-card">
-              <h4>> Плюшевая FKLR</h4>
-              <p class="empty-note">— без подпунктов —</p>
-            </div>
-            <div class="ops-card ops-full">
-              <h4>> ПРИМЕЧАНИЕ ОТ РУКОВОДСТВА</h4>
-              <p class="empty-note">
-                Данные раздела «ФЕТИШ ОБЪЕКТЫ» заполняются администратором комплекса вручную. 
-                Незаполненные поля помечены как [ОЖИДАНИЕ ДАННЫХ]. 
-                При обнаружении ошибок или неточностей — доложить куратору объекта.
-              </p>
+          </div>
+
+          <div class="status-unlocked" id="statusUnlocked">
+            <div class="ops-grid">
+              <div class="ops-card">
+                <h4>> История: Античного Мира</h4>
+                <ul>
+                  <li>Эллинистический Египет</li>
+                  <li>Империя Селевкидов</li>
+                  <li>Парфия</li>
+                </ul>
+              </div>
+              <div class="ops-card">
+                <h4>> История: Древних Государств</h4>
+                <ul>
+                  <li>Рим</li>
+                  <li>Египет</li>
+                  <li>Персия</li>
+                  <li>Греция</li>
+                  <li>Шумеры</li>
+                  <li>Крит</li>
+                </ul>
+              </div>
+              <div class="ops-card">
+                <h4>> Мифология Древней Винеты</h4>
+                <ul>
+                  <li>Греческая</li>
+                  <li>Египетская</li>
+                  <li>Персидская</li>
+                  <li>Шумерская</li>
+                </ul>
+              </div>
+              <div class="ops-card">
+                <h4>> Забота о папоротнике</h4>
+                <p class="empty-note">— раздел в разработке —</p>
+              </div>
+              <div class="ops-card">
+                <h4>> Фильмы</h4>
+                <ul>
+                  <li>Исторические</li>
+                  <li>Детективные</li>
+                  <li>Повседневность</li>
+                </ul>
+              </div>
+              <div class="ops-card">
+                <h4>> Плюшевая FKLR</h4>
+                <p class="empty-note">— без подпунктов —</p>
+              </div>
+              <div class="ops-card ops-full">
+                <h4>> ПРИМЕЧАНИЕ ОТ РУКОВОДСТВА</h4>
+                <p class="empty-note">
+                  Данные раздела «ФЕТИШ ОБЪЕКТЫ» заполняются администратором комплекса вручную. 
+                  Незаполненные поля помечены как [ОЖИДАНИЕ ДАННЫХ]. 
+                  При обнаружении ошибок или неточностей — доложить куратору объекта.
+                </p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="footer-bar">
-        <span>[ ЕРЕС-М-427 · v.2.1 ]</span>
-        <span>[ Модуль · ADLR ]</span>
       </div>
     </div>
+
+    <!-- НИЖНЯЯ ПАНЕЛЬ -->
+    <div class="bottom-bar">
+      <div class="brand">EDITOR: TERMINAL - editor unlock</div>
+      <div class="controls">
+        <span>F1: СПРАВКА</span>
+        <span>F2: ВЫХОД</span>
+      </div>
+    </div>
+
   </div>
 </div>
 
 <script>
 (function() {
-  const introScreen = document.getElementById('introScreen');
   const mainSite = document.getElementById('mainSite');
-  const enterBtn = document.getElementById('enterBtn');
   const loadingScreen = document.getElementById('loadingScreen');
-  const loadingBarFill = document.getElementById('loadingBarFill');
-  const loadingPercent = document.getElementById('loadingPercent');
   const loadingLog = document.getElementById('loadingLog');
+  const loadingLog2 = document.getElementById('loadingLog2');
+  const loadingLog3 = document.getElementById('loadingLog3');
+  const loadingStatus = document.getElementById('loadingStatus');
 
-  // Звуковые эффекты (синтезатор)
+  // Звуковые эффекты
   function playBeep(freq, duration = 0.05) {
     try {
       const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -1220,61 +1001,51 @@
     setTimeout(() => playBeep(880, 0.2), 200);
   }
 
-  const logMessages = [
-    "> INIT SYSTEM...",
-    "> CONNECTING TO NODE...",
-    "> AUTHENTICATING...",
-    "> LOADING CORE DATA...",
-    "> DECRYPTING ARCHIVE...",
-    "> VERIFYING SIGNATURE...",
-    "> LOADING PERSONNEL...",
-    "> MAPPING RELATIONS...",
-    "> FINALIZING..."
-  ];
-
-  function startLoading(callback) {
+  // Терминальная загрузка
+  function runBootSequence(callback) {
     loadingScreen.classList.add('active');
-    let percent = 0; let logIndex = 0;
-
-    const interval = setInterval(() => {
-      let step = 1.5 + Math.random() * 2.5;
-      percent += step;
-      
-      if (percent >= 100) {
-        percent = 100;
-        clearInterval(interval);
-        loadingLog.textContent = "> COMPLETE.";
-        loadingPercent.textContent = "100%";
-        loadingBarFill.style.width = "100%";
-        playBeep(880, 0.2);
-
+    
+    setTimeout(() => {
+      loadingLog.textContent = "> LOADING KERNEL... OK";
+      playBeep(600, 0.05);
+      setTimeout(() => {
+        loadingLog2.textContent = "> MOUNTING FILE SYSTEM... OK";
+        playBeep(700, 0.05);
         setTimeout(() => {
-          loadingScreen.classList.remove('active');
-          if (typeof callback === 'function') callback();
+          loadingLog3.textContent = "> DECRYPTING PERSONNEL DATA... OK";
+          playBeep(800, 0.05);
+          setTimeout(() => {
+            loadingStatus.textContent = "СИСТЕМА ГОТОВА";
+            playBeep(900, 0.2);
+            setTimeout(() => {
+              loadingScreen.classList.remove('active');
+              callback();
+            }, 800);
+          }, 600);
         }, 600);
-      }
-
-      loadingBarFill.style.width = percent + '%';
-      loadingPercent.textContent = Math.floor(percent) + '%';
-
-      const newLogIndex = Math.floor(percent / 12);
-      if (newLogIndex !== logIndex && newLogIndex < logMessages.length) {
-        logIndex = newLogIndex;
-        loadingLog.textContent = logMessages[logIndex];
-        playBeep(600 + Math.random() * 400, 0.02);
-      }
-    }, 80);
+      }, 600);
+    }, 800);
   }
 
-  enterBtn.addEventListener('click', function() {
-    startLoading(function() {
-      introScreen.classList.add('hidden');
-      setTimeout(() => { mainSite.classList.add('visible'); }, 300);
-      window.scrollTo(0, 0);
-    });
+  // Запуск
+  runBootSequence(() => {
+    mainSite.classList.add('visible');
+    window.scrollTo(0, 0);
+    startClock();
   });
 
-  const tabs = document.querySelectorAll('.tab-btn');
+  // Часы
+  function startClock() {
+    const clock = document.getElementById('liveClock');
+    setInterval(() => {
+      const now = new Date();
+      const time = now.toTimeString().split(' ')[0];
+      clock.textContent = time;
+    }, 1000);
+  }
+
+  // Переключение вкладок (Сайдбар)
+  const navBtns = document.querySelectorAll('.nav-btn');
   const contents = {
     tab1: document.getElementById('tab1'),
     tab2: document.getElementById('tab2'),
@@ -1283,17 +1054,17 @@
   };
 
   function activateTab(tabId) {
-    tabs.forEach(btn => btn.classList.remove('active'));
+    navBtns.forEach(btn => btn.classList.remove('active'));
     Object.values(contents).forEach(c => c.classList.remove('active'));
-    const targetBtn = Array.from(tabs).find(btn => btn.dataset.tab === tabId);
+    const targetBtn = Array.from(navBtns).find(btn => btn.dataset.tab === tabId);
     if (targetBtn) targetBtn.classList.add('active');
     if (contents[tabId]) contents[tabId].classList.add('active');
   }
 
   let statusUnlocked = false;
 
-  tabs.forEach(btn => {
-    btn.addEventListener('click', function(e) {
+  navBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
       const tabId = this.dataset.tab;
       if (!tabId) return;
 
@@ -1312,6 +1083,7 @@
     });
   });
 
+  // Логика блокировки
   const SECRET_CODE = "Харибта";
   const lockInput = document.getElementById('lockInput');
   const lockBtn = document.getElementById('lockBtn');
@@ -1366,6 +1138,7 @@
   `;
   document.head.appendChild(styleShake);
 
+  // Логика карточек и фильтров
   const panel = document.getElementById('descPanel');
   const emptyState = panel.querySelector('.empty-state');
 
@@ -1381,7 +1154,7 @@
   }
 
   document.querySelectorAll('.item-link').forEach(link => {
-    link.addEventListener('click', function(e) {
+    link.addEventListener('click', function() {
       const target = this.dataset.target;
       const card = document.getElementById('card-' + target);
       if (card && card.classList.contains('open')) closeCard();
@@ -1399,7 +1172,7 @@
   });
 
   document.querySelectorAll('.rel-tag').forEach(tag => {
-    tag.addEventListener('click', function(e) {
+    tag.addEventListener('click', function() {
       const relClass = this.dataset.rel;
       if (!relClass) return;
 
@@ -1410,8 +1183,8 @@
         const cardRels = card.dataset.relations ? card.dataset.relations.split(' ') : [];
         if (isActive) {
           if (cardRels.includes(relClass)) {
-            card.style.border = '2px solid #fff';
-            card.style.background = '#111';
+            card.style.border = '1px solid var(--text-bright)';
+            card.style.background = 'rgba(168, 42, 21, 0.1)';
           } else {
             card.style.border = 'none';
             card.style.background = 'transparent';
@@ -1439,7 +1212,7 @@
   });
 
   document.querySelectorAll('.group-header').forEach(header => {
-    header.addEventListener('click', function(e) {
+    header.addEventListener('click', function() {
       const group = this.dataset.group;
       const items = document.getElementById('group-' + group);
       if (items) {
@@ -1455,8 +1228,8 @@
     });
   });
 
-  activateTab('tab1');
 })();
 </script>
 </body>
 </html>
+```
