@@ -464,19 +464,67 @@
     to   { opacity: 1; transform: translateY(0); }
   }
 
+  /* ГАЛЕРЕЯ АРТОВ СВЕРХУ */
+  .art-gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .art-gallery .art-item {
+    position: relative;
+    background: #0a0000;
+    border: 1px solid #661111;
+    border-radius: 2px;
+    height: 240px;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(200,30,30,0.25), inset 0 0 20px rgba(0,0,0,0.6);
+    transition: 0.2s;
+  }
+  .art-gallery .art-item:hover {
+    border-color: #cc2222;
+    box-shadow: 0 0 25px rgba(200,30,30,0.5);
+  }
+  .art-gallery .art-item img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center;
+    filter: contrast(1.05) saturate(0.85) brightness(0.92);
+    transition: 0.3s;
+  }
+  .art-gallery .art-item:hover img {
+    filter: contrast(1.1) saturate(1) brightness(1);
+  }
+  .art-gallery .art-item::before {
+    content: ''; position: absolute; inset: 3px;
+    border: 1px solid rgba(204,34,34,0.4);
+    pointer-events: none;
+    z-index: 2;
+  }
+  .art-gallery .art-item .art-label {
+    position: absolute;
+    bottom: 4px; left: 6px;
+    font-family: 'VT323', monospace;
+    font-size: 11px;
+    color: #cc2222;
+    letter-spacing: 2px;
+    z-index: 3;
+    text-shadow: 0 0 6px #000, 0 0 4px #000;
+  }
+
   /* ЛИЧНОЕ ДЕЛО */
   .dossier-block {
     display: flex; flex-wrap: wrap; gap: 16px;
     margin-bottom: 16px;
   }
-  .info-left { flex: 0 0 260px; min-width: 240px; }
+  .info-left { flex: 0 0 240px; min-width: 220px; }
 
   .photo-place {
     position: relative;
     background: #0a0000;
     border: 1px solid #661111;
     border-radius: 2px;
-    height: 280px; width: 100%; max-width: 260px;
+    height: 260px; width: 100%; max-width: 240px;
     margin-bottom: 8px;
     padding: 6px;
     box-shadow:
@@ -534,23 +582,23 @@
     border: 1px solid #440000;
     border-left: 3px solid #cc2222;
     border-radius: 2px;
-    padding: 14px 16px;
+    padding: 12px 14px;
     font-size: 13px;
     line-height: 1.5;
     color: #cc6666;
     box-shadow: inset 0 0 20px rgba(80,0,0,0.3);
-    display: flex; flex-direction: column; gap: 12px;
+    display: flex; flex-direction: column; gap: 10px;
   }
   .info-item {
-    display: flex; flex-direction: column; gap: 6px;
-    padding-bottom: 12px;
+    display: flex; flex-direction: column; gap: 5px;
+    padding-bottom: 10px;
     border-bottom: 1px dashed #2a0000;
   }
   .info-item:last-child { border-bottom: none; padding-bottom: 0; }
   .info-item .info-label {
     color: #ff3333;
     font-weight: bold;
-    font-size: 14px;
+    font-size: 12px;
     letter-spacing: 3px;
     text-transform: uppercase;
     text-shadow: 0 0 6px rgba(200,30,30,0.6);
@@ -566,38 +614,21 @@
   }
   .info-item .info-value {
     color: #cc6666;
-    font-size: 18px;
+    font-size: 16px;
     letter-spacing: 1px;
-    line-height: 1.5;
+    line-height: 1.45;
     padding-left: 12px;
     text-shadow: 0 0 4px rgba(200,30,30,0.4);
     text-align: left;
   }
   .info-item .info-value.big {
-    font-size: 20px;
+    font-size: 18px;
     color: #ff5555;
     text-shadow: 0 0 8px rgba(200,30,30,0.5);
     font-weight: bold;
   }
-  .info-item .info-value.classified {
-    color: #ff2222;
-    background: #1a0000;
-    border-left: 3px solid #cc2222;
-    padding: 4px 12px;
-    letter-spacing: 4px;
-    font-weight: bold;
-    text-shadow: 0 0 10px #ff3333;
-    font-family: 'VT323', monospace;
-    font-size: 20px;
-    display: inline-block;
-    animation: classifiedPulse 2s ease-in-out infinite;
-  }
-  @keyframes classifiedPulse {
-    0%, 100% { box-shadow: 0 0 8px rgba(200,30,30,0.4); }
-    50%      { box-shadow: 0 0 20px rgba(255,50,50,0.8); }
-  }
 
-  .right-col { flex: 1; min-width: 240px; display: flex; flex-direction: column; gap: 10px; }
+  .right-col { flex: 1; min-width: 220px; display: flex; flex-direction: column; gap: 10px; }
 
   .med-card {
     padding: 12px 16px;
@@ -628,7 +659,7 @@
   }
   .med-card.plain img {
     max-width: 100%;
-    max-height: 380px;
+    max-height: 320px;
     object-fit: contain;
     filter: contrast(1.05) saturate(0.7) brightness(0.95) sepia(0.1);
     border: 1px solid #661111;
@@ -637,40 +668,64 @@
     background: #000;
   }
 
-  /* Личные записи с артом */
   .personal-note-block {
-    display: flex; flex-direction: column; gap: 10px;
+    display: flex; flex-direction: column; gap: 8px;
   }
   .personal-note-text {
-    font-size: 15px;
-    line-height: 1.7;
+    font-size: 14px;
+    line-height: 1.65;
     color: #cc6666;
     letter-spacing: 0.5px;
-    padding: 8px 4px;
+    padding: 6px 4px;
     font-style: italic;
     border-left: 2px solid #661111;
-    padding-left: 14px;
+    padding-left: 12px;
     text-shadow: 0 0 6px rgba(200,30,30,0.3);
   }
-  .personal-note-art {
-    display: flex; justify-content: center; align-items: center;
-    padding: 6px;
-    background: #000;
-    border: 1px solid #661111;
-    box-shadow: 0 0 12px rgba(200,30,30,0.25);
-  }
-  .personal-note-art img {
-    max-width: 100%;
-    max-height: 320px;
-    object-fit: contain;
-    filter: contrast(1.05) saturate(0.7) brightness(0.95) sepia(0.1);
-  }
 
-  /* СЕТКА КАРТОЧЕК */
+  .status-block {
+    margin-top: 0;
+    padding: 10px 12px;
+    background: #0a0000;
+    border: 1px solid #440000;
+    border-left: 3px solid #cc2222;
+    border-radius: 2px;
+    box-shadow: inset 0 0 20px rgba(80,0,0,0.3);
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .status-row { display: flex; flex-direction: column; gap: 3px; }
+  .status-row .label {
+    font-size: 11px; color: #ff3333;
+    letter-spacing: 2px; text-transform: uppercase;
+    font-weight: bold;
+    text-shadow: 0 0 6px rgba(200,30,30,0.6);
+    padding-left: 8px; position: relative;
+  }
+  .status-row .label::before {
+    content: "▸";
+    position: absolute; left: 0;
+    color: #cc2222; font-size: 10px;
+    text-shadow: 0 0 6px #cc2222;
+  }
+  .status-row .value {
+    display: inline-block;
+    background: #1a0000;
+    padding: 3px 10px;
+    border-left: 3px solid #cc2222;
+    color: #ff3333;
+    font-size: 14px; letter-spacing: 1px;
+    text-shadow: 0 0 8px rgba(200,30,30,0.6);
+    align-self: flex-start;
+    min-width: 120px;
+  }
+  .status-row .value.green { color: #ff4444; text-shadow: 0 0 10px #cc2222; }
+  .status-row .value.yellow { color: #ff6666; text-shadow: 0 0 10px #cc2222; }
+
+  /* СЕТКА КАРТОЧЕК — уменьшенная, аккуратная */
   .dossier-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 10px;
     margin-top: 12px;
   }
   .dossier-card {
@@ -678,7 +733,7 @@
     border: 1px solid #440000;
     border-left: 3px solid #cc2222;
     border-radius: 2px;
-    padding: 14px 16px;
+    padding: 10px 12px;
     box-shadow: inset 0 0 20px rgba(80,0,0,0.3);
     position: relative;
     transition: 0.15s;
@@ -689,42 +744,42 @@
   }
   .dossier-card::before {
     content: '';
-    position: absolute; top: 4px; right: 4px;
-    width: 8px; height: 8px;
+    position: absolute; top: 3px; right: 3px;
+    width: 6px; height: 6px;
     border-top: 1px solid #cc2222;
     border-right: 1px solid #cc2222;
   }
   .dossier-card::after {
     content: '';
-    position: absolute; bottom: 4px; left: 4px;
-    width: 8px; height: 8px;
+    position: absolute; bottom: 3px; left: 3px;
+    width: 6px; height: 6px;
     border-bottom: 1px solid #cc2222;
     border-left: 1px solid #cc2222;
   }
   .dossier-card h4 {
     font-family: 'VT323', monospace;
-    font-size: 19px; color: #ff3333;
-    letter-spacing: 3px;
+    font-size: 15px; color: #ff3333;
+    letter-spacing: 2px;
     text-transform: uppercase;
-    margin-bottom: 10px;
-    padding-bottom: 6px;
+    margin-bottom: 6px;
+    padding-bottom: 4px;
     border-bottom: 1px solid #2a0000;
     text-shadow: 0 0 8px rgba(200,30,30,0.5);
-    display: flex; align-items: center; gap: 6px;
+    display: flex; align-items: center; gap: 4px;
   }
   .dossier-card h4 .card-icon {
-    font-size: 14px;
+    font-size: 12px;
     color: #cc2222;
   }
   .dossier-card p,
   .dossier-card ul {
-    font-size: 14px; line-height: 1.75;
+    font-size: 12px; line-height: 1.55;
     color: #cc6666;
     white-space: pre-wrap;
   }
   .dossier-card ul { list-style: none; padding-left: 0; }
   .dossier-card ul li {
-    padding: 5px 0 5px 16px;
+    padding: 2px 0 2px 12px;
     position: relative;
     border-bottom: 1px dashed #1a0000;
   }
@@ -733,31 +788,49 @@
     content: "▪";
     position: absolute; left: 0;
     color: #cc2222;
+    font-size: 10px;
   }
   .dossier-card ul li strong {
     color: #ff5555;
     font-weight: normal;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
   }
   .dossier-card .placeholder {
     color: #441111;
     font-style: italic;
     letter-spacing: 1px;
-    font-size: 12px;
+    font-size: 11px;
+  }
+  .dossier-card .classified {
+    color: #ff2222;
+    background: #1a0000;
+    border-left: 2px solid #cc2222;
+    padding: 1px 8px;
+    letter-spacing: 2px;
+    font-weight: bold;
+    text-shadow: 0 0 8px #ff3333;
+    font-family: 'VT323', monospace;
+    font-size: 13px;
+    display: inline-block;
+    animation: classifiedPulse 2s ease-in-out infinite;
+  }
+  @keyframes classifiedPulse {
+    0%, 100% { box-shadow: 0 0 6px rgba(200,30,30,0.4); }
+    50%      { box-shadow: 0 0 14px rgba(255,50,50,0.8); }
   }
 
-  /* Стат-бары */
+  /* Стат-бары — компактнее */
   .stat-bar {
-    display: flex; align-items: center; gap: 8px;
-    font-size: 12px; margin: 8px 0;
+    display: flex; align-items: center; gap: 6px;
+    font-size: 11px; margin: 5px 0;
   }
   .stat-bar .stat-label {
-    flex: 0 0 160px; color: #cc6666; letter-spacing: 1.5px;
-    text-transform: uppercase; font-size: 12px;
+    flex: 0 0 130px; color: #cc6666; letter-spacing: 1px;
+    text-transform: uppercase; font-size: 10px;
     text-shadow: 0 0 4px rgba(200,30,30,0.3);
   }
   .stat-bar .stat-track {
-    flex: 1; height: 10px; background: #0a0000;
+    flex: 1; height: 8px; background: #0a0000;
     border: 1px solid #440000;
     position: relative; overflow: hidden;
   }
@@ -768,24 +841,24 @@
     transition: width 0.6s ease;
   }
   .stat-bar .stat-val {
-    flex: 0 0 48px; text-align: right; color: #ff3333;
-    font-family: 'VT323', monospace; font-size: 15px;
+    flex: 0 0 38px; text-align: right; color: #ff3333;
+    font-family: 'VT323', monospace; font-size: 13px;
     letter-spacing: 1px;
   }
 
-  /* Медкарта — текст как на скрине */
+  /* Медкарта */
   .med-rows {
-    display: flex; flex-direction: column; gap: 14px;
+    display: flex; flex-direction: column; gap: 8px;
   }
   .med-row {
-    display: flex; flex-direction: column; gap: 4px;
-    padding-bottom: 10px;
+    display: flex; flex-direction: column; gap: 2px;
+    padding-bottom: 6px;
     border-bottom: 1px dashed #2a0000;
   }
   .med-row:last-child { border-bottom: none; padding-bottom: 0; }
   .med-row .med-row-label {
     color: #ff3333;
-    font-size: 13px;
+    font-size: 11px;
     letter-spacing: 2px;
     text-transform: uppercase;
     font-weight: bold;
@@ -797,12 +870,12 @@
     content: "▪";
     position: absolute; left: 0;
     color: #cc2222;
-    font-size: 12px;
+    font-size: 11px;
   }
   .med-row .med-row-value {
     color: #cc6666;
-    font-size: 15px;
-    letter-spacing: 0.5px;
+    font-size: 13px;
+    letter-spacing: 0.3px;
     padding-left: 14px;
     line-height: 1.5;
   }
@@ -1380,6 +1453,16 @@
   }
   .ops-full { grid-column: 1 / -1; }
 
+  /* Внешний вид — блок описания */
+  .appearance-text {
+    font-size: 14px;
+    line-height: 1.75;
+    color: #cc6666;
+    letter-spacing: 0.3px;
+    white-space: pre-wrap;
+    padding: 4px 0;
+  }
+
   .footer-bar {
     display: flex; justify-content: space-between;
     margin-top: 12px;
@@ -1450,6 +1533,7 @@
     .computer { padding: 10px; }
     .tab-btn { font-size: 13px; padding: 4px 8px; letter-spacing: 1px; }
     .social-lists, .ops-grid { grid-template-columns: 1fr; }
+    .art-gallery { grid-template-columns: 1fr; }
     .info-left { flex: 0 0 100%; }
     .photo-place { max-width: 100%; }
     .side-frame { width: 30px; }
@@ -1559,11 +1643,29 @@
       <!-- ==================== ЛИЧНОЕ ДЕЛО ==================== -->
       <div id="tab1" class="tab-content active">
 
+        <!-- ГАЛЕРЕЯ АРТОВ СВЕРХУ -->
+        <div class="art-gallery">
+          <div class="art-item">
+            <img src="1.png" alt="Арт 1"
+                 onerror="this.outerHTML='&lt;span style=&quot;color:#661111;font-style:italic;letter-spacing:2px;font-size:12px;padding:20px;display:block;text-align:center;&quot;&gt;[ 1.png ]&lt;/span&gt;'">
+            <span class="art-label">◈ 01</span>
+          </div>
+          <div class="art-item">
+            <img src="2.png" alt="Арт 2"
+                 onerror="this.outerHTML='&lt;span style=&quot;color:#661111;font-style:italic;letter-spacing:2px;font-size:12px;padding:20px;display:block;text-align:center;&quot;&gt;[ 2.png ]&lt;/span&gt;'">
+            <span class="art-label">◈ 02</span>
+          </div>
+          <div class="art-item">
+            <img src="3.jpeg" alt="Арт 3"
+                 onerror="this.outerHTML='&lt;span style=&quot;color:#661111;font-style:italic;letter-spacing:2px;font-size:12px;padding:20px;display:block;text-align:center;&quot;&gt;[ 3.jpeg ]&lt;/span&gt;'">
+            <span class="art-label">◈ 03</span>
+          </div>
+        </div>
+
         <div class="sub-tabs">
           <div class="sub-tab active" data-sub="sub-base">БАЗА</div>
-          <div class="sub-tab" data-sub="sub-med">МЕДИЦИНА</div>
-          <div class="sub-tab" data-sub="sub-psy">ПСИХОЛОГИЯ</div>
-          <div class="sub-tab" data-sub="sub-appear">ВНЕШНОСТЬ</div>
+          <div class="sub-tab" data-sub="sub-status">СТАТУС</div>
+          <div class="sub-tab" data-sub="sub-appear">ФИЗИЧЕСКИЕ ХАРАКТЕРИСТИКИ</div>
         </div>
 
         <!-- БАЗА -->
@@ -1576,7 +1678,7 @@
               </div>
               <div class="info-column">
                 <div class="info-item">
-                  <span class="info-label">Ф.И</span>
+                  <span class="info-label">Фамилия Имя</span>
                   <span class="info-value big">Сицилия Сиракуза</span>
                 </div>
                 <div class="info-item">
@@ -1595,7 +1697,7 @@
                 <h4>✑ ЛИЧНЫЕ ЗАПИСИ</h4>
                 <div class="personal-note-block">
                   <div class="personal-note-text">«Лишь полтора года контракта — и после жизнь без забот, в самом сердце революции. Жди меня, Eres.»</div>
-                  <div class="personal-note-art">
+                  <div class="med-card plain" style="padding:6px;">
                     <img src="Sigars.png" alt="Личный арт"
                          onerror="this.outerHTML='&lt;span style=&quot;color:#661111;font-style:italic;letter-spacing:2px;font-size:12px;padding:20px;display:block;text-align:center;&quot;&gt;[ ИЗОБРАЖЕНИЕ НЕДОСТУПНО ]&lt;/span&gt;'">
                   </div>
@@ -1632,7 +1734,7 @@
                 <li><strong>Группа крови:</strong> 0(I) Rh⁻</li>
                 <li><strong>Цвет глаз:</strong> Серые</li>
                 <li><strong>Цвет волос:</strong> Белые</li>
-                <li><strong>Особые приметы:</strong> Шрам, проходящий через правый глаз</li>
+                <li><strong>Особые приметы:</strong> Шрам через правый глаз</li>
               </ul>
             </div>
 
@@ -1652,14 +1754,14 @@
                 <li><strong>Возраст:</strong> 25 лет</li>
                 <li><strong>Пол:</strong> Женский</li>
                 <li><strong>Семейное положение:</strong> Не жената</li>
-                <li><strong>Родственники:</strong> <span class="info-value classified">ЗАСЕКРЕЧЕНО</span></li>
+                <li><strong>Родственники:</strong> <span class="classified">ЗАСЕКРЕЧЕНО</span></li>
               </ul>
             </div>
           </div>
         </div>
 
-        <!-- МЕДИЦИНА -->
-        <div class="sub-pane" id="sub-med">
+        <!-- СТАТУС (объединяет медицину и психологию) -->
+        <div class="sub-pane" id="sub-status">
           <div class="dossier-grid">
             <div class="dossier-card">
               <h4><span class="card-icon">▸</span> МЕДИЦИНСКИЕ ДАННЫЕ</h4>
@@ -1705,7 +1807,7 @@
                 <div class="stat-track"><div class="stat-fill" style="width:100%"></div></div>
                 <div class="stat-val">100%</div>
               </div>
-              <p style="margin-top:14px; color:#6fcf97; font-size:13px; letter-spacing:1px; text-shadow:0 0 8px rgba(111,207,151,0.5);">
+              <p style="margin-top:10px; color:#6fcf97; font-size:12px; letter-spacing:1px; text-shadow:0 0 8px rgba(111,207,151,0.5);">
                 ▸ Состояние стабильное. Отклонений не выявлено.
               </p>
             </div>
@@ -1715,17 +1817,14 @@
               <p class="placeholder">[ ЗАПИСИ ОСМОТРОВ ОТСУТСТВУЮТ ]</p>
             </div>
           </div>
-        </div>
 
-        <!-- ПСИХОЛОГИЯ -->
-        <div class="sub-pane" id="sub-psy">
-          <div class="dossier-grid">
+          <div class="dossier-grid" style="margin-top:10px;">
             <div class="dossier-card">
               <h4><span class="card-icon">▸</span> ПСИХОЛОГИЧЕСКИЙ ПРОФИЛЬ</h4>
               <ul>
                 <li><strong>Темперамент:</strong> Сангвиник</li>
                 <li><strong>Стрессоустойчивость:</strong> Норма</li>
-                <li><strong>Особенности поведения:</strong> Склонности к театральным высказываниям / общительный характер, без привязанностей / злопамятность</li>
+                <li><strong>Особенности:</strong> Театральность / общительность / без привязанностей / злопамятность</li>
                 <li><strong>Рекомендации:</strong> Не проявлять печали / апатии / депрессии в её присутствии</li>
               </ul>
             </div>
@@ -1766,21 +1865,12 @@
           </div>
         </div>
 
-        <!-- ВНЕШНОСТЬ -->
+        <!-- ФИЗИЧЕСКИЕ ХАРАКТЕРИСТИКИ -->
         <div class="sub-pane" id="sub-appear">
-          <div class="dossier-grid">
+          <div class="dossier-grid" style="grid-template-columns: 1fr;">
             <div class="dossier-card">
-              <h4><span class="card-icon">▸</span> ОПИСАНИЕ ВНЕШНОСТИ</h4>
-              <p class="placeholder" style="font-style:normal; color:#661111; font-size:13px; line-height:1.8;">
-                [ РАЗДЕЛ В РАЗРАБОТКЕ — ОПИСАНИЕ ВНЕШНОСТИ БУДЕТ ЗАПОЛНЕНО ПОЗЖЕ ]
-              </p>
-            </div>
-
-            <div class="dossier-card">
-              <h4><span class="card-icon">▸</span> ОСОБЫЕ ОТМЕТКИ</h4>
-              <p class="placeholder" style="font-style:normal; color:#661111; font-size:13px; line-height:1.8;">
-                [ СВОБОДНАЯ ФОРМА ]
-              </p>
+              <h4><span class="card-icon">▸</span> ФИЗИЧЕСКИЕ ХАРАКТЕРИСТИКИ</h4>
+              <div class="appearance-text">Внешний облик гештальта характеризуется следующими устойчивыми признаками. Волосы — длинные, густые, серебристо-серого оттенка, близкого к белому, с плавным градиентом, уходящим в черноту; чёлка разделена между глаз. Глаза серые, взгляд острый и пронзительный, нередко с опасным или насмешливым блеском. Отличительные особенности: шрам, пересекающий область правого глаза; характерная частая улыбка или оскал. Фигура спортивная, рельефная. Кожа более бледная, чем у прочих гештальтов; иных дефектов не наблюдается. На лбу расположены три красных ромба — символ революции.</div>
             </div>
           </div>
 
@@ -1800,7 +1890,7 @@
 
           <div class="diary-header-block">
             <h2>ЛИЧНЫЙ ДНЕВНИК · С. СИРАКУЗА</h2>
-            <div class="sub">◈ ЕРЕС-М-427 · ЗАПИСИ ВЕДУТСЯ ВРУЧНУЮ ◈ <span id="diaryCount">0 записей</span></div>
+            <div class="sub">◈ ЕРЕС-М-427 · ЗАПИСИ ВЕДУТСЯ ВРУЧНУЮ ◈</div>
           </div>
 
           <div class="diary-filters" id="diaryFilters">
@@ -1812,7 +1902,6 @@
             <span class="diary-tag-btn" data-tag="thought">РАЗМЫШЛЕНИЯ</span>
           </div>
 
-          <!-- Запись 1 -->
           <div class="diary-entry" data-tags="personal thought">
             <div class="diary-entry-head" onclick="toggleDiary(this)">
               <span class="diary-entry-toggle">▶</span>
@@ -1835,7 +1924,6 @@
             </div>
           </div>
 
-          <!-- Запись 2 -->
           <div class="diary-entry" data-tags="work">
             <div class="diary-entry-head" onclick="toggleDiary(this)">
               <span class="diary-entry-toggle">▶</span>
@@ -1858,7 +1946,6 @@
             </div>
           </div>
 
-          <!-- Запись 3 -->
           <div class="diary-entry" data-tags="incident">
             <div class="diary-entry-head" onclick="toggleDiary(this)">
               <span class="diary-entry-toggle">▶</span>
@@ -1881,7 +1968,6 @@
             </div>
           </div>
 
-          <!-- Запись 4 -->
           <div class="diary-entry" data-tags="personal">
             <div class="diary-entry-head" onclick="toggleDiary(this)">
               <span class="diary-entry-toggle">▶</span>
@@ -1904,7 +1990,6 @@
             </div>
           </div>
 
-          <!-- Запись 5 -->
           <div class="diary-entry" data-tags="thought">
             <div class="diary-entry-head" onclick="toggleDiary(this)">
               <span class="diary-entry-toggle">▶</span>
@@ -2155,7 +2240,7 @@
         </div>
       </div>
 
-      <!-- ==================== СТАТУС ==================== -->
+      <!-- ==================== ЛИЧНЫЙ СТАТУС (ПОД КОДОМ) ==================== -->
       <div id="tab5" class="tab-content">
         <div class="lock-screen" id="lockScreen">
           <div class="lock-title">▓ ДОСТУП ЗАПРЕЩЁН ▓</div>
@@ -2284,7 +2369,7 @@
       </div>
 
       <div class="footer-bar">
-        <span>⏻ ЕРЕС-М-427 · v.3.1</span>
+        <span>⏻ ЕРЕС-М-427 · v.3.2</span>
         <span id="footerDate">◆ CYCLE 0000</span>
         <span>⏾ ГЕШТАЛЬТ · С. СИРАКУЗА</span>
       </div>
@@ -2651,7 +2736,6 @@
     });
   });
 
-  // Редактируемые поля (только дневник)
   document.querySelectorAll('.editable').forEach(el => {
     const key = el.dataset.key;
     if (!key) return;
