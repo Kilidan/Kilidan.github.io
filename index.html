@@ -279,7 +279,6 @@
     50%      { filter: brightness(1.03); }
   }
 
-  /* ТЁМНАЯ ГИФКА НА ФОНЕ */
   #mainSite::before {
     content: '';
     position: fixed; inset: 0;
@@ -293,7 +292,6 @@
     pointer-events: none;
   }
 
-  /* ШУМ-ОВЕРЛЕЙ */
   .noise-overlay {
     position: fixed; inset: 0;
     pointer-events: none;
@@ -434,7 +432,7 @@
   }
   .tab-content.active { display: block; }
 
-  /* ============ ПОД-ВКЛАДКИ ЛИЧНОГО ДЕЛА ============ */
+  /* ПОД-ВКЛАДКИ */
   .sub-tabs {
     display: flex; gap: 4px; margin-bottom: 14px; flex-wrap: wrap;
     border-bottom: 1px dashed #2a0000;
@@ -466,19 +464,19 @@
     to   { opacity: 1; transform: translateY(0); }
   }
 
-  /* ============ ЛИЧНОЕ ДЕЛО ============ */
+  /* ЛИЧНОЕ ДЕЛО */
   .dossier-block {
     display: flex; flex-wrap: wrap; gap: 16px;
     margin-bottom: 16px;
   }
-  .info-left { flex: 0 0 220px; min-width: 200px; }
+  .info-left { flex: 0 0 260px; min-width: 240px; }
 
   .photo-place {
     position: relative;
     background: #0a0000;
     border: 1px solid #661111;
     border-radius: 2px;
-    height: 220px; width: 100%; max-width: 220px;
+    height: 280px; width: 100%; max-width: 260px;
     margin-bottom: 8px;
     padding: 6px;
     box-shadow:
@@ -536,45 +534,70 @@
     border: 1px solid #440000;
     border-left: 3px solid #cc2222;
     border-radius: 2px;
-    padding: 10px 12px;
+    padding: 14px 16px;
     font-size: 13px;
     line-height: 1.5;
     color: #cc6666;
     box-shadow: inset 0 0 20px rgba(80,0,0,0.3);
-    display: flex; flex-direction: column; gap: 8px;
+    display: flex; flex-direction: column; gap: 12px;
   }
   .info-item {
-    display: flex; flex-direction: column; gap: 3px;
-    padding-bottom: 8px;
+    display: flex; flex-direction: column; gap: 6px;
+    padding-bottom: 12px;
     border-bottom: 1px dashed #2a0000;
   }
   .info-item:last-child { border-bottom: none; padding-bottom: 0; }
   .info-item .info-label {
     color: #ff3333;
     font-weight: bold;
-    font-size: 11px;
-    letter-spacing: 2px;
+    font-size: 14px;
+    letter-spacing: 3px;
     text-transform: uppercase;
     text-shadow: 0 0 6px rgba(200,30,30,0.6);
-    padding-left: 8px;
+    padding-left: 10px;
     position: relative;
   }
   .info-item .info-label::before {
     content: "▸";
     position: absolute; left: 0;
     color: #cc2222;
-    font-size: 10px;
+    font-size: 11px;
     text-shadow: 0 0 6px #cc2222;
   }
   .info-item .info-value {
     color: #cc6666;
-    font-size: 13px;
-    letter-spacing: 0.5px;
-    line-height: 1.45;
-    padding-left: 8px;
+    font-size: 18px;
+    letter-spacing: 1px;
+    line-height: 1.5;
+    padding-left: 12px;
+    text-shadow: 0 0 4px rgba(200,30,30,0.4);
+    text-align: left;
+  }
+  .info-item .info-value.big {
+    font-size: 20px;
+    color: #ff5555;
+    text-shadow: 0 0 8px rgba(200,30,30,0.5);
+    font-weight: bold;
+  }
+  .info-item .info-value.classified {
+    color: #ff2222;
+    background: #1a0000;
+    border-left: 3px solid #cc2222;
+    padding: 4px 12px;
+    letter-spacing: 4px;
+    font-weight: bold;
+    text-shadow: 0 0 10px #ff3333;
+    font-family: 'VT323', monospace;
+    font-size: 20px;
+    display: inline-block;
+    animation: classifiedPulse 2s ease-in-out infinite;
+  }
+  @keyframes classifiedPulse {
+    0%, 100% { box-shadow: 0 0 8px rgba(200,30,30,0.4); }
+    50%      { box-shadow: 0 0 20px rgba(255,50,50,0.8); }
   }
 
-  .right-col { flex: 1; min-width: 220px; display: flex; flex-direction: column; gap: 10px; }
+  .right-col { flex: 1; min-width: 240px; display: flex; flex-direction: column; gap: 10px; }
 
   .med-card {
     padding: 12px 16px;
@@ -605,7 +628,7 @@
   }
   .med-card.plain img {
     max-width: 100%;
-    max-height: 320px;
+    max-height: 380px;
     object-fit: contain;
     filter: contrast(1.05) saturate(0.7) brightness(0.95) sepia(0.1);
     border: 1px solid #661111;
@@ -614,10 +637,39 @@
     background: #000;
   }
 
-  /* СЕТКА КАРТОЧЕК ЛИЧНОГО ДЕЛА */
+  /* Личные записи с артом */
+  .personal-note-block {
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .personal-note-text {
+    font-size: 15px;
+    line-height: 1.7;
+    color: #cc6666;
+    letter-spacing: 0.5px;
+    padding: 8px 4px;
+    font-style: italic;
+    border-left: 2px solid #661111;
+    padding-left: 14px;
+    text-shadow: 0 0 6px rgba(200,30,30,0.3);
+  }
+  .personal-note-art {
+    display: flex; justify-content: center; align-items: center;
+    padding: 6px;
+    background: #000;
+    border: 1px solid #661111;
+    box-shadow: 0 0 12px rgba(200,30,30,0.25);
+  }
+  .personal-note-art img {
+    max-width: 100%;
+    max-height: 320px;
+    object-fit: contain;
+    filter: contrast(1.05) saturate(0.7) brightness(0.95) sepia(0.1);
+  }
+
+  /* СЕТКА КАРТОЧЕК */
   .dossier-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 12px;
     margin-top: 12px;
   }
@@ -626,7 +678,7 @@
     border: 1px solid #440000;
     border-left: 3px solid #cc2222;
     border-radius: 2px;
-    padding: 12px 14px;
+    padding: 14px 16px;
     box-shadow: inset 0 0 20px rgba(80,0,0,0.3);
     position: relative;
     transition: 0.15s;
@@ -635,7 +687,6 @@
     border-left-color: #ff3333;
     box-shadow: inset 0 0 20px rgba(80,0,0,0.3), 0 0 15px rgba(200,30,30,0.25);
   }
-  /* Уголки */
   .dossier-card::before {
     content: '';
     position: absolute; top: 4px; right: 4px;
@@ -652,11 +703,11 @@
   }
   .dossier-card h4 {
     font-family: 'VT323', monospace;
-    font-size: 17px; color: #ff3333;
+    font-size: 19px; color: #ff3333;
     letter-spacing: 3px;
     text-transform: uppercase;
-    margin-bottom: 8px;
-    padding-bottom: 4px;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
     border-bottom: 1px solid #2a0000;
     text-shadow: 0 0 8px rgba(200,30,30,0.5);
     display: flex; align-items: center; gap: 6px;
@@ -667,13 +718,13 @@
   }
   .dossier-card p,
   .dossier-card ul {
-    font-size: 13px; line-height: 1.6;
+    font-size: 14px; line-height: 1.75;
     color: #cc6666;
     white-space: pre-wrap;
   }
   .dossier-card ul { list-style: none; padding-left: 0; }
   .dossier-card ul li {
-    padding: 3px 0 3px 14px;
+    padding: 5px 0 5px 16px;
     position: relative;
     border-bottom: 1px dashed #1a0000;
   }
@@ -683,6 +734,11 @@
     position: absolute; left: 0;
     color: #cc2222;
   }
+  .dossier-card ul li strong {
+    color: #ff5555;
+    font-weight: normal;
+    letter-spacing: 1px;
+  }
   .dossier-card .placeholder {
     color: #441111;
     font-style: italic;
@@ -690,59 +746,69 @@
     font-size: 12px;
   }
 
-  /* Редактируемое поле */
-  .editable {
-    display: inline-block;
-    min-width: 30px;
-    color: #cc6666;
-    outline: none;
-    border-bottom: 1px dashed #2a0000;
-    padding: 0 4px;
-    cursor: text;
-    transition: 0.15s;
-    user-select: text;
-  }
-  .editable:focus {
-    background: #1a0000;
-    border-bottom-color: #cc2222;
-    color: #ff5555;
-    box-shadow: 0 0 8px rgba(200,30,30,0.3);
-  }
-  .editable:empty::before {
-    content: attr(data-placeholder);
-    color: #441111;
-    font-style: italic;
-  }
-
   /* Стат-бары */
   .stat-bar {
     display: flex; align-items: center; gap: 8px;
-    font-size: 12px; margin: 6px 0;
+    font-size: 12px; margin: 8px 0;
   }
   .stat-bar .stat-label {
-    flex: 0 0 140px; color: #cc6666; letter-spacing: 1px;
-    text-transform: uppercase; font-size: 11px;
+    flex: 0 0 160px; color: #cc6666; letter-spacing: 1.5px;
+    text-transform: uppercase; font-size: 12px;
+    text-shadow: 0 0 4px rgba(200,30,30,0.3);
   }
   .stat-bar .stat-track {
-    flex: 1; height: 8px; background: #0a0000;
+    flex: 1; height: 10px; background: #0a0000;
     border: 1px solid #440000;
     position: relative; overflow: hidden;
   }
   .stat-bar .stat-fill {
     height: 100%;
-    background: linear-gradient(90deg, #440000, #cc2222);
+    background: linear-gradient(90deg, #440000, #cc2222, #ff3333);
     box-shadow: 0 0 8px #cc2222;
     transition: width 0.6s ease;
   }
   .stat-bar .stat-val {
-    flex: 0 0 42px; text-align: right; color: #ff3333;
-    font-family: 'VT323', monospace; font-size: 13px;
+    flex: 0 0 48px; text-align: right; color: #ff3333;
+    font-family: 'VT323', monospace; font-size: 15px;
+    letter-spacing: 1px;
   }
 
-  /* ============ ДНЕВНИК ============ */
-  .diary-wrapper {
+  /* Медкарта — текст как на скрине */
+  .med-rows {
     display: flex; flex-direction: column; gap: 14px;
   }
+  .med-row {
+    display: flex; flex-direction: column; gap: 4px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed #2a0000;
+  }
+  .med-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .med-row .med-row-label {
+    color: #ff3333;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: bold;
+    padding-left: 10px;
+    position: relative;
+    text-shadow: 0 0 6px rgba(200,30,30,0.6);
+  }
+  .med-row .med-row-label::before {
+    content: "▪";
+    position: absolute; left: 0;
+    color: #cc2222;
+    font-size: 12px;
+  }
+  .med-row .med-row-value {
+    color: #cc6666;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+    padding-left: 14px;
+    line-height: 1.5;
+  }
+
+  /* ДНЕВНИК */
+  .diary-wrapper { display: flex; flex-direction: column; gap: 14px; }
   .diary-header-block {
     background: linear-gradient(135deg, #0a0000 0%, #150000 100%);
     border: 1px solid #661111;
@@ -773,7 +839,6 @@
     margin-top: 4px;
   }
 
-  /* Фильтр тегов */
   .diary-filters {
     display: flex; flex-wrap: wrap; gap: 6px;
     padding: 8px 12px;
@@ -915,7 +980,7 @@
     display: flex; justify-content: space-between;
   }
 
-  /* ============ ЗАПИСИ О ПЕРСОНАЛЕ ============ */
+  /* ЗАПИСИ О ПЕРСОНАЛЕ */
   .social-wrapper { display: flex; flex-direction: column; gap: 14px; }
   .classifier-block {
     background: #0a0000;
@@ -961,7 +1026,6 @@
   .rel-tag.c-sympathy { color: #c97ac9; border-color: #c97ac9; background: rgba(201,122,201,0.08); }
   .rel-tag.c-respect { color: #ffcc44; border-color: #ffcc44; background: rgba(255,204,68,0.10); }
 
-  /* Поиск */
   .search-wrap {
     margin-bottom: 12px;
     position: relative;
@@ -1125,7 +1189,7 @@
     text-transform: uppercase;
   }
 
-  /* ============ СТАТУС ============ */
+  /* СТАТУС */
   .lock-screen {
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
@@ -1252,7 +1316,6 @@
     100% { transform: translate(0, 0); }
   }
 
-  /* Глитч-строки */
   .glitch-line {
     font-size: 11px;
     color: #ff2222;
@@ -1273,7 +1336,6 @@
     96% { opacity: 0.7; }
   }
 
-  /* ФЕТИШ-КАРТОЧКИ */
   .ops-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -1327,7 +1389,6 @@
     letter-spacing: 2px;
   }
 
-  /* КНОПКА ЗВУКА */
   .mute-btn {
     position: fixed; top: 12px; right: 110px;
     z-index: 200;
@@ -1371,7 +1432,6 @@
     text-shadow: none;
   }
 
-  /* ПЕЧАТЬ */
   @media print {
     body { background: #fff; color: #000; }
     .intro-crt, .intro-vignette, .intro-red-glow,
@@ -1499,13 +1559,11 @@
       <!-- ==================== ЛИЧНОЕ ДЕЛО ==================== -->
       <div id="tab1" class="tab-content active">
 
-        <!-- ПОД-ВКЛАДКИ -->
         <div class="sub-tabs">
           <div class="sub-tab active" data-sub="sub-base">БАЗА</div>
-          <div class="sub-tab" data-sub="sub-service">СЛУЖБА</div>
           <div class="sub-tab" data-sub="sub-med">МЕДИЦИНА</div>
           <div class="sub-tab" data-sub="sub-psy">ПСИХОЛОГИЯ</div>
-          <div class="sub-tab" data-sub="sub-special">ОСОБОЕ</div>
+          <div class="sub-tab" data-sub="sub-appear">ВНЕШНОСТЬ</div>
         </div>
 
         <!-- БАЗА -->
@@ -1518,16 +1576,16 @@
               </div>
               <div class="info-column">
                 <div class="info-item">
-                  <span class="info-label">Ф.И.О.</span>
-                  <span class="info-value">Сицилия Сиракуза</span>
+                  <span class="info-label">Ф.И</span>
+                  <span class="info-value big">Сицилия Сиракуза</span>
                 </div>
                 <div class="info-item">
                   <span class="info-label">Дата рождения</span>
-                  <span class="info-value">18.12.2132</span>
+                  <span class="info-value big">18.12.2132</span>
                 </div>
                 <div class="info-item">
                   <span class="info-label">Место рождения</span>
-                  <span class="info-value">Буян (Восточная сторона /// Дворец Maior Italia)</span>
+                  <span class="info-value">Буян · Восточная сторона · Дворец Maior Italia</span>
                 </div>
               </div>
             </div>
@@ -1535,7 +1593,13 @@
             <div class="right-col">
               <div class="med-card">
                 <h4>✑ ЛИЧНЫЕ ЗАПИСИ</h4>
-                <p class="editable" contenteditable="true" data-key="personal-note" data-placeholder="[ ТЕКСТ БУДЕТ ЗАПОЛНЕН ПОЗЖЕ ]"></p>
+                <div class="personal-note-block">
+                  <div class="personal-note-text">«Лишь полтора года контракта — и после жизнь без забот, в самом сердце революции. Жди меня, Eres.»</div>
+                  <div class="personal-note-art">
+                    <img src="Sigars.png" alt="Личный арт"
+                         onerror="this.outerHTML='&lt;span style=&quot;color:#661111;font-style:italic;letter-spacing:2px;font-size:12px;padding:20px;display:block;text-align:center;&quot;&gt;[ ИЗОБРАЖЕНИЕ НЕДОСТУПНО ]&lt;/span&gt;'">
+                  </div>
+                </div>
               </div>
 
               <div class="status-block">
@@ -1566,9 +1630,9 @@
                 <li><strong>Рост:</strong> 178 см</li>
                 <li><strong>Вес:</strong> 68 кг</li>
                 <li><strong>Группа крови:</strong> 0(I) Rh⁻</li>
-                <li><strong>Цвет глаз:</strong> <span class="editable" contenteditable="true" data-key="bio-eyes" data-placeholder="[ ДАННЫЕ ]"></span></li>
-                <li><strong>Цвет волос:</strong> <span class="editable" contenteditable="true" data-key="bio-hair" data-placeholder="[ ДАННЫЕ ]"></span></li>
-                <li><strong>Особые приметы:</strong> <span class="editable" contenteditable="true" data-key="bio-marks" data-placeholder="[ ДАННЫЕ ]"></span></li>
+                <li><strong>Цвет глаз:</strong> Серые</li>
+                <li><strong>Цвет волос:</strong> Белые</li>
+                <li><strong>Особые приметы:</strong> Шрам, проходящий через правый глаз</li>
               </ul>
             </div>
 
@@ -1577,59 +1641,19 @@
               <ul>
                 <li><strong>Уровень:</strong> Высшее</li>
                 <li><strong>Учреждение:</strong> Центральный Хайматский Государственный исторический институт</li>
-                <li><strong>Специализация:</strong> <span class="editable" contenteditable="true" data-key="edu-spec" data-placeholder="[ ДАННЫЕ ]"></span></li>
-                <li><strong>Доп. курсы:</strong> <span class="editable" contenteditable="true" data-key="edu-extra" data-placeholder="[ ДАННЫЕ ]"></span></li>
+                <li><strong>Специализация:</strong> История дореволюционной Винеты</li>
+                <li><strong>Доп. курсы:</strong> Военная кафедра</li>
               </ul>
             </div>
 
             <div class="dossier-card">
               <h4><span class="card-icon">▸</span> ЛИЧНЫЕ ДАННЫЕ</h4>
               <ul>
-                <li><strong>Возраст:</strong> <span class="editable" contenteditable="true" data-key="pers-age" data-placeholder="[ ДАННЫЕ ]"></span></li>
-                <li><strong>Пол:</strong> <span class="editable" contenteditable="true" data-key="pers-sex" data-placeholder="[ ДАННЫЕ ]"></span></li>
-                <li><strong>Семейное положение:</strong> <span class="editable" contenteditable="true" data-key="pers-family" data-placeholder="[ ДАННЫЕ ]"></span></li>
-                <li><strong>Родственники:</strong> <span class="editable" contenteditable="true" data-key="pers-relatives" data-placeholder="[ ДАННЫЕ ]"></span></li>
+                <li><strong>Возраст:</strong> 25 лет</li>
+                <li><strong>Пол:</strong> Женский</li>
+                <li><strong>Семейное положение:</strong> Не жената</li>
+                <li><strong>Родственники:</strong> <span class="info-value classified">ЗАСЕКРЕЧЕНО</span></li>
               </ul>
-            </div>
-          </div>
-        </div>
-
-        <!-- СЛУЖБА -->
-        <div class="sub-pane" id="sub-service">
-          <div class="dossier-grid">
-            <div class="dossier-card">
-              <h4><span class="card-icon">▸</span> РАСПРЕДЕЛЕНИЕ</h4>
-              <ul>
-                <li><strong>Пояс:</strong> Астер</li>
-                <li><strong>Комплекс:</strong> ERES M-427</li>
-                <li><strong>Должность:</strong> Боевой гештальт-резонатор</li>
-                <li><strong>Дата прибытия:</strong> <span class="editable" contenteditable="true" data-key="arrival" data-placeholder="[ ДАННЫЕ ]"></span></li>
-              </ul>
-            </div>
-
-            <div class="dossier-card">
-              <h4><span class="card-icon">▸</span> СЛУЖЕБНАЯ ИСТОРИЯ</h4>
-              <ul>
-                <li><strong>Предыдущие назначения:</strong> <span class="editable" contenteditable="true" data-key="prev-assign" data-placeholder="[ ДАННЫЕ ]"></span></li>
-                <li><strong>Звания и ранги:</strong> <span class="editable" contenteditable="true" data-key="ranks" data-placeholder="[ ДАННЫЕ ]"></span></li>
-                <li><strong>Награды:</strong> <span class="editable" contenteditable="true" data-key="rewards" data-placeholder="[ ДАННЫЕ ]"></span></li>
-                <li><strong>Дисциплинарные взыскания:</strong> <span class="editable" contenteditable="true" data-key="penalties" data-placeholder="[ ДАННЫЕ ]"></span></li>
-              </ul>
-            </div>
-
-            <div class="dossier-card">
-              <h4><span class="card-icon">▸</span> КВАЛИФИКАЦИИ И ДОПУСКИ</h4>
-              <ul>
-                <li><strong>Уровень допуска:</strong> <span class="editable" contenteditable="true" data-key="access-level" data-placeholder="[ ДАННЫЕ ]"></span></li>
-                <li><strong>Боевая подготовка:</strong> <span class="editable" contenteditable="true" data-key="combat" data-placeholder="[ ДАННЫЕ ]"></span></li>
-                <li><strong>Резонансные способности:</strong> <span class="editable" contenteditable="true" data-key="resonance" data-placeholder="[ ДАННЫЕ ]"></span></li>
-                <li><strong>Специальные допуски:</strong> <span class="editable" contenteditable="true" data-key="spec-access" data-placeholder="[ ДАННЫЕ ]"></span></li>
-              </ul>
-            </div>
-
-            <div class="dossier-card">
-              <h4><span class="card-icon">▸</span> ОСОБЫЕ ОТМЕТКИ</h4>
-              <p class="editable" contenteditable="true" data-key="spec-notes" data-placeholder="[ ЗАПИСИ КУРАТОРА / РУКОВОДСТВА ]"></p>
             </div>
           </div>
         </div>
@@ -1639,41 +1663,56 @@
           <div class="dossier-grid">
             <div class="dossier-card">
               <h4><span class="card-icon">▸</span> МЕДИЦИНСКИЕ ДАННЫЕ</h4>
-              <ul>
-                <li><strong>Физическое состояние:</strong> <span class="editable" contenteditable="true" data-key="med-physical" data-placeholder="[ ДАННЫЕ ]"></span></li>
-                <li><strong>Хронические заболевания:</strong> <span class="editable" contenteditable="true" data-key="med-chronic" data-placeholder="[ ДАННЫЕ ]"></span></li>
-                <li><strong>Имплантаты / протезы:</strong> <span class="editable" contenteditable="true" data-key="med-implants" data-placeholder="[ ДАННЫЕ ]"></span></li>
-                <li><strong>Противопоказания:</strong> <span class="editable" contenteditable="true" data-key="med-contra" data-placeholder="[ ДАННЫЕ ]"></span></li>
-              </ul>
+              <div class="med-rows">
+                <div class="med-row">
+                  <div class="med-row-label">Физическое состояние</div>
+                  <div class="med-row-value">Спортивное / атлетичное</div>
+                </div>
+                <div class="med-row">
+                  <div class="med-row-label">Хронические заболевания</div>
+                  <div class="med-row-value">Альбинизм</div>
+                </div>
+                <div class="med-row">
+                  <div class="med-row-label">Имплантаты / протезы</div>
+                  <div class="med-row-value">Отсутствие</div>
+                </div>
+                <div class="med-row">
+                  <div class="med-row-label">Противопоказания</div>
+                  <div class="med-row-value">Отсутствуют</div>
+                </div>
+              </div>
             </div>
 
             <div class="dossier-card">
               <h4><span class="card-icon">▸</span> ИНДИКАТОРЫ СОСТОЯНИЯ</h4>
               <div class="stat-bar">
                 <div class="stat-label">Физическое</div>
-                <div class="stat-track"><div class="stat-fill" style="width:70%"></div></div>
-                <div class="stat-val">70%</div>
+                <div class="stat-track"><div class="stat-fill" style="width:100%"></div></div>
+                <div class="stat-val">100%</div>
               </div>
               <div class="stat-bar">
                 <div class="stat-label">Психическое</div>
-                <div class="stat-track"><div class="stat-fill" style="width:65%"></div></div>
-                <div class="stat-val">65%</div>
+                <div class="stat-track"><div class="stat-fill" style="width:100%"></div></div>
+                <div class="stat-val">100%</div>
               </div>
               <div class="stat-bar">
                 <div class="stat-label">Резонанс</div>
-                <div class="stat-track"><div class="stat-fill" style="width:82%"></div></div>
-                <div class="stat-val">82%</div>
+                <div class="stat-track"><div class="stat-fill" style="width:100%"></div></div>
+                <div class="stat-val">100%</div>
               </div>
               <div class="stat-bar">
                 <div class="stat-label">Стабильность</div>
-                <div class="stat-track"><div class="stat-fill" style="width:58%"></div></div>
-                <div class="stat-val">58%</div>
+                <div class="stat-track"><div class="stat-fill" style="width:100%"></div></div>
+                <div class="stat-val">100%</div>
               </div>
+              <p style="margin-top:14px; color:#6fcf97; font-size:13px; letter-spacing:1px; text-shadow:0 0 8px rgba(111,207,151,0.5);">
+                ▸ Состояние стабильное. Отклонений не выявлено.
+              </p>
             </div>
 
             <div class="dossier-card">
               <h4><span class="card-icon">▸</span> ЖУРНАЛ МЕДОСМОТРОВ</h4>
-              <p class="editable" contenteditable="true" data-key="med-log" data-placeholder="[ ЗАПИСИ ОСМОТРОВ ]"></p>
+              <p class="placeholder">[ ЗАПИСИ ОСМОТРОВ ОТСУТСТВУЮТ ]</p>
             </div>
           </div>
         </div>
@@ -1684,10 +1723,10 @@
             <div class="dossier-card">
               <h4><span class="card-icon">▸</span> ПСИХОЛОГИЧЕСКИЙ ПРОФИЛЬ</h4>
               <ul>
-                <li><strong>Темперамент:</strong> <span class="editable" contenteditable="true" data-key="psy-temp" data-placeholder="[ ДАННЫЕ ]"></span></li>
-                <li><strong>Стрессоустойчивость:</strong> <span class="editable" contenteditable="true" data-key="psy-stress" data-placeholder="[ ДАННЫЕ ]"></span></li>
-                <li><strong>Особенности поведения:</strong> <span class="editable" contenteditable="true" data-key="psy-behavior" data-placeholder="[ ДАННЫЕ ]"></span></li>
-                <li><strong>Рекомендации:</strong> <span class="editable" contenteditable="true" data-key="psy-rec" data-placeholder="[ ДАННЫЕ ]"></span></li>
+                <li><strong>Темперамент:</strong> Сангвиник</li>
+                <li><strong>Стрессоустойчивость:</strong> Норма</li>
+                <li><strong>Особенности поведения:</strong> Склонности к театральным высказываниям / общительный характер, без привязанностей / злопамятность</li>
+                <li><strong>Рекомендации:</strong> Не проявлять печали / апатии / депрессии в её присутствии</li>
               </ul>
             </div>
 
@@ -1695,69 +1734,53 @@
               <h4><span class="card-icon">▸</span> ПСИХОМЕТРИЯ</h4>
               <div class="stat-bar">
                 <div class="stat-label">Стрессоустойчивость</div>
-                <div class="stat-track"><div class="stat-fill" style="width:78%"></div></div>
-                <div class="stat-val">78%</div>
+                <div class="stat-track"><div class="stat-fill" style="width:85%"></div></div>
+                <div class="stat-val">85%</div>
               </div>
               <div class="stat-bar">
                 <div class="stat-label">Импульсивность</div>
-                <div class="stat-track"><div class="stat-fill" style="width:52%"></div></div>
-                <div class="stat-val">52%</div>
+                <div class="stat-track"><div class="stat-fill" style="width:80%"></div></div>
+                <div class="stat-val">80%</div>
               </div>
               <div class="stat-bar">
                 <div class="stat-label">Лояльность</div>
-                <div class="stat-track"><div class="stat-fill" style="width:90%"></div></div>
-                <div class="stat-val">90%</div>
+                <div class="stat-track"><div class="stat-fill" style="width:95%"></div></div>
+                <div class="stat-val">95%</div>
               </div>
               <div class="stat-bar">
                 <div class="stat-label">Эмпатия</div>
-                <div class="stat-track"><div class="stat-fill" style="width:64%"></div></div>
-                <div class="stat-val">64%</div>
+                <div class="stat-track"><div class="stat-fill" style="width:45%"></div></div>
+                <div class="stat-val">45%</div>
               </div>
               <div class="stat-bar">
                 <div class="stat-label">Агрессия</div>
-                <div class="stat-track"><div class="stat-fill" style="width:41%"></div></div>
-                <div class="stat-val">41%</div>
+                <div class="stat-track"><div class="stat-fill" style="width:70%"></div></div>
+                <div class="stat-val">70%</div>
               </div>
               <div class="stat-bar">
                 <div class="stat-label">Дисциплина</div>
-                <div class="stat-track"><div class="stat-fill" style="width:86%"></div></div>
-                <div class="stat-val">86%</div>
+                <div class="stat-track"><div class="stat-fill" style="width:80%"></div></div>
+                <div class="stat-val">80%</div>
               </div>
-            </div>
-
-            <div class="dossier-card">
-              <h4><span class="card-icon">▸</span> ЛИЧНОСТНЫЕ ОСОБЕННОСТИ</h4>
-              <ul>
-                <li><strong>Интересы:</strong> <span class="editable" contenteditable="true" data-key="pers-interests" data-placeholder="[ ДАННЫЕ ]"></span></li>
-                <li><strong>Привычки:</strong> <span class="editable" contenteditable="true" data-key="pers-habits" data-placeholder="[ ДАННЫЕ ]"></span></li>
-                <li><strong>Слабости:</strong> <span class="editable" contenteditable="true" data-key="pers-weak" data-placeholder="[ ДАННЫЕ ]"></span></li>
-                <li><strong>Сильные стороны:</strong> <span class="editable" contenteditable="true" data-key="pers-strong" data-placeholder="[ ДАННЫЕ ]"></span></li>
-              </ul>
             </div>
           </div>
         </div>
 
-        <!-- ОСОБОЕ -->
-        <div class="sub-pane" id="sub-special">
+        <!-- ВНЕШНОСТЬ -->
+        <div class="sub-pane" id="sub-appear">
           <div class="dossier-grid">
             <div class="dossier-card">
-              <h4><span class="card-icon">▸</span> ВЗАИМОДЕЙСТВИЕ С ПЕРСОНАЛОМ</h4>
-              <ul>
-                <li><strong>Отношение к репликам:</strong> <span class="editable" contenteditable="true" data-key="rel-repl" data-placeholder="[ ДАННЫЕ ]"></span></li>
-                <li><strong>Отношение к гештальтам:</strong> <span class="editable" contenteditable="true" data-key="rel-gest" data-placeholder="[ ДАННЫЕ ]"></span></li>
-                <li><strong>Конфликты:</strong> <span class="editable" contenteditable="true" data-key="rel-conflicts" data-placeholder="[ ДАННЫЕ ]"></span></li>
-                <li><strong>Дружеские связи:</strong> <span class="editable" contenteditable="true" data-key="rel-friends" data-placeholder="[ ДАННЫЕ ]"></span></li>
-              </ul>
+              <h4><span class="card-icon">▸</span> ОПИСАНИЕ ВНЕШНОСТИ</h4>
+              <p class="placeholder" style="font-style:normal; color:#661111; font-size:13px; line-height:1.8;">
+                [ РАЗДЕЛ В РАЗРАБОТКЕ — ОПИСАНИЕ ВНЕШНОСТИ БУДЕТ ЗАПОЛНЕНО ПОЗЖЕ ]
+              </p>
             </div>
 
             <div class="dossier-card">
               <h4><span class="card-icon">▸</span> ОСОБЫЕ ОТМЕТКИ</h4>
-              <p class="editable" contenteditable="true" data-key="special-notes" data-placeholder="[ ЗАПИСИ КУРАТОРА / РУКОВОДСТВА ]"></p>
-            </div>
-
-            <div class="dossier-card">
-              <h4><span class="card-icon">▸</span> ДОПОЛНИТЕЛЬНО</h4>
-              <p class="editable" contenteditable="true" data-key="extra-notes" data-placeholder="[ СВОБОДНАЯ ФОРМА ]"></p>
+              <p class="placeholder" style="font-style:normal; color:#661111; font-size:13px; line-height:1.8;">
+                [ СВОБОДНАЯ ФОРМА ]
+              </p>
             </div>
           </div>
 
@@ -2261,7 +2284,7 @@
       </div>
 
       <div class="footer-bar">
-        <span>⏻ ЕРЕС-М-427 · v.3.0</span>
+        <span>⏻ ЕРЕС-М-427 · v.3.1</span>
         <span id="footerDate">◆ CYCLE 0000</span>
         <span>⏾ ГЕШТАЛЬТ · С. СИРАКУЗА</span>
       </div>
@@ -2281,7 +2304,6 @@
   const loadingLog = document.getElementById('loadingLog');
   const muteBtn = document.getElementById('muteBtn');
 
-  // === Звук ===
   const laughAudio = new Audio('Hahaha.mp3');
   laughAudio.preload = 'auto';
   laughAudio.volume = 0.7;
@@ -2383,7 +2405,6 @@
     } catch (e) {}
   }
 
-  // === Кнопка звука ===
   muteBtn.addEventListener('click', function() {
     soundEnabled = !soundEnabled;
     if (soundEnabled) {
@@ -2396,7 +2417,6 @@
     }
   });
 
-  // === Динамическая дата ===
   function updateDate() {
     const now = new Date();
     const start = new Date(2156, 0, 1);
@@ -2509,7 +2529,6 @@
     window.scrollTo(0, 0);
   });
 
-  // === Вкладки ===
   const tabs = document.querySelectorAll('.tab-btn');
   const contents = {
     tab1: document.getElementById('tab1'),
@@ -2548,7 +2567,6 @@
     });
   });
 
-  // === Под-вкладки личного дела ===
   document.querySelectorAll('.sub-tab').forEach(st => {
     st.addEventListener('click', function() {
       const target = this.dataset.sub;
@@ -2561,14 +2579,12 @@
     });
   });
 
-  // === Дневник: раскрытие записей ===
   window.toggleDiary = function(headEl) {
     const entry = headEl.closest('.diary-entry');
     if (entry) entry.classList.toggle('open');
     playSwitchSound();
   };
 
-  // === Дневник: фильтр тегов ===
   document.querySelectorAll('.diary-tag-btn').forEach(btn => {
     btn.addEventListener('click', function() {
       const tag = this.dataset.tag;
@@ -2586,7 +2602,6 @@
     });
   });
 
-  // === Раскрытие групп персонала ===
   document.querySelectorAll('.group-header').forEach(header => {
     header.addEventListener('click', function(e) {
       const group = this.dataset.group;
@@ -2604,7 +2619,6 @@
     });
   });
 
-  // === Поиск по персоналу ===
   const searchInput = document.getElementById('personnelSearch');
   if (searchInput) {
     searchInput.addEventListener('input', function() {
@@ -2613,7 +2627,6 @@
         const name = (entry.dataset.name || entry.textContent).toLowerCase();
         entry.classList.toggle('hidden', q.length > 0 && !name.includes(q));
       });
-      // Раскрываем все группы при поиске
       if (q.length > 0) {
         document.querySelectorAll('.sub-items').forEach(s => s.classList.add('open'));
         document.querySelectorAll('.group-header').forEach(h => h.classList.add('open'));
@@ -2621,7 +2634,6 @@
     });
   }
 
-  // === Клик по персоналу — заглушка в desc-panel ===
   document.querySelectorAll('.personnel-entry').forEach(entry => {
     entry.addEventListener('click', function() {
       const name = this.dataset.name;
@@ -2639,14 +2651,12 @@
     });
   });
 
-  // === Редактируемые поля с localStorage ===
+  // Редактируемые поля (только дневник)
   document.querySelectorAll('.editable').forEach(el => {
     const key = el.dataset.key;
     if (!key) return;
-    // Загрузка
     const saved = localStorage.getItem('dossier_' + key);
     if (saved) el.textContent = saved;
-    // Сохранение
     el.addEventListener('input', function() {
       localStorage.setItem('dossier_' + key, this.textContent);
     });
@@ -2657,7 +2667,6 @@
     });
   });
 
-  // === Код доступа ===
   const SECRET_CODE = "Харибта";
   const lockInput = document.getElementById('lockInput');
   const lockBtn = document.getElementById('lockBtn');
@@ -2716,7 +2725,6 @@
   `;
   document.head.appendChild(styleShake);
 
-  // === Звуки на элементах ===
   document.querySelectorAll('.rel-tag, .med-card, .dossier-card, .sub-tab').forEach(el => {
     el.addEventListener('click', function() {
       playBeep(600 + Math.random() * 400);
