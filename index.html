@@ -9,9 +9,6 @@
   html,body{width:100%;height:100%;background:#000;overflow-x:hidden}
   body{min-height:100vh;font-family:'Courier New','VT323','Lucida Console',monospace;color:#cc2222;position:relative}
 
-  /* ===== ОБЩИЕ КАРТОЧКИ ===== */
-  .card-base{background:#0a0000;border:1px solid #661111;border-radius:2px;box-shadow:inset 0 0 20px rgba(80,0,0,.3)}
-
   /* ===== ЗАСТАВКА ===== */
   #introScreen{position:fixed;inset:0;background:#000;z-index:9999;display:flex;justify-content:center;align-items:center;transition:opacity .8s ease,visibility .8s ease}
   #introScreen.hidden{opacity:0;visibility:hidden;pointer-events:none}
@@ -45,7 +42,7 @@
   @keyframes barShine{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
   .intro-footer{font-size:12px;color:#441111;letter-spacing:3px;margin-top:10px}
 
-  /* ===== ЭКРАН ЗАГРУЗКИ ===== */
+  /* ===== ЗАГРУЗКА ===== */
   #loadingScreen{position:fixed;inset:0;z-index:99999;pointer-events:none;opacity:0;background:#000;display:flex;justify-content:center;align-items:center;transition:opacity .4s ease}
   #loadingScreen.active{opacity:1;pointer-events:all}
   .loading-kanji{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:1;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:20px;opacity:.08;filter:blur(.3px)}
@@ -62,7 +59,7 @@
   .loading-percent{font-weight:bold;color:#ff4444;text-shadow:0 0 12px #ff2222}
   .loading-log{font-size:12px;color:#661111;letter-spacing:1px;min-height:16px;white-space:nowrap;overflow:hidden}
 
-  /* ===== ОСНОВНОЙ САЙТ ===== */
+  /* ===== ОСНОВНОЙ ===== */
   #mainSite{display:flex;justify-content:center;align-items:center;min-height:100vh;padding:16px;position:relative;opacity:0;transition:opacity 1s ease;background:#000;animation:breathe 10s ease-in-out infinite}
   #mainSite.visible{opacity:1}
   @keyframes breathe{0%,100%{filter:brightness(1)}50%{filter:brightness(1.03)}}
@@ -105,9 +102,9 @@
   .sub-pane.active{display:block}
   @keyframes paneFade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
 
-  /* ===== ГАЛЕРЕЯ АРТОВ ===== */
-  .art-gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
-  .art-gallery .art-item{position:relative;background:#0a0000;border:1px solid #661111;border-radius:2px;height:240px;overflow:hidden;box-shadow:0 0 15px rgba(200,30,30,.25),inset 0 0 20px rgba(0,0,0,.6);transition:.2s}
+  /* ===== ГАЛЕРЕЯ ===== */
+  .art-gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+  .art-gallery .art-item{position:relative;background:#0a0000;border:1px solid #661111;border-radius:2px;height:260px;overflow:hidden;box-shadow:0 0 15px rgba(200,30,30,.25),inset 0 0 20px rgba(0,0,0,.6);transition:.2s}
   .art-gallery .art-item:hover{border-color:#cc2222;box-shadow:0 0 25px rgba(200,30,30,.5)}
   .art-gallery .art-item img{width:100%;height:100%;object-fit:cover;object-position:center;filter:contrast(1.05) saturate(.85) brightness(.92);transition:.3s}
   .art-gallery .art-item:hover img{filter:contrast(1.1) saturate(1) brightness(1)}
@@ -115,7 +112,7 @@
   .art-gallery .art-item .art-label{position:absolute;bottom:4px;left:6px;font-family:'VT323',monospace;font-size:11px;color:#cc2222;letter-spacing:2px;z-index:3;text-shadow:0 0 6px #000,0 0 4px #000}
 
   /* ===== ЛИЧНОЕ ДЕЛО ===== */
-  .dossier-block{display:flex;flex-wrap:wrap;gap:16px;margin-bottom:16px}
+  .dossier-block{display:flex;flex-wrap:wrap;gap:16px;margin-bottom:14px}
   .info-left{flex:0 0 240px;min-width:220px}
   .photo-place{position:relative;background:#0a0000;border:1px solid #661111;border-radius:2px;height:260px;width:100%;max-width:240px;margin-bottom:8px;padding:6px;box-shadow:0 0 0 1px #2a0000,0 0 18px rgba(200,30,30,.35),inset 0 0 30px rgba(80,0,0,.4);display:flex;align-items:center;justify-content:center;overflow:hidden}
   .photo-place::before{content:'';position:absolute;inset:4px;border:1px solid #cc2222;border-radius:2px;pointer-events:none;z-index:3;box-shadow:0 0 8px rgba(200,30,30,.5)}
@@ -159,7 +156,14 @@
   .status-row .value.yellow{color:#ff6666;text-shadow:0 0 10px #cc2222}
 
   /* ===== СЕТКА КАРТОЧЕК ===== */
-  .dossier-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;margin-top:12px}
+  .dossier-grid{display:grid;gap:10px;margin-top:10px}
+  /* авто-заполнение — карточки растягиваются и заполняют строку */
+  .dossier-grid.auto{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+  /* 3 и 2 колонки — центрируются по горизонтали */
+  .dossier-grid.cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .dossier-grid.cols-2{grid-template-columns:repeat(2,minmax(0,1fr));max-width:720px;margin-left:auto;margin-right:auto}
+  .dossier-grid.cols-1{grid-template-columns:1fr;max-width:820px;margin-left:auto;margin-right:auto}
+
   .dossier-card{background:#0a0000;border:1px solid #440000;border-left:3px solid #cc2222;border-radius:2px;padding:10px 12px;box-shadow:inset 0 0 20px rgba(80,0,0,.3);position:relative;transition:.15s}
   .dossier-card:hover{border-left-color:#ff3333;box-shadow:inset 0 0 20px rgba(80,0,0,.3),0 0 15px rgba(200,30,30,.25)}
   .dossier-card::before{content:'';position:absolute;top:3px;right:3px;width:6px;height:6px;border-top:1px solid #cc2222;border-right:1px solid #cc2222}
@@ -176,14 +180,12 @@
   .dossier-card .classified{color:#ff2222;background:#1a0000;border-left:2px solid #cc2222;padding:1px 8px;letter-spacing:2px;font-weight:bold;text-shadow:0 0 8px #ff3333;font-family:'VT323',monospace;font-size:13px;display:inline-block;animation:classifiedPulse 2s ease-in-out infinite}
   @keyframes classifiedPulse{0%,100%{box-shadow:0 0 6px rgba(200,30,30,.4)}50%{box-shadow:0 0 14px rgba(255,50,50,.8)}}
 
-  /* ===== STAT BAR ===== */
   .stat-bar{display:flex;align-items:center;gap:6px;font-size:11px;margin:5px 0}
   .stat-bar .stat-label{flex:0 0 130px;color:#cc6666;letter-spacing:1px;text-transform:uppercase;font-size:10px;text-shadow:0 0 4px rgba(200,30,30,.3)}
   .stat-bar .stat-track{flex:1;height:8px;background:#0a0000;border:1px solid #440000;position:relative;overflow:hidden}
   .stat-bar .stat-fill{height:100%;background:linear-gradient(90deg,#440000,#cc2222,#ff3333);box-shadow:0 0 8px #cc2222;transition:width .6s ease}
   .stat-bar .stat-val{flex:0 0 38px;text-align:right;color:#ff3333;font-family:'VT323',monospace;font-size:13px;letter-spacing:1px}
 
-  /* ===== МЕДКАРТА ===== */
   .med-rows{display:flex;flex-direction:column;gap:8px}
   .med-row{display:flex;flex-direction:column;gap:2px;padding-bottom:6px;border-bottom:1px dashed #2a0000}
   .med-row:last-child{border-bottom:none;padding-bottom:0}
@@ -316,7 +318,7 @@
   .ops-full{grid-column:1/-1}
   .appearance-text{font-size:14px;line-height:1.75;color:#cc6666;letter-spacing:.3px;white-space:pre-wrap;padding:4px 0}
 
-  /* ===== ФУТЕР И КНОПКИ ===== */
+  /* ===== ФУТЕР ===== */
   .footer-bar{display:flex;justify-content:space-between;margin-top:12px;color:#440000;font-size:12px;border-top:1px solid #2a0000;padding-top:6px;letter-spacing:2px}
   .mute-btn,.logout-btn{position:fixed;top:12px;z-index:200;padding:6px 14px;border:2px solid #cc2222;background:rgba(10,0,0,.85);color:#cc2222;font-family:'Courier New',monospace;font-size:12px;letter-spacing:2px;cursor:pointer;transition:.2s;text-transform:uppercase;text-shadow:0 0 6px rgba(200,30,30,.5)}
   .mute-btn{right:110px}
@@ -330,6 +332,9 @@
     .computer{border-color:#000;box-shadow:none}
   }
 
+  @media (max-width:900px){
+    .dossier-grid.cols-3{grid-template-columns:repeat(2,minmax(0,1fr))}
+  }
   @media (max-width:750px){
     .intro-main{flex-direction:column;align-items:center;gap:20px}
     .intro-portrait{width:160px;height:190px}
@@ -339,7 +344,7 @@
     .computer{padding:10px}
     .tab-btn{font-size:13px;padding:4px 8px;letter-spacing:1px}
     .social-lists,.ops-grid{grid-template-columns:1fr}
-    .art-gallery{grid-template-columns:1fr}
+    .art-gallery{grid-template-columns:1fr;height:auto}
     .info-left{flex:0 0 100%}
     .photo-place{max-width:100%}
     .side-frame{width:30px}
@@ -347,14 +352,13 @@
     .loading-kanji span{font-size:90px;letter-spacing:30px}
     .loading-kanji .kanji-small{font-size:50px;letter-spacing:20px}
     .diary-entry-head-meta{flex-direction:column;gap:4px}
-    .dossier-grid{grid-template-columns:1fr}
+    .dossier-grid.cols-3,.dossier-grid.cols-2,.dossier-grid.cols-1{grid-template-columns:1fr;max-width:none}
     .mute-btn{right:100px;font-size:10px;padding:4px 8px}
   }
 </style>
 </head>
 <body>
 
-<!-- ЭКРАН ЗАГРУЗКИ -->
 <div id="loadingScreen">
   <div class="intro-crt"></div>
   <div class="intro-vignette"></div>
@@ -375,7 +379,6 @@
   </div>
 </div>
 
-<!-- ЗАСТАВКА -->
 <div id="introScreen">
   <div class="intro-crt"></div>
   <div class="intro-vignette"></div>
@@ -405,7 +408,6 @@
   </div>
 </div>
 
-<!-- ОСНОВНОЙ САЙТ -->
 <div id="mainSite">
   <div class="crt-overlay"></div>
   <div class="fish-eye"></div>
@@ -433,21 +435,6 @@
 
       <!-- ============ ЛИЧНОЕ ДЕЛО ============ -->
       <div id="tab1" class="tab-content active">
-
-        <div class="art-gallery">
-          <div class="art-item">
-            <img src="1.png" alt="Арт 1" onerror="this.outerHTML='&lt;span style=&quot;color:#661111;font-style:italic;letter-spacing:2px;font-size:12px;padding:20px;display:block;text-align:center;&quot;&gt;[ 1.png ]&lt;/span&gt;'">
-            <span class="art-label">◈ 01</span>
-          </div>
-          <div class="art-item">
-            <img src="2.png" alt="Арт 2" onerror="this.outerHTML='&lt;span style=&quot;color:#661111;font-style:italic;letter-spacing:2px;font-size:12px;padding:20px;display:block;text-align:center;&quot;&gt;[ 2.png ]&lt;/span&gt;'">
-            <span class="art-label">◈ 02</span>
-          </div>
-          <div class="art-item">
-            <img src="3.jpeg" alt="Арт 3" onerror="this.outerHTML='&lt;span style=&quot;color:#661111;font-style:italic;letter-spacing:2px;font-size:12px;padding:20px;display:block;text-align:center;&quot;&gt;[ 3.jpeg ]&lt;/span&gt;'">
-            <span class="art-label">◈ 03</span>
-          </div>
-        </div>
 
         <div class="sub-tabs">
           <div class="sub-tab active" data-sub="sub-base">БАЗА</div>
@@ -499,7 +486,7 @@
             </div>
           </div>
 
-          <div class="dossier-grid">
+          <div class="dossier-grid auto">
             <div class="dossier-card">
               <h4><span class="card-icon">▸</span> БИОМЕТРИЧЕСКИЕ ДАННЫЕ</h4>
               <ul>
@@ -534,7 +521,7 @@
 
         <!-- СТАТУС -->
         <div class="sub-pane" id="sub-status">
-          <div class="dossier-grid">
+          <div class="dossier-grid cols-3">
             <div class="dossier-card">
               <h4><span class="card-icon">▸</span> МЕДИЦИНСКИЕ ДАННЫЕ</h4>
               <div class="med-rows">
@@ -558,7 +545,7 @@
             </div>
           </div>
 
-          <div class="dossier-grid" style="margin-top:10px;">
+          <div class="dossier-grid cols-2">
             <div class="dossier-card">
               <h4><span class="card-icon">▸</span> ПСИХОЛОГИЧЕСКИЙ ПРОФИЛЬ</h4>
               <ul>
@@ -582,18 +569,29 @@
 
         <!-- ФИЗИЧЕСКИЕ ХАРАКТЕРИСТИКИ -->
         <div class="sub-pane" id="sub-appear">
-          <div class="dossier-grid" style="grid-template-columns:1fr;">
+          <div class="art-gallery">
+            <div class="art-item">
+              <img src="1.png" alt="Арт 1" onerror="this.outerHTML='&lt;span style=&quot;color:#661111;font-style:italic;letter-spacing:2px;font-size:12px;padding:20px;display:block;text-align:center;&quot;&gt;[ 1.png ]&lt;/span&gt;'">
+              <span class="art-label">◈ 01</span>
+            </div>
+            <div class="art-item">
+              <img src="2.png" alt="Арт 2" onerror="this.outerHTML='&lt;span style=&quot;color:#661111;font-style:italic;letter-spacing:2px;font-size:12px;padding:20px;display:block;text-align:center;&quot;&gt;[ 2.png ]&lt;/span&gt;'">
+              <span class="art-label">◈ 02</span>
+            </div>
+            <div class="art-item">
+              <img src="3.jpeg" alt="Арт 3" onerror="this.outerHTML='&lt;span style=&quot;color:#661111;font-style:italic;letter-spacing:2px;font-size:12px;padding:20px;display:block;text-align:center;&quot;&gt;[ 3.jpeg ]&lt;/span&gt;'">
+              <span class="art-label">◈ 03</span>
+            </div>
+          </div>
+
+          <div class="dossier-grid cols-1">
             <div class="dossier-card">
               <h4><span class="card-icon">▸</span> ФИЗИЧЕСКИЕ ХАРАКТЕРИСТИКИ</h4>
               <div class="appearance-text">Внешний облик гештальта характеризуется следующими устойчивыми признаками. Волосы — длинные, густые, серебристо-серого оттенка, близкого к белому, с плавным градиентом, уходящим в черноту; чёлка разделена между глаз. Глаза серые, взгляд острый и пронзительный, нередко с опасным или насмешливым блеском. Отличительные особенности: шрам, пересекающий область правого глаза; характерная частая улыбка или оскал. Фигура спортивная, рельефная. Кожа более бледная, чем у прочих гештальтов; иных дефектов не наблюдается. На лбу расположены три красных ромба — символ революции.</div>
             </div>
           </div>
-          <div class="dossier-block" style="margin-top:14px;">
-            <div class="med-card plain" style="flex:1;">
-              <img src="ava.jpeg" alt="Запись" onerror="this.outerHTML='&lt;span style=&quot;color:#661111;font-style:italic;letter-spacing:2px;font-size:12px;padding:20px;display:block;text-align:center;&quot;&gt;[ ИЗОБРАЖЕНИЕ НЕДОСТУПНО ]&lt;/span&gt;'">
-            </div>
-          </div>
         </div>
+
       </div>
 
       <!-- ============ ДНЕВНИК ============ -->
@@ -736,7 +734,6 @@
           <div class="social-lists">
             <div class="social-col">
               <h3>▸ РЕПЛИКИ</h3>
-
               <span class="group-header" data-group="eulr">EULR</span>
               <div class="sub-items" id="group-eulr">
                 <div class="personnel-entry" data-name="EULR.724"><span class="status-dot unknown"></span><span class="personnel-name">EULR.724</span><span class="personnel-rel">—</span></div>
@@ -745,7 +742,6 @@
                 <div class="personnel-entry" data-name="EULR.401"><span class="status-dot unknown"></span><span class="personnel-name">EULR.401</span><span class="personnel-rel">—</span></div>
                 <div class="personnel-entry" data-name="EULR.322"><span class="status-dot unknown"></span><span class="personnel-name">EULR.322</span><span class="personnel-rel">—</span></div>
               </div>
-
               <span class="group-header" data-group="arar">ARAR</span>
               <div class="sub-items" id="group-arar">
                 <div class="personnel-entry" data-name="ARAR.841"><span class="status-dot unknown"></span><span class="personnel-name">ARAR.841</span><span class="personnel-rel">—</span></div>
@@ -753,35 +749,29 @@
                 <div class="personnel-entry" data-name="ARAR.595"><span class="status-dot unknown"></span><span class="personnel-name">ARAR.595</span><span class="personnel-rel">—</span></div>
                 <div class="personnel-entry" data-name="ARAR.102"><span class="status-dot unknown"></span><span class="personnel-name">ARAR.102</span><span class="personnel-rel">—</span></div>
               </div>
-
               <span class="group-header" data-group="mnhr">MNHR</span>
               <div class="sub-items" id="group-mnhr">
                 <div class="personnel-entry" data-name="MNHR.300"><span class="status-dot unknown"></span><span class="personnel-name">MNHR.300</span><span class="personnel-rel">—</span></div>
                 <div class="personnel-entry" data-name="MNHR.063"><span class="status-dot unknown"></span><span class="personnel-name">MNHR.063</span><span class="personnel-rel">—</span></div>
               </div>
-
               <span class="group-header" data-group="star">STAR</span>
               <div class="sub-items" id="group-star">
                 <div class="personnel-entry" data-name="STAR.114"><span class="status-dot unknown"></span><span class="personnel-name">STAR.114</span><span class="personnel-rel">—</span></div>
                 <div class="personnel-entry" data-name="STAR.603"><span class="status-dot unknown"></span><span class="personnel-name">STAR.603</span><span class="personnel-rel">—</span></div>
                 <div class="personnel-entry" data-name="STAR.762"><span class="status-dot unknown"></span><span class="personnel-name">STAR.762</span><span class="personnel-rel">—</span></div>
               </div>
-
               <span class="group-header" data-group="stcr">STCR</span>
               <div class="sub-items" id="group-stcr">
                 <div class="personnel-entry" data-name="STRC.213"><span class="status-dot unknown"></span><span class="personnel-name">STRC.213</span><span class="personnel-rel">—</span></div>
               </div>
-
               <span class="group-header" data-group="klbr">KLBR</span>
               <div class="sub-items" id="group-klbr">
                 <div class="personnel-entry" data-name="KLBR.080"><span class="status-dot unknown"></span><span class="personnel-name">KLBR.080</span><span class="personnel-rel">—</span></div>
               </div>
-
               <span class="group-header" data-group="kahr">KAHR</span>
               <div class="sub-items" id="group-kahr">
                 <div class="personnel-entry" data-name="KAHR"><span class="status-dot unknown"></span><span class="personnel-name">KAHR</span><span class="personnel-rel">—</span></div>
               </div>
-
               <span class="group-header" data-group="fklr">FKLR</span>
               <div class="sub-items" id="group-fklr">
                 <div class="personnel-entry" data-name="FKLR"><span class="status-dot unknown"></span><span class="personnel-name">FKLR</span><span class="personnel-rel">—</span></div>
@@ -790,13 +780,11 @@
 
             <div class="social-col">
               <h3>▸ ГЕШТАЛЬТЫ</h3>
-
               <span class="group-header" data-group="gscc">GSCC</span>
               <div class="sub-items" id="group-gscc">
                 <div class="personnel-entry" data-name="GSCC.Артемий Овечкин"><span class="status-dot unknown"></span><span class="personnel-name">GSCC.Артемий Овечкин</span><span class="personnel-rel">—</span></div>
                 <div class="personnel-entry" data-name="GSCC.Кирра Фостер"><span class="status-dot unknown"></span><span class="personnel-name">GSCC.Кирра Фостер</span><span class="personnel-rel">—</span></div>
               </div>
-
               <span class="group-header" data-group="gscp">GSCP</span>
               <div class="sub-items" id="group-gscp">
                 <div class="personnel-entry" data-name="GSCP.Анна Леонхард"><span class="status-dot unknown"></span><span class="personnel-name">GSCP.Анна Леонхард</span><span class="personnel-rel">—</span></div>
@@ -806,13 +794,10 @@
                 <div class="personnel-entry" data-name="GSCP.168"><span class="status-dot unknown"></span><span class="personnel-name">GSCP.168 — Аделина Краусс</span><span class="personnel-rel">—</span></div>
                 <div class="personnel-entry" data-name="GSCP.999"><span class="status-dot unknown"></span><span class="personnel-name">GSCP.999</span><span class="personnel-rel">—</span></div>
               </div>
-
               <span class="group-header" data-group="gsco">GSCO</span>
               <div class="sub-items" id="group-gsco"><div class="empty-note">— список пуст —</div></div>
-
               <span class="group-header" data-group="command">КОМАНДОВАНИЕ</span>
               <div class="sub-items" id="group-command"><div class="empty-note">— список пуст —</div></div>
-
               <span class="group-header" data-group="other-gest">ПРОЧИЕ ГЕШТАЛЬТЫ</span>
               <div class="sub-items" id="group-other-gest"><div class="empty-note">— список пуст —</div></div>
             </div>
@@ -1033,7 +1018,7 @@
 
   function updateDate(){
     const now=new Date();
-    const days=Math.floor((now-new Date(2156,0,1))/86400000);
+    const days=Math.abs(Math.floor((now-new Date(2156,0,1))/86400000));
     const cycle=200+(days%9999);
     const hh=String(now.getHours()).padStart(2,'0');
     const mm=String(now.getMinutes()).padStart(2,'0');
