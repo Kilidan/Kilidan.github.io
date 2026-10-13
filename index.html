@@ -1,150 +1,76 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Лаппланд</title>
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    background: #1a100a;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: 'Courier New', monospace;
-    padding: 16px;
-    color: #9bb5d4;
-  }
-  .computer {
-    width: 900px;
-    max-width: 96vw;
-    background: #15142b;
-    border: 4px solid #3c3b6b;
-    border-radius: 12px;
-    padding: 16px;
-  }
-  .screen {
-    background: #0e0e1f;
-    border: 2px solid #332f59;
-    border-radius: 8px;
-    padding: 14px;
-  }
-  .title {
-    color: #c9a87a;
-    border-bottom: 2px solid #3b457a;
-    padding-bottom: 6px;
-    margin-bottom: 10px;
-    font-size: 16px;
-    letter-spacing: 2px;
-    display: flex;
-    justify-content: space-between;
-  }
-  .tabs {
-    display: flex;
-    gap: 4px;
-    margin-bottom: 10px;
-    flex-wrap: wrap;
-  }
-  .tab-btn {
-    background: #101029;
-    border: 2px solid #332f59;
-    border-bottom: none;
-    padding: 6px 16px;
-    color: #7271b0;
-    border-radius: 8px 8px 0 0;
-    cursor: pointer;
-    font-family: inherit;
-    font-size: 14px;
-    text-transform: uppercase;
-  }
-  .tab-btn.active {
-    background: #1d1a40;
-    color: #afb5f0;
-    border-color: #5b50a1;
-  }
-  .tab-btn:hover { background: #21204a; color: #a1a0e8; }
-  .tab-content {
-    display: none;
-    background: #0a0a1a;
-    border: 2px solid #4a3424;
-    border-radius: 8px;
-    padding: 14px;
-    min-height: 300px;
-  }
-  .tab-content.active { display: block; }
-  .box {
-    background: #0d0a1a;
-    border: 2px solid #2c244a;
-    border-radius: 8px;
-    padding: 12px;
-    margin-bottom: 10px;
-  }
-  .footer {
-    margin-top: 12px;
-    color: #302f59;
-    font-size: 12px;
-    border-top: 1px solid #3f2a1a;
-    padding-top: 6px;
-    display: flex;
-    justify-content: space-between;
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lappupa.gif</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background: #000;
+      overflow: hidden;
+      font-family: 'Courier New', monospace;
+    }
+    /* Экран загрузки */
+    #loader {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+      color: #fff;
+      font-size: 24px;
+      text-align: center;
+      padding: 20px;
+      transition: opacity 0.8s;
+    }
+    #loader.hide {
+      opacity: 0;
+      pointer-events: none;
+    }
+    /* Полноэкранная гифка */
+    #gifScreen {
+      position: fixed;
+      inset: 0;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      background: #000;
+      z-index: 20;
+    }
+    #gifScreen.show {
+      display: flex;
+    }
+    #gifScreen img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  </style>
 </head>
 <body>
-  <div class="computer">
-    <div class="screen">
-      <div class="title">
-        <span>Лаппланд</span>
-        <span>Лаппланд</span>
-      </div>
 
-      <div class="tabs">
-        <div class="tab-btn active" data-tab="tab1">Лаппланд</div>
-        <div class="tab-btn" data-tab="tab2">Лаппланд</div>
-        <div class="tab-btn" data-tab="tab3">Лаппланд</div>
-        <div class="tab-btn" data-tab="tab4">Лаппланд</div>
-      </div>
+  <div id="loader">
+    пока просто, готовы начать представление
+  </div>
 
-      <div id="tab1" class="tab-content active">
-        <div class="box">Лаппланд</div>
-        <div class="box">Лаппланд</div>
-        <div class="box">Лаппланд</div>
-      </div>
-
-      <div id="tab2" class="tab-content">
-        <div class="box">Лаппланд</div>
-      </div>
-
-      <div id="tab3" class="tab-content">
-        <div class="box">Лаппланд</div>
-        <div class="box">Лаппланд</div>
-      </div>
-
-      <div id="tab4" class="tab-content">
-        <div class="box">Лаппланд</div>
-      </div>
-
-      <div class="footer">
-        <span>Лаппланд</span>
-        <span>Лаппланд</span>
-      </div>
-    </div>
+  <div id="gifScreen">
+    <img src="Lappupa.gif" alt="Lappupa.gif">
   </div>
 
   <script>
-    const tabs = document.querySelectorAll('.tab-btn');
-    const contents = document.querySelectorAll('.tab-content');
-
-    tabs.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const id = btn.dataset.tab;
-        tabs.forEach(b => b.classList.remove('active'));
-        contents.forEach(c => c.classList.remove('active'));
-        btn.classList.add('active');
-        document.getElementById(id).classList.add('active');
-      });
-    });
+    // Через 3 секунды скрываем загрузку и показываем гифку
+    setTimeout(() => {
+      document.getElementById('loader').classList.add('hide');
+      document.getElementById('gifScreen').classList.add('show');
+    }, 3000);
   </script>
+
 </body>
 </html>
