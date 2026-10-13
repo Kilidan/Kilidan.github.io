@@ -407,16 +407,23 @@
   }
   .tab-content.active { display: block; }
 
-  /* ЛИЧНОЕ ДЕЛО */
-  .info-grid { display: flex; flex-wrap: wrap; gap: 14px; }
-  .info-left { flex: 0 0 200px; min-width: 160px; }
+  /* ============ ЛИЧНОЕ ДЕЛО ============ */
+  .dossier-block {
+    display: flex; flex-wrap: wrap; gap: 16px;
+    margin-bottom: 16px;
+  }
+  .dossier-main {
+    display: flex; flex-wrap: wrap; gap: 14px;
+    flex: 1; min-width: 260px;
+  }
+  .info-left { flex: 0 0 220px; min-width: 200px; }
 
   .photo-place {
     position: relative;
     background: #0a0000;
     border: 1px solid #661111;
     border-radius: 2px;
-    height: 180px; width: 100%; max-width: 200px;
+    height: 220px; width: 100%; max-width: 220px;
     margin-bottom: 8px;
     padding: 6px;
     box-shadow:
@@ -464,7 +471,6 @@
     line-height: 1.5;
     color: #cc6666;
     box-shadow: inset 0 0 20px rgba(80,0,0,0.3);
-    max-width: 200px;
     display: flex; flex-direction: column; gap: 8px;
   }
   .info-item {
@@ -496,6 +502,76 @@
     letter-spacing: 0.5px;
     line-height: 1.45;
     padding-left: 8px;
+  }
+
+  /* БЛОКИ-КАРТОЧКИ В ЛИЧНОМ ДЕЛЕ */
+  .dossier-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+    margin-top: 12px;
+  }
+  .dossier-card {
+    background: #0a0000;
+    border: 1px solid #440000;
+    border-left: 3px solid #cc2222;
+    border-radius: 2px;
+    padding: 12px 14px;
+    box-shadow: inset 0 0 20px rgba(80,0,0,0.3);
+    position: relative;
+    transition: 0.15s;
+  }
+  .dossier-card:hover {
+    border-left-color: #ff3333;
+    box-shadow: inset 0 0 20px rgba(80,0,0,0.3), 0 0 15px rgba(200,30,30,0.25);
+  }
+  .dossier-card::before {
+    content: '';
+    position: absolute; top: 6px; right: 6px;
+    width: 5px; height: 5px;
+    background: #cc2222;
+    box-shadow: 0 0 6px #cc2222;
+  }
+  .dossier-card h4 {
+    font-family: 'VT323', monospace;
+    font-size: 17px; color: #ff3333;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #2a0000;
+    text-shadow: 0 0 8px rgba(200,30,30,0.5);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .dossier-card h4 .card-icon {
+    font-size: 14px;
+    color: #cc2222;
+  }
+  .dossier-card p,
+  .dossier-card ul {
+    font-size: 13px; line-height: 1.6;
+    color: #cc6666;
+    white-space: pre-wrap;
+  }
+  .dossier-card ul {
+    list-style: none; padding-left: 0;
+  }
+  .dossier-card ul li {
+    padding: 3px 0 3px 14px;
+    position: relative;
+    border-bottom: 1px dashed #1a0000;
+  }
+  .dossier-card ul li:last-child { border-bottom: none; }
+  .dossier-card ul li::before {
+    content: "▪";
+    position: absolute; left: 0;
+    color: #cc2222;
+  }
+  .dossier-card .placeholder {
+    color: #441111;
+    font-style: italic;
+    letter-spacing: 1px;
+    font-size: 12px;
   }
 
   .status-block {
@@ -536,25 +612,33 @@
   .status-row .value.green { color: #ff4444; text-shadow: 0 0 10px #cc2222; }
   .status-row .value.yellow { color: #ff6666; text-shadow: 0 0 10px #cc2222; }
 
-  .right-col { flex: 1; min-width: 180px; display: flex; flex-direction: column; gap: 8px; }
+  .right-col { flex: 1; min-width: 220px; display: flex; flex-direction: column; gap: 10px; }
 
   .med-card {
-    padding: 10px 14px;
+    padding: 12px 16px;
     border: 1px solid #661111;
     border-radius: 2px;
     background: #0a0000;
     box-shadow: inset 0 0 20px rgba(80,0,0,0.3);
+    position: relative;
+  }
+  .med-card::after {
+    content: '';
+    position: absolute; bottom: 6px; right: 6px;
+    width: 5px; height: 5px;
+    background: #440000;
   }
   .med-card h4 {
     font-family: 'VT323', monospace;
     font-size: 18px; color: #ff3333;
     letter-spacing: 3px;
     border-bottom: 1px solid #440000;
-    padding-bottom: 3px; margin-bottom: 6px;
+    padding-bottom: 4px; margin-bottom: 8px;
     text-shadow: 0 0 10px #cc2222;
+    text-transform: uppercase;
   }
   .med-card p {
-    font-size: 14px; line-height: 1.5;
+    font-size: 14px; line-height: 1.6;
     color: #cc6666; white-space: pre-wrap;
   }
 
@@ -574,52 +658,247 @@
     background: #000;
   }
 
-  /* ФЕТИШ-КАРТОЧКИ (внутри статуса) */
-  .ops-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
+  /* ============ ДНЕВНИК ============ */
+  .diary-wrapper {
+    display: flex; flex-direction: column; gap: 14px;
   }
-  .ops-card {
+  .diary-header-block {
+    background: linear-gradient(135deg, #0a0000 0%, #150000 100%);
     border: 1px solid #661111;
-    background: #0a0000;
-    padding: 12px 14px;
+    border-left: 4px solid #cc2222;
     border-radius: 2px;
-    box-shadow: inset 0 0 20px rgba(80,0,0,0.3);
+    padding: 14px 20px;
+    box-shadow: inset 0 0 30px rgba(80,0,0,0.3), 0 0 20px rgba(200,30,30,0.2);
     position: relative;
   }
-  .ops-card::before {
+  .diary-header-block::before {
+    content: '⊞';
+    position: absolute; top: 8px; right: 12px;
+    color: #cc2222; font-size: 20px;
+    text-shadow: 0 0 10px #cc2222;
+  }
+  .diary-header-block h2 {
+    font-family: 'VT323', 'Courier New', monospace;
+    font-size: 26px; font-weight: normal;
+    color: #ff3333;
+    text-shadow: 0 0 16px #cc2222;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+  }
+  .diary-header-block .sub {
+    font-size: 12px;
+    color: #661111;
+    letter-spacing: 3px;
+    margin-top: 4px;
+  }
+
+  /* Запись дневника */
+  .diary-entry {
+    background: #0a0000;
+    border: 1px solid #440000;
+    border-left: 3px solid #cc2222;
+    border-radius: 2px;
+    padding: 14px 18px 16px;
+    box-shadow: inset 0 0 30px rgba(80,0,0,0.3);
+    position: relative;
+    transition: 0.2s;
+  }
+  .diary-entry:hover {
+    border-left-color: #ff3333;
+    box-shadow: inset 0 0 30px rgba(80,0,0,0.3), 0 0 20px rgba(200,30,30,0.3);
+  }
+  .diary-entry::before {
     content: '';
-    position: absolute; top: 4px; right: 4px;
+    position: absolute; top: 8px; right: 8px;
     width: 6px; height: 6px;
     background: #cc2222;
     box-shadow: 0 0 8px #cc2222;
+    animation: diaryPulse 2s ease-in-out infinite;
   }
-  .ops-card h4 {
+  @keyframes diaryPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+  .diary-entry-meta {
+    display: flex; justify-content: space-between; align-items: baseline;
+    border-bottom: 1px dashed #2a0000;
+    padding-bottom: 6px;
+    margin-bottom: 10px;
+  }
+  .diary-entry-date {
     font-family: 'VT323', monospace;
-    font-size: 17px; color: #ff3333;
+    color: #ff3333;
+    font-size: 15px;
+    letter-spacing: 3px;
+    text-shadow: 0 0 8px rgba(200,30,30,0.6);
+  }
+  .diary-entry-tag {
+    font-size: 11px;
+    color: #661111;
     letter-spacing: 2px;
-    margin-bottom: 8px;
-    padding-bottom: 4px;
-    border-bottom: 1px solid #2a0000;
-    text-shadow: 0 0 8px rgba(200,30,30,0.5);
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border: 1px solid #2a0000;
+    border-radius: 2px;
+    background: #050000;
   }
-  .ops-card p, .ops-card ul {
-    font-size: 13px; line-height: 1.6;
+  .diary-entry-title {
+    font-family: 'VT323', 'Courier New', monospace;
+    color: #ff5555;
+    font-size: 20px;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    text-shadow: 0 0 10px rgba(200,30,30,0.5);
+    text-transform: uppercase;
+  }
+  .diary-entry-body {
     color: #cc6666;
+    font-size: 14px;
+    line-height: 1.75;
+    letter-spacing: 0.3px;
+    white-space: pre-wrap;
+    min-height: 40px;
   }
-  .ops-card ul { list-style: none; padding-left: 0; }
-  .ops-card ul li { padding: 2px 0; }
-  .ops-card ul li::before { content: "▪ "; color: #cc2222; }
-  .ops-card .empty-note {
+  .diary-entry-body .placeholder {
     color: #441111;
     font-style: italic;
+    letter-spacing: 2px;
+  }
+  .diary-entry-footer {
+    margin-top: 10px;
+    padding-top: 6px;
+    border-top: 1px dashed #2a0000;
+    font-size: 11px;
+    color: #441111;
+    letter-spacing: 3px;
+    display: flex; justify-content: space-between;
+  }
+
+  /* ============ ЗАПИСИ О ПЕРСОНАЛЕ ============ */
+  .social-wrapper { display: flex; flex-direction: column; gap: 14px; }
+  .classifier-block {
+    background: #0a0000;
+    border: 1px solid #661111;
+    border-radius: 2px;
+    padding: 12px 16px;
+    box-shadow: inset 0 0 30px rgba(80,0,0,0.3);
+    display: flex; flex-wrap: wrap;
+    justify-content: center; gap: 8px 12px;
+  }
+  .rel-tag {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 2px;
+    font-size: 14px; font-weight: bold;
     letter-spacing: 1px;
+    background: #0a0000;
+    border: 1px solid #661111;
+    cursor: pointer; transition: 0.1s;
+    color: #cc6666;
+    text-shadow: 0 0 6px rgba(200,30,30,0.4);
+  }
+  .rel-tag:hover {
+    filter: brightness(1.3);
+    transform: scale(1.02);
+    border-color: #cc2222;
+    box-shadow: 0 0 12px rgba(200,30,30,0.5);
+  }
+  .rel-tag.active-filter { box-shadow: 0 0 20px currentColor; border-color: #fff; }
+
+  .rel-tag.c-distrust { color: #e8c86a; border-color: #e8c86a; background: rgba(232,200,106,0.08); }
+  .rel-tag.c-sad { color: #9a9a9a; border-color: #9a9a9a; background: rgba(154,154,154,0.08); }
+  .rel-tag.c-neutral { color: #f0f0f0; border-color: #f0f0f0; background: rgba(240,240,240,0.05); }
+  .rel-tag.c-friend { color: #6fcf97; border-color: #6fcf97; background: rgba(111,207,151,0.08); }
+  .rel-tag.c-strong { color: #27ae60; border-color: #27ae60; background: rgba(39,174,96,0.08); }
+  .rel-tag.c-love { color: #f1948a; border-color: #f1948a; background: rgba(241,148,138,0.08); }
+  .rel-tag.c-dead { color: #1a1a1a; border-color: #555; background: rgba(212,212,212,0.3); }
+  .rel-tag.c-enemy { color: #ff3333; border-color: #ff3333; background: rgba(255,50,50,0.10); }
+  .rel-tag.c-fear { color: #5a7a9a; border-color: #5a7a9a; background: rgba(90,122,154,0.08); }
+  .rel-tag.c-disappoint { color: #e8d8a0; border-color: #e8d8a0; background: rgba(232,216,160,0.08); }
+  .rel-tag.c-cautious { color: #d97a3a; border-color: #d97a3a; background: rgba(217,122,58,0.08); }
+  .rel-tag.c-regret { color: #4a7a9a; border-color: #4a7a9a; background: rgba(74,122,154,0.10); }
+  .rel-tag.c-sympathy { color: #c97ac9; border-color: #c97ac9; background: rgba(201,122,201,0.08); }
+  .rel-tag.c-respect { color: #ffcc44; border-color: #ffcc44; background: rgba(255,204,68,0.10); }
+
+  .social-lists { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .social-col {
+    background: #0a0000;
+    border: 1px solid #440000;
+    border-radius: 2px;
+    padding: 12px 16px;
+    box-shadow: inset 0 0 20px rgba(80,0,0,0.3);
+    min-height: 260px;
+    max-height: 400px; overflow-y: auto;
+  }
+  .social-col::-webkit-scrollbar { width: 4px; background: #0a0000; }
+  .social-col::-webkit-scrollbar-thumb { background: #661111; border-radius: 4px; }
+
+  .social-col h3 {
+    font-family: 'VT323', monospace;
+    color: #ff3333;
+    font-size: 20px; letter-spacing: 3px;
+    border-bottom: 1px solid #440000;
+    padding-bottom: 4px; margin-bottom: 10px;
+    text-shadow: 0 0 12px rgba(200,30,30,0.6);
+  }
+
+  .social-col .group-header {
+    font-weight: bold; font-size: 16px;
+    color: #cc2222;
+    cursor: pointer;
+    padding: 6px 0 6px 10px;
+    border-bottom: 1px solid #1a0000;
+    border-left: 2px solid transparent;
+    transition: 0.1s;
+    display: block;
+    text-shadow: 0 0 6px rgba(200,30,30,0.3);
+    position: relative;
+  }
+  .social-col .group-header::after {
+    content: '◂';
+    position: absolute; right: 6px;
+    color: #440000;
     font-size: 12px;
   }
-  .ops-full { grid-column: 1 / -1; }
+  .social-col .group-header:hover { color: #ff5555; background: #150000; text-shadow: 0 0 10px #ff3333; border-left-color: #cc2222; }
+  .social-col .group-header.open { color: #ff3333; background: #1a0000; border-left-color: #ff3333; }
+  .social-col .group-header.open::after { content: '▾'; color: #cc2222; }
 
-  /* СТАТУС МОДУЛЯ */
+  .sub-items {
+    padding-left: 14px; margin: 4px 0 8px;
+    display: none;
+    border-left: 1px dashed #2a0000;
+  }
+  .sub-items.open { display: block; }
+  .sub-items .empty-note {
+    color: #441111;
+    font-style: italic;
+    letter-spacing: 2px;
+    font-size: 12px;
+    padding: 6px 0;
+  }
+
+  .desc-panel {
+    background: #0a0000;
+    border: 1px solid #440000;
+    border-radius: 2px;
+    padding: 14px 16px;
+    margin-top: 14px;
+    min-height: 200px; max-height: 320px;
+    overflow-y: auto;
+    box-shadow: inset 0 0 30px rgba(80,0,0,0.3);
+    transition: all 0.15s;
+  }
+  .desc-panel::-webkit-scrollbar { width: 4px; background: #0a0000; }
+  .desc-panel::-webkit-scrollbar-thumb { background: #440000; border-radius: 4px; }
+  .desc-panel .empty-state {
+    color: #440000; text-align: center;
+    padding: 40px 0;
+    font-size: 16px; letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  /* ============ СТАТУС ============ */
   .lock-screen {
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
@@ -746,256 +1025,50 @@
     100% { transform: translate(0, 0); }
   }
 
-  /* ДНЕВНИК */
-  .history-block {
-    background: #0a0000;
+  /* ФЕТИШ-КАРТОЧКИ */
+  .ops-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .ops-card {
     border: 1px solid #661111;
-    border-radius: 2px;
-    padding: 14px 18px 18px;
-    box-shadow: inset 0 0 30px rgba(80,0,0,0.3), 0 0 20px rgba(200,30,30,0.15);
-  }
-  .history-block h2 {
-    font-family: 'VT323', 'Courier New', monospace;
-    font-size: 28px; font-weight: normal;
-    color: #ff3333;
-    text-shadow: 0 0 16px #cc2222;
-    letter-spacing: 6px;
-    border-bottom: 1px solid #440000;
-    padding-bottom: 6px; margin-bottom: 14px;
-    text-transform: uppercase;
-    display: flex; align-items: center; gap: 12px;
-  }
-  .history-block h2::before { content: "⊞"; font-size: 24px; color: #cc2222; }
-  .history-block p {
-    font-size: 15px; line-height: 1.7;
-    color: #cc6666; letter-spacing: 0.3px;
-    font-family: 'Courier New', 'VT323', monospace;
-    white-space: pre-wrap;
-  }
-
-  /* ЗАПИСИ О ПЕРСОНАЛЕ */
-  .social-wrapper { display: flex; flex-direction: column; gap: 14px; }
-  .classifier-block {
     background: #0a0000;
-    border: 1px solid #661111;
-    border-radius: 2px;
-    padding: 12px 16px;
-    box-shadow: inset 0 0 30px rgba(80,0,0,0.3);
-    display: flex; flex-wrap: wrap;
-    justify-content: center; gap: 8px 12px;
-  }
-  .rel-tag {
-    display: inline-block;
-    padding: 4px 14px;
-    border-radius: 2px;
-    font-size: 14px; font-weight: bold;
-    letter-spacing: 1px;
-    background: #0a0000;
-    border: 1px solid #661111;
-    cursor: pointer; transition: 0.1s;
-    color: #cc6666;
-    text-shadow: 0 0 6px rgba(200,30,30,0.4);
-  }
-  .rel-tag:hover {
-    filter: brightness(1.3);
-    transform: scale(1.02);
-    border-color: #cc2222;
-    box-shadow: 0 0 12px rgba(200,30,30,0.5);
-  }
-  .rel-tag.active-filter { box-shadow: 0 0 20px currentColor; border-color: #fff; }
-
-  .rel-tag.c-distrust { color: #e8c86a; border-color: #e8c86a; background: rgba(232,200,106,0.08); }
-  .rel-tag.c-sad { color: #9a9a9a; border-color: #9a9a9a; background: rgba(154,154,154,0.08); }
-  .rel-tag.c-neutral { color: #f0f0f0; border-color: #f0f0f0; background: rgba(240,240,240,0.05); }
-  .rel-tag.c-friend { color: #6fcf97; border-color: #6fcf97; background: rgba(111,207,151,0.08); }
-  .rel-tag.c-strong { color: #27ae60; border-color: #27ae60; background: rgba(39,174,96,0.08); }
-  .rel-tag.c-love { color: #f1948a; border-color: #f1948a; background: rgba(241,148,138,0.08); }
-  .rel-tag.c-dead { color: #1a1a1a; border-color: #555; background: rgba(212,212,212,0.3); }
-  .rel-tag.c-enemy { color: #ff3333; border-color: #ff3333; background: rgba(255,50,50,0.10); }
-  .rel-tag.c-fear { color: #5a7a9a; border-color: #5a7a9a; background: rgba(90,122,154,0.08); }
-  .rel-tag.c-disappoint { color: #e8d8a0; border-color: #e8d8a0; background: rgba(232,216,160,0.08); }
-  .rel-tag.c-cautious { color: #d97a3a; border-color: #d97a3a; background: rgba(217,122,58,0.08); }
-  .rel-tag.c-regret { color: #4a7a9a; border-color: #4a7a9a; background: rgba(74,122,154,0.10); }
-  .rel-tag.c-sympathy { color: #c97ac9; border-color: #c97ac9; background: rgba(201,122,201,0.08); }
-  .rel-tag.c-respect { color: #ffcc44; border-color: #ffcc44; background: rgba(255,204,68,0.10); }
-
-  .social-lists { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .social-col {
-    background: #0a0000;
-    border: 1px solid #440000;
-    border-radius: 2px;
-    padding: 10px 14px;
-    box-shadow: inset 0 0 20px rgba(80,0,0,0.3);
-    max-height: 400px; overflow-y: auto;
-  }
-  .social-col::-webkit-scrollbar { width: 4px; background: #0a0000; }
-  .social-col::-webkit-scrollbar-thumb { background: #661111; border-radius: 4px; }
-
-  .social-col h3 {
-    font-family: 'VT323', monospace;
-    color: #ff3333;
-    font-size: 20px; letter-spacing: 3px;
-    border-bottom: 1px solid #440000;
-    padding-bottom: 4px; margin-bottom: 8px;
-    text-shadow: 0 0 12px rgba(200,30,30,0.6);
-  }
-
-  .desc-panel {
-    background: #0a0000;
-    border: 1px solid #440000;
-    border-radius: 2px;
     padding: 12px 14px;
-    margin-top: 14px;
-    min-height: 180px; max-height: 300px;
-    overflow-y: auto;
-    box-shadow: inset 0 0 30px rgba(80,0,0,0.3);
-    transition: all 0.15s;
+    border-radius: 2px;
+    box-shadow: inset 0 0 20px rgba(80,0,0,0.3);
+    position: relative;
   }
-  .desc-panel::-webkit-scrollbar { width: 4px; background: #0a0000; }
-  .desc-panel::-webkit-scrollbar-thumb { background: #440000; border-radius: 4px; }
-  .desc-panel .empty-state {
-    color: #440000; text-align: center;
-    padding: 30px 0;
-    font-size: 16px; letter-spacing: 2px;
+  .ops-card::before {
+    content: '';
+    position: absolute; top: 4px; right: 4px;
+    width: 6px; height: 6px;
+    background: #cc2222;
+    box-shadow: 0 0 8px #cc2222;
   }
-
-  .desc-panel .sub-card {
-    display: none; background: transparent;
-    border: none; padding: 0; margin: 0; box-shadow: none;
-  }
-  .desc-panel .sub-card.open { display: block; }
-  .desc-panel .sub-header {
-    font-weight: bold;
-    color: #ff3333;
-    font-size: 16px;
+  .ops-card h4 {
+    font-family: 'VT323', monospace;
+    font-size: 17px; color: #ff3333;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+    padding-bottom: 4px;
     border-bottom: 1px solid #2a0000;
-    padding-bottom: 4px; margin-bottom: 6px;
-    display: flex; justify-content: space-between; align-items: center;
     text-shadow: 0 0 8px rgba(200,30,30,0.5);
   }
-  .desc-panel .sub-body { display: flex; gap: 12px; flex-wrap: wrap; }
-  .desc-panel .sub-desc { flex: 1; font-size: 13px; line-height: 1.5; color: #cc6666; min-width: 100px; white-space: pre-wrap; }
-
-  /* НОВЫЙ КВАДРАТИК "NO DATA" с рябью */
-  .no-data-box {
-    width: 70px; height: 70px;
-    border-radius: 2px;
-    border: 1px solid #cc2222;
-    background: #0a0000;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-    box-shadow: 0 0 12px rgba(200,30,30,0.3), inset 0 0 20px rgba(0,0,0,0.9);
-    position: relative;
-    overflow: hidden;
-  }
-  .no-data-box::before {
-    content: '';
-    position: absolute; inset: 0;
-    background-image:
-      repeating-linear-gradient(0deg, rgba(255,255,255,0.06) 0px, rgba(255,255,255,0.06) 1px, transparent 1px, transparent 3px),
-      repeating-linear-gradient(90deg, rgba(255,0,0,0.05) 0px, rgba(255,0,0,0.05) 1px, transparent 1px, transparent 4px);
-    mix-blend-mode: screen;
-    animation: noiseShift 0.12s steps(2) infinite;
-    z-index: 1;
-  }
-  .no-data-box::after {
-    content: '';
-    position: absolute; inset: 0;
-    background: radial-gradient(circle at 30% 40%, rgba(255,255,255,0.15), transparent 40%),
-                radial-gradient(circle at 70% 60%, rgba(255,255,255,0.1), transparent 45%);
-    mix-blend-mode: screen;
-    opacity: 0.5;
-    animation: noiseFlicker 0.08s steps(2) infinite;
-    z-index: 1;
-  }
-  @keyframes noiseShift {
-    0%   { background-position: 0 0, 0 0; }
-    50%  { background-position: 1px 2px, 2px 1px; }
-    100% { background-position: 0 0, 0 0; }
-  }
-  @keyframes noiseFlicker {
-    0%   { opacity: 0.5; }
-    50%  { opacity: 0.8; }
-    100% { opacity: 0.5; }
-  }
-  .no-data-box .no-data-text {
-    position: relative;
-    z-index: 2;
-    font-family: 'VT323', 'Courier New', monospace;
-    font-size: 11px;
-    color: #ff3333;
-    letter-spacing: 2px;
-    text-shadow: 0 0 6px #cc2222, 0 0 12px rgba(200,30,30,0.6);
-    font-weight: bold;
-    text-align: center;
-    line-height: 1.1;
-  }
-
-  .desc-panel .rel-tags {
-    display: flex; flex-wrap: wrap;
-    gap: 4px 8px;
-    margin-top: 6px; padding-top: 6px;
-    border-top: 1px solid #2a0000;
-  }
-  .desc-panel .rel-tags .mini-tag {
-    display: inline-block;
-    padding: 2px 10px;
-    border-radius: 2px;
-    font-size: 12px; font-weight: bold;
-    letter-spacing: 0.5px;
-    background: #0a0000;
-    border: 1px solid #661111;
-  }
-  .desc-panel .rel-tags .mini-tag.c-distrust { color: #e8c86a; border-color: #e8c86a; background: rgba(232,200,106,0.08); }
-  .desc-panel .rel-tags .mini-tag.c-sad { color: #9a9a9a; border-color: #9a9a9a; background: rgba(154,154,154,0.08); }
-  .desc-panel .rel-tags .mini-tag.c-neutral { color: #f0f0f0; border-color: #f0f0f0; background: rgba(240,240,240,0.05); }
-  .desc-panel .rel-tags .mini-tag.c-friend { color: #6fcf97; border-color: #6fcf97; background: rgba(111,207,151,0.08); }
-  .desc-panel .rel-tags .mini-tag.c-strong { color: #27ae60; border-color: #27ae60; background: rgba(39,174,96,0.08); }
-  .desc-panel .rel-tags .mini-tag.c-love { color: #f1948a; border-color: #f1948a; background: rgba(241,148,138,0.08); }
-  .desc-panel .rel-tags .mini-tag.c-dead { color: #1a1a1a; border-color: #555; background: rgba(30,30,30,0.3); }
-  .desc-panel .rel-tags .mini-tag.c-enemy { color: #ff3333; border-color: #ff3333; background: rgba(255,50,50,0.10); }
-  .desc-panel .rel-tags .mini-tag.c-fear { color: #5a7a9a; border-color: #5a7a9a; background: rgba(90,122,154,0.08); }
-  .desc-panel .rel-tags .mini-tag.c-disappoint { color: #e8d8a0; border-color: #e8d8a0; background: rgba(232,216,160,0.08); }
-  .desc-panel .rel-tags .mini-tag.c-cautious { color: #d97a3a; border-color: #d97a3a; background: rgba(217,122,58,0.08); }
-  .desc-panel .rel-tags .mini-tag.c-regret { color: #4a7a9a; border-color: #4a7a9a; background: rgba(74,122,154,0.10); }
-  .desc-panel .rel-tags .mini-tag.c-sympathy { color: #c97ac9; border-color: #c97ac9; background: rgba(201,122,201,0.08); }
-  .desc-panel .rel-tags .mini-tag.c-respect { color: #ffcc44; border-color: #ffcc44; background: rgba(255,204,68,0.10); }
-
-  .desc-panel .close-btn {
-    font-size: 14px; color: #661111;
-    cursor: pointer; padding: 0 6px;
-  }
-  .desc-panel .close-btn:hover { color: #ff3333; }
-
-  .social-col .group-header {
-    font-weight: bold; font-size: 16px;
-    color: #cc2222;
-    cursor: pointer;
-    padding: 4px 0 4px 8px;
-    border-bottom: 1px solid #1a0000;
-    transition: 0.1s;
-    display: block;
-    text-shadow: 0 0 6px rgba(200,30,30,0.3);
-  }
-  .social-col .group-header:hover { color: #ff5555; background: #150000; text-shadow: 0 0 10px #ff3333; }
-  .social-col .group-header.open { color: #ff3333; background: #1a0000; }
-  .sub-items { padding-left: 12px; margin: 4px 0; display: none; }
-  .sub-items .item-link {
-    display: block;
-    padding: 3px 0 3px 8px;
-    font-size: 14px;
+  .ops-card p, .ops-card ul {
+    font-size: 13px; line-height: 1.6;
     color: #cc6666;
-    cursor: pointer;
-    border-bottom: 1px solid #0a0000;
-    transition: 0.1s;
   }
-  .sub-items .item-link:hover { background: #150000; color: #ff5555; }
-  .sub-items .item-link::before { content: "▪ "; color: #661111; }
-  .sub-items .item-link.highlight {
-    background: #1a0000; color: #ff3333;
-    border-left: 2px solid #cc2222;
-    padding-left: 6px;
+  .ops-card ul { list-style: none; padding-left: 0; }
+  .ops-card ul li { padding: 2px 0; }
+  .ops-card ul li::before { content: "▪ "; color: #cc2222; }
+  .ops-card .empty-note {
+    color: #441111;
+    font-style: italic;
+    letter-spacing: 1px;
+    font-size: 12px;
   }
+  .ops-full { grid-column: 1 / -1; }
 
   .footer-bar {
     display: flex; justify-content: space-between;
@@ -1037,11 +1110,12 @@
     .social-lists, .ops-grid { grid-template-columns: 1fr; }
     .info-left { flex: 0 0 100%; }
     .photo-place { max-width: 100%; }
-    .info-column { max-width: 100%; }
     .side-frame { width: 30px; }
     .lock-input { width: 100%; max-width: 280px; }
     .loading-kanji span { font-size: 90px; letter-spacing: 30px; }
     .loading-kanji .kanji-small { font-size: 50px; letter-spacing: 20px; }
+    .diary-entry-meta { flex-direction: column; gap: 4px; }
+    .dossier-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -1138,14 +1212,16 @@
 
       <!-- ==================== ЛИЧНОЕ ДЕЛО ==================== -->
       <div id="tab1" class="tab-content active">
-        <div class="info-grid">
+
+        <!-- ВЕРХНИЙ БЛОК: фото + основная информация + личные записи -->
+        <div class="dossier-block">
           <div class="info-left">
             <div class="photo-place">
               <img src="ava.jpeg" alt="Фото: С. Сиракуза">
             </div>
             <div class="info-column">
               <div class="info-item">
-                <span class="info-label">Сотрудник</span>
+                <span class="info-label">Ф.И.О.</span>
                 <span class="info-value">Сицилия Сиракуза</span>
               </div>
               <div class="info-item">
@@ -1156,14 +1232,13 @@
                 <span class="info-label">Место рождения</span>
                 <span class="info-value">Буян (Восточная сторона /// Дворец Maior Italia)</span>
               </div>
-              <div class="info-item">
-                <span class="info-label">Образование</span>
-                <span class="info-value">Высшее (Центральный Хайматский Государственный исторический институт)</span>
-              </div>
-              <div class="info-item">
-                <span class="info-label">Распределение</span>
-                <span class="info-value">Пояс Астер, комплекс ERES M-427</span>
-              </div>
+            </div>
+          </div>
+
+          <div class="right-col">
+            <div class="med-card">
+              <h4>✑ ЛИЧНЫЕ ЗАПИСИ</h4>
+              <p class="placeholder" style="color:#441111;font-style:italic;letter-spacing:2px;font-size:12px;">[ ТЕКСТ БУДЕТ ЗАПОЛНЕН ПОЗЖЕ ]</p>
             </div>
 
             <div class="status-block">
@@ -1183,43 +1258,200 @@
                 <span class="label">Назначение</span>
                 <span class="value">Боевой гештальт-резонатор</span>
               </div>
-              <div class="status-row">
-                <span class="label">Рост / Вес</span>
-                <span class="value">178 см · 68 кг</span>
-              </div>
-              <div class="status-row">
-                <span class="label">Группа крови</span>
-                <span class="value">0(I) Rh⁻</span>
-              </div>
             </div>
           </div>
+        </div>
 
-          <div class="right-col">
-            <div class="med-card">
-              <h4>✑ ЛИЧНЫЕ ЗАПИСИ</h4>
-              <p>«История — это не пыль веков и не сухие даты. Это живой организм, который дышит через нас. Каждый цикл, каждое решение, каждая ошибка — лишь повторение того, что уже было. Мы не учимся на чужих ошибках, потому что не помним их. Но тот, кто помнит, кто видит узор — тот может его разорвать. Я здесь не для того, чтобы воевать. Я здесь для того, чтобы помнить. И чтобы однажды это перестало повторяться.» — С. Сиракуза.</p>
-            </div>
+        <!-- РАСШИРЕННЫЕ БЛОКИ ЛИЧНОГО ДЕЛА -->
+        <div class="dossier-grid">
 
-<div class="med-card plain">
-  <img src="ava.jpeg" 
-       alt="Запись"
-       onerror="this.outerHTML='&lt;span style=&quot;color:#661111;font-style:italic;letter-spacing:2px;font-size:12px;padding:20px;display:block;text-align:center;&quot;&gt;[ ИЗОБРАЖЕНИЕ НЕДОСТУПНО ]&lt;/span&gt;'">
-</div>
+          <div class="dossier-card">
+            <h4><span class="card-icon">▸</span> БИОМЕТРИЧЕСКИЕ ДАННЫЕ</h4>
+            <ul>
+              <li><strong>Рост:</strong> 178 см</li>
+              <li><strong>Вес:</strong> 68 кг</li>
+              <li><strong>Группа крови:</strong> 0(I) Rh⁻</li>
+              <li><strong>Цвет глаз:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
+              <li><strong>Цвет волос:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
+              <li><strong>Особые приметы:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
+            </ul>
+          </div>
+
+          <div class="dossier-card">
+            <h4><span class="card-icon">▸</span> ОБРАЗОВАНИЕ</h4>
+            <ul>
+              <li><strong>Уровень:</strong> Высшее</li>
+              <li><strong>Учреждение:</strong> Центральный Хайматский Государственный исторический институт</li>
+              <li><strong>Специализация:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
+              <li><strong>Доп. курсы:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
+            </ul>
+          </div>
+
+          <div class="dossier-card">
+            <h4><span class="card-icon">▸</span> РАСПРЕДЕЛЕНИЕ</h4>
+            <ul>
+              <li><strong>Пояс:</strong> Астер</li>
+              <li><strong>Комплекс:</strong> ERES M-427</li>
+              <li><strong>Должность:</strong> Боевой гештальт-резонатор</li>
+              <li><strong>Дата прибытия:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
+            </ul>
+          </div>
+
+          <div class="dossier-card">
+            <h4><span class="card-icon">▸</span> СЛУЖЕБНАЯ ИСТОРИЯ</h4>
+            <ul>
+              <li><strong>Предыдущие назначения:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
+              <li><strong>Звания и ранги:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
+              <li><strong>Награды:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
+              <li><strong>Дисциплинарные взыскания:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
+            </ul>
+          </div>
+
+          <div class="dossier-card">
+            <h4><span class="card-icon">▸</span> ПСИХОЛОГИЧЕСКИЙ ПРОФИЛЬ</h4>
+            <ul>
+              <li><strong>Темперамент:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
+              <li><strong>Стрессоустойчивость:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
+              <li><strong>Особенности поведения:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
+              <li><strong>Рекомендации:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
+            </ul>
+          </div>
+
+          <div class="dossier-card">
+            <h4><span class="card-icon">▸</span> МЕДИЦИНСКИЕ ДАННЫЕ</h4>
+            <ul>
+              <li><strong>Физическое состояние:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
+              <li><strong>Хронические заболевания:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
+              <li><strong>Имплантаты / протезы:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
+              <li><strong>Противопоказания:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
+            </ul>
+          </div>
+
+          <div class="dossier-card">
+            <h4><span class="card-icon">▸</span> КВАЛИФИКАЦИИ И ДОПУСКИ</h4>
+            <ul>
+              <li><strong>Уровень допуска:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
+              <li><strong>Боевая подготовка:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
+              <li><strong>Резонансные способности:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
+              <li><strong>Специальные допуски:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
+            </ul>
+          </div>
+
+          <div class="dossier-card">
+            <h4><span class="card-icon">▸</span> ЛИЧНОСТНЫЕ ОСОБЕННОСТИ</h4>
+            <ul>
+              <li><strong>Интересы:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
+              <li><strong>Привычки:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
+              <li><strong>Слабости:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
+              <li><strong>Сильные стороны:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
+            </ul>
+          </div>
+
+          <div class="dossier-card">
+            <h4><span class="card-icon">▸</span> ВЗАИМОДЕЙСТВИЕ С ПЕРСОНАЛОМ</h4>
+            <ul>
+              <li><strong>Отношение к репликам:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
+              <li><strong>Отношение к гештальтам:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
+              <li><strong>Конфликты:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
+              <li><strong>Дружеские связи:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
+            </ul>
+          </div>
+
+          <div class="dossier-card">
+            <h4><span class="card-icon">▸</span> ОСОБЫЕ ОТМЕТКИ</h4>
+            <p class="placeholder">[ ЗАПИСИ КУРАТОРА / РУКОВОДСТВА ]</p>
+          </div>
+
+        </div>
+
+        <!-- ФОТОГРАФИЯ-ЗАПИСЬ -->
+        <div class="dossier-block" style="margin-top:14px;">
+          <div class="med-card plain" style="flex:1;">
+            <img src="ava.jpeg" alt="Запись"
+                 onerror="this.outerHTML='&lt;span style=&quot;color:#661111;font-style:italic;letter-spacing:2px;font-size:12px;padding:20px;display:block;text-align:center;&quot;&gt;[ ИЗОБРАЖЕНИЕ НЕДОСТУПНО ]&lt;/span&gt;'">
           </div>
         </div>
       </div>
 
       <!-- ==================== ДНЕВНИК ==================== -->
       <div id="tab3" class="tab-content">
-        <div class="history-block">
-          <h2>ЛИЧНОЕ ДЕЛО: СИЦИЛИЯ СИРАКУЗА</h2>
-          <p>
-Сотрудник Сицилия Сиракуза родилась 18.12.2132 на территории Буян, Восточная сторона, во Дворце Maior Italia. Получила высшее образование в Центральном Хайматском Государственном историческом институте. По завершении обучения распределена в пояс Астер, на комплекс ERES M-427, где проходит службу в должности боевого гештальт-резонатора.
+        <div class="diary-wrapper">
 
-Физические показатели: рост 178 см, вес 68 кг, группа крови 0(I) Rh⁻. Оболочка — Гештальт. Состояние на текущий момент: жив(а).
+          <div class="diary-header-block">
+            <h2>ЛИЧНЫЙ ДНЕВНИК · С. СИРАКУЗА</h2>
+            <div class="sub">◈ ЕРЕС-М-427 · ЗАПИСИ ВЕДУТСЯ ВРУЧНУЮ ◈</div>
+          </div>
 
-Согласно данным распределения, направлена для несения службы в составе комплекса ERES M-427. Сведений о деградации, отклонениях или нарушениях протокола не зафиксировано. Проявляет интерес к историческим дисциплинам и мифологии, что соответствует полученному образованию.
-          </p>
+          <!-- ЗАПИСЬ №1 -->
+          <div class="diary-entry">
+            <div class="diary-entry-meta">
+              <span class="diary-entry-date">▸ ДАТА · ЦИКЛ</span>
+              <span class="diary-entry-tag">ЗАПИСЬ 01</span>
+            </div>
+            <div class="diary-entry-title">◆ ЗАГОЛОВОК ЗАПИСИ</div>
+            <div class="diary-entry-body"><span class="placeholder">[ ТЕКСТ ЗАПИСИ БУДЕТ ЗАПОЛНЕН ПОЗЖЕ ]</span></div>
+            <div class="diary-entry-footer">
+              <span>◈ ADLR / ГЕШТАЛЬТ</span>
+              <span>◆ СТАТУС: ЧЕРНОВИК</span>
+            </div>
+          </div>
+
+          <!-- ЗАПИСЬ №2 -->
+          <div class="diary-entry">
+            <div class="diary-entry-meta">
+              <span class="diary-entry-date">▸ ДАТА · ЦИКЛ</span>
+              <span class="diary-entry-tag">ЗАПИСЬ 02</span>
+            </div>
+            <div class="diary-entry-title">◆ ЗАГОЛОВОК ЗАПИСИ</div>
+            <div class="diary-entry-body"><span class="placeholder">[ ТЕКСТ ЗАПИСИ БУДЕТ ЗАПОЛНЕН ПОЗЖЕ ]</span></div>
+            <div class="diary-entry-footer">
+              <span>◈ ADLR / ГЕШТАЛЬТ</span>
+              <span>◆ СТАТУС: ЧЕРНОВИК</span>
+            </div>
+          </div>
+
+          <!-- ЗАПИСЬ №3 -->
+          <div class="diary-entry">
+            <div class="diary-entry-meta">
+              <span class="diary-entry-date">▸ ДАТА · ЦИКЛ</span>
+              <span class="diary-entry-tag">ЗАПИСЬ 03</span>
+            </div>
+            <div class="diary-entry-title">◆ ЗАГОЛОВОК ЗАПИСИ</div>
+            <div class="diary-entry-body"><span class="placeholder">[ ТЕКСТ ЗАПИСИ БУДЕТ ЗАПОЛНЕН ПОЗЖЕ ]</span></div>
+            <div class="diary-entry-footer">
+              <span>◈ ADLR / ГЕШТАЛЬТ</span>
+              <span>◆ СТАТУС: ЧЕРНОВИК</span>
+            </div>
+          </div>
+
+          <!-- ЗАПИСЬ №4 -->
+          <div class="diary-entry">
+            <div class="diary-entry-meta">
+              <span class="diary-entry-date">▸ ДАТА · ЦИКЛ</span>
+              <span class="diary-entry-tag">ЗАПИСЬ 04</span>
+            </div>
+            <div class="diary-entry-title">◆ ЗАГОЛОВОК ЗАПИСИ</div>
+            <div class="diary-entry-body"><span class="placeholder">[ ТЕКСТ ЗАПИСИ БУДЕТ ЗАПОЛНЕН ПОЗЖЕ ]</span></div>
+            <div class="diary-entry-footer">
+              <span>◈ ADLR / ГЕШТАЛЬТ</span>
+              <span>◆ СТАТУС: ЧЕРНОВИК</span>
+            </div>
+          </div>
+
+          <!-- ЗАПИСЬ №5 -->
+          <div class="diary-entry">
+            <div class="diary-entry-meta">
+              <span class="diary-entry-date">▸ ДАТА · ЦИКЛ</span>
+              <span class="diary-entry-tag">ЗАПИСЬ 05</span>
+            </div>
+            <div class="diary-entry-title">◆ ЗАГОЛОВОК ЗАПИСИ</div>
+            <div class="diary-entry-body"><span class="placeholder">[ ТЕКСТ ЗАПИСИ БУДЕТ ЗАПОЛНЕН ПОЗЖЕ ]</span></div>
+            <div class="diary-entry-footer">
+              <span>◈ ADLR / ГЕШТАЛЬТ</span>
+              <span>◆ СТАТУС: ЧЕРНОВИК</span>
+            </div>
+          </div>
+
         </div>
       </div>
 
@@ -1249,52 +1481,52 @@
 
               <span class="group-header" data-group="eulr">EULR</span>
               <div class="sub-items" id="group-eulr">
-                <span class="item-link" data-target="eulr724">EULR.724</span>
-                <span class="item-link" data-target="eulr546">EULR.546</span>
-                <span class="item-link" data-target="eulr381">EULR.381</span>
-                <span class="item-link" data-target="eulr401">EULR.401</span>
-                <span class="item-link" data-target="eulr322">EULR.322</span>
+                <div class="empty-note">— список пуст —</div>
               </div>
 
               <span class="group-header" data-group="arar">ARAR</span>
               <div class="sub-items" id="group-arar">
-                <span class="item-link" data-target="arar841">ARAR.841</span>
-                <span class="item-link" data-target="arar978">ARAR.978</span>
-                <span class="item-link" data-target="arar595">ARAR.595</span>
-                <span class="item-link" data-target="arar102">ARAR.102</span>
+                <div class="empty-note">— список пуст —</div>
               </div>
 
               <span class="group-header" data-group="mnhr">MNHR</span>
               <div class="sub-items" id="group-mnhr">
-                <span class="item-link" data-target="mnhr.300">MNHR.300</span>
-                <span class="item-link" data-target="mnhr.063">MNHR.063</span>
+                <div class="empty-note">— список пуст —</div>
               </div>
 
               <span class="group-header" data-group="star">STAR</span>
               <div class="sub-items" id="group-star">
-                <span class="item-link" data-target="star114">STAR.114</span>
-                <span class="item-link" data-target="star603">STAR.603</span>
-                <span class="item-link" data-target="star762">STAR.762</span>
+                <div class="empty-note">— список пуст —</div>
               </div>
 
               <span class="group-header" data-group="stcr">STCR</span>
               <div class="sub-items" id="group-stcr">
-                <span class="item-link" data-target="strc213">STRC.213</span>
+                <div class="empty-note">— список пуст —</div>
               </div>
 
               <span class="group-header" data-group="klbr">KLBR</span>
               <div class="sub-items" id="group-klbr">
-                <span class="item-link" data-target="klbr080">KLBR.080</span>
+                <div class="empty-note">— список пуст —</div>
               </div>
 
               <span class="group-header" data-group="kahr">KAHR</span>
               <div class="sub-items" id="group-kahr">
-                <span class="item-link" data-target="kahr">KAHR</span>
+                <div class="empty-note">— список пуст —</div>
               </div>
 
               <span class="group-header" data-group="fklr">FKLR</span>
               <div class="sub-items" id="group-fklr">
-                <span class="item-link" data-target="fklr">FKLR</span>
+                <div class="empty-note">— список пуст —</div>
+              </div>
+
+              <span class="group-header" data-group="star-other">STAR · ПРОЧИЕ</span>
+              <div class="sub-items" id="group-star-other">
+                <div class="empty-note">— список пуст —</div>
+              </div>
+
+              <span class="group-header" data-group="other-repl">ПРОЧИЕ РЕПЛИКИ</span>
+              <div class="sub-items" id="group-other-repl">
+                <div class="empty-note">— список пуст —</div>
               </div>
             </div>
 
@@ -1303,417 +1535,38 @@
 
               <span class="group-header" data-group="gscc">GSCC</span>
               <div class="sub-items" id="group-gscc">
-                <span class="item-link" data-target="gsccartem">GSCC.Артемий Овечкин</span>
-                <span class="item-link" data-target="gscckirra">GSCC.Кирра Фостер</span>
+                <div class="empty-note">— список пуст —</div>
               </div>
 
               <span class="group-header" data-group="gscp">GSCP</span>
               <div class="sub-items" id="group-gscp">
-                <span class="item-link" data-target="gscpanna">GSCP.Анна Леонхард</span>
-                <span class="item-link" data-target="gscpseira">GSCP.Сэйра Штраусс</span>
-                <span class="item-link" data-target="gscpgodjo">GSCP.Кенто Годжо</span>
-                <span class="item-link" data-target="gscp316">GSCP.316</span>
-                <span class="item-link" data-target="gscp168">GSCP.168</span>
-                <span class="item-link" data-target="gscp999">GSCP.999</span>
+                <div class="empty-note">— список пуст —</div>
+              </div>
+
+              <span class="group-header" data-group="gsco">GSCO</span>
+              <div class="sub-items" id="group-gsco">
+                <div class="empty-note">— список пуст —</div>
+              </div>
+
+              <span class="group-header" data-group="command">КОМАНДОВАНИЕ</span>
+              <div class="sub-items" id="group-command">
+                <div class="empty-note">— список пуст —</div>
+              </div>
+
+              <span class="group-header" data-group="other-gest">ПРОЧИЕ ГЕШТАЛЬТЫ</span>
+              <div class="sub-items" id="group-other-gest">
+                <div class="empty-note">— список пуст —</div>
               </div>
             </div>
           </div>
 
           <div class="desc-panel" id="descPanel">
-            <div class="empty-state">Ожидание ввода</div>
-
-            <!-- EULR.724 -->
-            <div class="sub-card" id="card-eulr724" data-relations="c-respect">
-              <div class="sub-header">EULR.724 <span class="close-btn" data-close="eulr724">✕</span></div>
-              <div class="sub-body">
-                <div class="no-data-box"><span class="no-data-text">NO<br>DATA</span></div>
-                <div class="sub-desc">Хорошо себя проявила как глава отдела и как "старшая сестра" среди прочих Сов. Отличается более холодным и рассудительным характером. По началу мне казалось, что она сама серьезность, но заметив некоторые фрагменты ее "личности" прихожу к простому выводу. Она такая же совушка как и прочие, но только отличается тем имеет намного больше опыта. Поэтому каждое ее слово, действие, поступок и даже мимика крайне выверенная за это время. Что же до ее прошлого, то мне известно крайне мало, Анна была с Рот-Фронта и работала ранее там в мед учреждение. Часто интересуется моим состоянием, приятно с ней общаться, хоть и крайне редко выходит. Оценка: крайне хороший модуль, хочу с ней поговорить побольше в будущем.</div>
-              </div>
-              <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
-            </div>
-
-            <!-- EULR.546 -->
-            <div class="sub-card" id="card-eulr546" data-relations="c-respect">
-              <div class="sub-header">EULR.546 <span class="close-btn" data-close="eulr564">✕</span></div>
-              <div class="sub-body">
-                <div class="no-data-box"><span class="no-data-text">NO<br>DATA</span></div>
-                <div class="sub-desc">Отличается своей добротой даже среди совушек. Кажется у нее нет конфликтов с модулями и рабочими и даже напротив. Взаимоотношение на крайне высоком уровне со всеми рабочими и военными. Так же проявила интерес в общение со мной, ответил тем же. Так она получила две кассеты с кинофильмами на временное пользование. Взамен она подарила мне крайне прекрасный дневник, кажется фирма, что их выпускала была сокращенна еще несколько лет назад... Но видимо Шафо смогла урвать хороший вариант. Думаю в будущем нужно как то ей ответить...</div>
-              </div>
-              <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
-            </div>
-
-            <!-- EULR.381 -->
-            <div class="sub-card" id="card-eulr381" data-relations="c-respect">
-              <div class="sub-header">EULR.381 <span class="close-btn" data-close="eulr381">✕</span></div>
-              <div class="sub-body">
-                <div class="no-data-box"><span class="no-data-text">NO<br>DATA</span></div>
-                <div class="sub-desc">Так же одна из самых "староживущих" модулей, отличается среди прочих сов своей "двуличностью". Перед административным модулями старается показывать крайне... "холодный" - "механический" характер. Но когда рядом с ней ее сестры или же АРЫ, становится крайне "возбужденной" совой на тактильные действия. Запомнилась тем, что во время того как гравитация спала к нулевому уровню на нашем комплексе, помогал ей добраться до МО. Интересно помнит ли она такое?</div>
-              </div>
-              <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
-            </div>
-
-            <!-- EULR.401 -->
-            <div class="sub-card" id="card-eulr401" data-relations="c-respect">
-              <div class="sub-header">EULR.401 <span class="close-btn" data-close="eulr401">✕</span></div>
-              <div class="sub-body">
-                <div class="no-data-box"><span class="no-data-text">NO<br>DATA</span></div>
-                <div class="sub-desc">Одна из самых юных среди модулей Сов, отличилась по началу своими незначительными ошибками, но со временем проявила хорошие навыки в медицине, а так же в социальном взаимодействие. Ошибки в основе своей лишь касались ее неопытности работы на Ерес, где смерть, травмы и БРУ не исключения, а постоянные вызовы персоналу. Что же до модуля Руми, можно выделить, что хорошая сова. Лишь чаще появлялась бы на сменах и на окладах. Более нет вопросов к ее рабочей эффективности.</div>
-              </div>
-              <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
-            </div>
-
-            <!-- EULR.322 -->
-            <div class="sub-card" id="card-eulr322" data-relations="c-respect">
-              <div class="sub-header">EULR.322 <span class="close-btn" data-close="eulr322">✕</span></div>
-              <div class="sub-body">
-                <div class="no-data-box"><span class="no-data-text">NO<br>DATA</span></div>
-                <div class="sub-desc">Совушка совой, работает исправно, что то более я не замечал за ней. Ходила хвостиком за остальными совушками, думая она в хороших отношениях с ними. В целом... Достойный модуль, но интереса для взаимодействия крайне низкое.</div>
-              </div>
-              <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
-            </div>
-
-            <!-- ARAR.841 -->
-            <div class="sub-card" id="card-arar841" data-relations="c-respect c-disappoint">
-              <div class="sub-header">ARAR.841 <span class="close-btn" data-close="arar841">✕</span></div>
-              <div class="sub-body">
-                <div class="no-data-box"><span class="no-data-text">NO<br>DATA</span></div>
-                <div class="sub-desc">Глава отдела, проявила себя крайне эффективной по организации работ, но вот ее коммуникации доставляют трудности. Ей крайне тяжело дается общение не только внутри отдела, но и во вне. Конечно ее профессионализм это не уменьшает, но стоит крайне важная задача разбавить этот недостаток. Не думаю, что разговор тут поможет, а вот поставить ей заместителя и перевести часть работы на нее — вполне.
-
-Интересно, сколько за ее плечами трудностей и прожитых циклов, думаю стоит спросить в один из разгрузочных циклов.
-
-Что же насчет сейчас? Сложный модуль, из-за большего опыта крайне консервативна, часто не любит слушать советы или иное мнение, лишь приказы. Нередко может специально показывать свой характер. В целом... Крайне забавно наблюдать, что вещи, против которых она стояла так усердно, в итоге стали помогать ей в работе. Да так помогать, что та сама их адаптировала под себя и стала чаще уделять время на что-то иное. Она может часто проявлять внимание прочим попугаям, но кажется это скорее редкое проявление. Зачастую она проводит время одна, в стороне от всех.</div>
-              </div>
-              <div class="rel-tags">
-                <span class="mini-tag c-respect">УВАЖЕНИЕ</span>
-                <span class="mini-tag c-disappoint">НЕПРИЯЗНЬ</span>
-              </div>
-            </div>
-
-            <!-- ARAR.978 -->
-            <div class="sub-card" id="card-arar978" data-relations="c-respect c-strong">
-              <div class="sub-header">ARAR.978 <span class="close-btn" data-close="arar978">✕</span></div>
-              <div class="sub-body">
-                <div class="no-data-box"><span class="no-data-text">NO<br>DATA</span></div>
-                <div class="sub-desc">Еще одна восходящая звезда отдела. Крайне эффективно себя показывает и много работает. Думаю, вопрос о ее ранге 04 — вопрос менее 20 циклов. Интересно, как она общается с сестрами и другими рабочими. Может, она тоже трудоголичка, что лишь и мыслит о рабочей деятельности без капли отдыха?
-
-Спустя столько времени, смотря на Руэ, я думаю, что не зря способствовал ее пути на ранг 04, а после и 03. Она прекрасно себя показала в данных регалиях. Но вопрос теперь новый: как она себя проявит, если будет полноценным заместителем геноссе Ханф. Конечно же, последняя будет против первое время, но после и сама будет рада.
-
-Так же была с нами в той аномалии. Вместе мы шли плечом к плечу через все испытания и ловушки. Давали отпор тварям и разгадывали эти загадки. Я должен буду позже вернуть ей должок... Доверил ей оружие и даже секунды сомнения не было, а после и сожаления. Она доказала, что готова сражаться ради товарищей не хуже военных модулей.</div>
-              </div>
-              <div class="rel-tags">
-                <span class="mini-tag c-respect">УВАЖЕНИЕ</span>
-                <span class="mini-tag c-strong">КРЕПКАЯ СВЯЗЬ</span>
-              </div>
-            </div>
-
-            <!-- ARAR.595 -->
-            <div class="sub-card" id="card-arar595" data-relations="c-respect">
-              <div class="sub-header">ARAR.595 <span class="close-btn" data-close="arar595">✕</span></div>
-              <div class="sub-body">
-                <div class="no-data-box"><span class="no-data-text">NO<br>DATA</span></div>
-                <div class="sub-desc">Работает отлично, характером так же проявил себя хорошо. Один из модулей, что в моих глазах заслуживает большего... Вопрос времени лишь ее повышение и становление на ранг Старшего специалиста отдела. Репутация среди рабочих у нее так же хорошая. Думаю, в будущем стоит ее опросить и узнать получше.</div>
-              </div>
-              <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
-            </div>
-
-            <!-- ARAR.102 -->
-            <div class="sub-card" id="card-arar102" data-relations="c-neutral">
-              <div class="sub-header">ARAR.102 <span class="close-btn" data-close="arar102">✕</span></div>
-              <div class="sub-body">
-                <div class="no-data-box"><span class="no-data-text">NO<br>DATA</span></div>
-                <div class="sub-desc">Работает исправно, хорошо. Вопросов или замечаний нет. Лишь не столь часто могу видеть на сменах и пока значимо себя не проявила.</div>
-              </div>
-              <div class="rel-tags"><span class="mini-tag c-neutral">НЕЙТРАЛИТЕТ</span></div>
-            </div>
-
-            <!-- MNHR.300 -->
-            <div class="sub-card" id="card-mnhr.300" data-relations="c-respect">
-              <div class="sub-header">MNHR.300 <span class="close-btn" data-close="mnhr.300">✕</span></div>
-              <div class="sub-body">
-                <div class="no-data-box"><span class="no-data-text">NO<br>DATA</span></div>
-                <div class="sub-desc">Хороший надежный модуль, проявила себя как прекрасный глава отдела. Смогла отработать свои ПН и после не нарушала. Правда с отделом слегка ей не свезло, модулей Майн крайне редко к нам привозят на объект, что создает свои трудности. Проявила интерес к Китежу... Планировал как-то ее спросить об этом, но утерял нить и прошло крайне много времени. Сейчас приходит ко мне на оклады в отдельное время... Стоит ее задержать и разговорить, заодно узнаю, как идет ее работа. Самый работящий модуль на нашем объекте, кажется, она вовсе не отдыхает.</div>
-              </div>
-              <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
-            </div>
-
-            <!-- MNHR.063 -->
-            <div class="sub-card" id="card-mnhr.063" data-relations="c-respect c-strong">
-              <div class="sub-header">MNHR.063 <span class="close-btn" data-close="mnhr.063">✕</span></div>
-              <div class="sub-body">
-                <div class="no-data-box"><span class="no-data-text">NO<br>DATA</span></div>
-                <div class="sub-desc">Проявила пока себя не столь значительно. Работает хорошо, в общении не видел. Прибыла вместе со своей сестрой, но осталась теперь тут одна.
-
-Оказалась со мной в той БРУ-аномалии и проявила себя крайне хорошо. Подбадривала товарищей своих, прикрывала тылы. Выдал ей оружие на тот момент, чтобы она в случае необходимости спасла наши жизни... Что же, не зря я решил так поступить.</div>
-              </div>
-              <div class="rel-tags">
-                <span class="mini-tag c-respect">УВАЖЕНИЕ</span>
-                <span class="mini-tag c-strong">КРЕПКАЯ СВЯЗЬ</span>
-              </div>
-            </div>
-
-            <!-- STAR.114 -->
-            <div class="sub-card" id="card-star114" data-relations="c-neutral">
-              <div class="sub-header">STAR.114 <span class="close-btn" data-close="star114">✕</span></div>
-              <div class="sub-body">
-                <div class="no-data-box"><span class="no-data-text">NO<br>DATA</span></div>
-                <div class="sub-desc">Только вышла с ночной и стала активно работать. Посмотрим, как покажет.</div>
-              </div>
-              <div class="rel-tags"><span class="mini-tag c-neutral">НЕЙТРАЛИТЕТ</span></div>
-            </div>
-
-            <!-- STAR.603 -->
-            <div class="sub-card" id="card-star603" data-relations="c-respect">
-              <div class="sub-header">STAR.603 <span class="close-btn" data-close="star603">✕</span></div>
-              <div class="sub-body">
-                <div class="no-data-box"><span class="no-data-text">NO<br>DATA</span></div>
-                <div class="sub-desc">Хороший модуль Штар, добросовестно выполняющий свою работу. Излишне мне говорить про нее нечего... Хотя... Я заметил ее интерес в сторону Сов, а после разговора с Анной, думаю, она крайне социальна в отношении одной совы, но которой — мне неизвестно. Кхм... В целом, пускай отдыхает в нерабочее время.</div>
-              </div>
-              <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
-            </div>
-
-            <!-- STAR.762 -->
-            <div class="sub-card" id="card-star762" data-relations="c-neutral">
-              <div class="sub-header">STAR.762 <span class="close-btn" data-close="star762">✕</span></div>
-              <div class="sub-body">
-                <div class="no-data-box"><span class="no-data-text">NO<br>DATA</span></div>
-                <div class="sub-desc">Хороший модуль, большего мне сказать нечего.</div>
-              </div>
-              <div class="rel-tags"><span class="mini-tag c-neutral">НЕЙТРАЛИТЕТ</span></div>
-            </div>
-
-            <!-- STRC.213 -->
-            <div class="sub-card" id="card-strc213" data-relations="c-respect c-neutral">
-              <div class="sub-header">STRC.213 <span class="close-btn" data-close="strc213">✕</span></div>
-              <div class="sub-body">
-                <div class="no-data-box"><span class="no-data-text">NO<br>DATA</span></div>
-                <div class="sub-desc">Шторхи и ранее мне казались строгими, но данный модуль крайне... Вежливый и аккуратный. Сравнивая с некоторыми другими представителями СБ, а до этого и ВП, она и вовсе показалась "нежной" в своих действиях. В рабочем плане я могу лишь сказать, что она крайне ответственный модуль.
-
-Я замечал — они часто общались с Анной, интересно, как такая дружба возникла.
-
-К сожалению, на смене она крайне редко.</div>
-              </div>
-              <div class="rel-tags">
-                <span class="mini-tag c-respect">УВАЖЕНИЕ</span>
-                <span class="mini-tag c-neutral">НЕЙТРАЛИТЕТ</span>
-              </div>
-            </div>
-
-            <!-- KLBR.080 -->
-            <div class="sub-card" id="card-klbr080" data-relations="c-respect">
-              <div class="sub-header">KLBR.080 <span class="close-btn" data-close="klbr080">✕</span></div>
-              <div class="sub-body">
-                <div class="no-data-box"><span class="no-data-text">NO<br>DATA</span></div>
-                <div class="sub-desc">Последняя колибри среди тех, с кем я был знаком на этом объекте. Весьма приятная в разговоре, работает так же крайне эффективно. Жаль, что мы мало пока общались — думаю, она многое сможет мне сообщить полезное или же интересное. Она так же крайне любит шоколад... Кхм, даже интересно, сколько его в общежитии их.
-
-Что же... Судя по всему, она последняя среди опытных колибри на объекте, что слегка печально, в особенности когда она ушла на время в ночную. С другой стороны, лучше почвы для роста прочих модулей ОД и представить нельзя. Главное, чтобы они не завяли на полпути.</div>
-              </div>
-              <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
-            </div>
-
-            <!-- KAHR -->
-            <div class="sub-card" id="card-kahr" data-relations="c-respect">
-              <div class="sub-header">KAHR <span class="close-btn" data-close="kahr">✕</span></div>
-              <div class="sub-body">
-                <div class="no-data-box"><span class="no-data-text">NO<br>DATA</span></div>
-                <div class="sub-desc">Что можно сказать о командующей Крахе? Мало говорит, а что говорит — то всегда по делу, лаконичность ее главная черта в общении. Остра на язык, в отличие от командующей Фальке, не сдерживается на яркие выражения. Наши взаимодействия крайне редки, и все же сомнения в ее действиях отсутствуют. Если сравнивать ее с богом из мифологии... Аид.
-
-Интересно, почему она так любит закрывать двери... Чем вызвано ее столь страстное желание их закрывать... Думаю, я явно что-то не знаю.</div>
-              </div>
-              <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
-            </div>
-
-            <!-- FKLR -->
-            <div class="sub-card" id="card-fklr" data-relations="c-respect c-strong">
-              <div class="sub-header">FKLR <span class="close-btn" data-close="fklr">✕</span></div>
-              <div class="sub-body">
-                <div class="no-data-box"><span class="no-data-text">NO<br>DATA</span></div>
-                <div class="sub-desc">Командующая, первая за все мои циклы. Крайне мудрая и расчетливая. Действия ее аккуратны и грамотны. Каждый разговор с ней схожий на игру шахмат, где никогда не знаешь, как она поставит фигуру, но каждый раз расчетливо обдумывает свои слова и действия. Слова ее зачастую не несут ответа, а лишь оценку и будто ветер направляет к собственному выводу. В свободном разговоре она все так же обдумывает и перебирает информацию, произнеся лишь самое необходимое. Никто не похож на неё, даже хоть немного. Мои ожидания оправдались.
-
-Она вытащила карту императрицы, это застало меня врасплох. Кхм, интересно, а что она знает об этой загадочной личности?
-
-В простом общении не многословна. Отвечает полу ответами и зачастую крайне... Неоднозначно. Старается или всегда так говорит, но скрывает любые полноценные факты о себе. Все, что я смог узнать: работала в НИИ, что занимался резонанс технологиями и находился на Рот-Фронте. Деталей прочих... К сожалению, не смог выведать. В будущем планирую сделать ей подарок/сюрприз. Пару раз заставлял ее улыбаться... Это было приятно и красиво.
-
-Если брать мифологию — ей крайне подошел бы образ "Афины".
-
-Все чаще стала разговаривать и проводить свое свободное время... Думаю, ей и вправду не хватало приятного собеседника в последнее время, рад, что я стал таковым для нее. Но что мне крайне интересно — какие цели она преследует за рабочим долгом. К чему она сейчас готовится и о чем думает. Как сильно это повлияет на нас всех? Думаю, я буду аккуратно вытаскивать по крупице информацию и после узнаю истину.</div>
-              </div>
-              <div class="rel-tags">
-                <span class="mini-tag c-respect">УВАЖЕНИЕ</span>
-                <span class="mini-tag c-strong">КРЕПКАЯ СВЯЗЬ</span>
-              </div>
-            </div>
-
-            <!-- GSCC.Артемий Овечкин -->
-            <div class="sub-card" id="card-gsccartem" data-relations="c-neutral">
-              <div class="sub-header">GSCC. Артемий Овечкин <span class="close-btn" data-close="gsccartem">✕</span></div>
-              <div class="sub-body">
-                <div class="no-data-box"><span class="no-data-text">NO<br>DATA</span></div>
-                <div class="sub-desc">При моём прибытии на объект отличился большим количеством нарушений. Действует резко и, кажется, не слишком задумывается о последствиях. Почти всё время проводит за работой, в выборе отдела отдал предпочтение товарищам из МО.
-
-Родился на Хаймате. Окончил школу и колледж. Проходил срочную службу в разведке, уволен в звании капрала. После армии работал почтальоном. Ввиду низкого денежного довольствия занялся незаконной доставкой корреспонденции для лиц, нелояльных Нации. После провала одного из клиентов привлечен как соучастник.
-
-Предметы, что заинтересовали гештальта: романтическая книга, порно-журнал, кактус и сумка с ремешками.
-
-В свободное время отдаёт предпочтение творческой стезе. Чтение романтических книг, рисование, а также проявил желание помогать товарищам. Склонен к социальному взаимодействию.
-
-Выбор литературы пал на романтику, мифологию (интересно), а также ужасы.
-
-Мечтает помогать нуждающимся в медицинской сфере. Помогать тем, кто не может помочь себе сам. Не строит высоких карьерных запросов, выбирая приземленный вариант в виде медбрата или просто медсотрудника.
-
-Звезда — гештальт мечтает не о власти, не о карьере, а о скромной работе медбрата. Его мотивация: «помогать тем, кто не может помочь себе сам». Звезда — альтруизм без корысти, вера в гуманизм. Надежда на возможное исцеление от собственного нарушения?
-
-Часто нарушает, что же. Стоит найти тяжелую для него работу, дабы он мог исправить свое положение.
-(05.08)
-Проявил значительный интерес к картам, подтверждая мой интересный опыт в эксперименте. Гештальтисты зачастую без специального образования чаще предрасположены к подобным суевериям. В целом, Артемий больше прочих дал мне данных для рассуждений и был первым толчком в поиске дальнейших ответов и смысла в картах.
-
-В последнее время стал меньше нарушать и лучше работать, вопрос о его становлении 04 теперь крайне близок. Еще бы ему отличиться на лекциях.
-
-Вскоре он станет рабочим, через многое прошел и был многому свидетель, вопрос, какой отдел он выберет, остается актуальным. Полезно его было держать в КБО, но, к сожалению, он сделает после свой личный выбор, и если тот падет на МО... Еще один медик... Девятый.
-
-Добрый малый, хоть и часто совершает глупости... Но полезный.</div>
-              </div>
-              <div class="rel-tags"><span class="mini-tag c-neutral">НЕЙТРАЛИТЕТ</span></div>
-            </div>
-
-            <!-- GSCC. Кирра Фостер -->
-            <div class="sub-card" id="card-gscckirra" data-relations="c-neutral">
-              <div class="sub-header">GSCC. Кирра Фостер <span class="close-btn" data-close="gscckirra">✕</span></div>
-              <div class="sub-body">
-                <div class="no-data-box"><span class="no-data-text">NO<br>DATA</span></div>
-                <div class="sub-desc">[ОЖИДАНИЕ ДАННЫХ]</div>
-              </div>
-              <div class="rel-tags"><span class="mini-tag c-neutral">НЕЙТРАЛИТЕТ</span></div>
-            </div>
-
-            <!-- GSCP. Анна Леонхард -->
-            <div class="sub-card" id="card-gscpanna" data-relations="c-respect c-strong c-love">
-              <div class="sub-header">GSCP. Анна Леонхард <span class="close-btn" data-close="gscpanna">✕</span></div>
-              <div class="sub-body">
-                <div class="no-data-box"><span class="no-data-text">NO<br>DATA</span></div>
-                <div class="sub-desc">Первая, кто перешла в другой отдел при мне, также стала фигурой, о которой идут совсем разные слухи. Одни называют бездельницей, другие же, напротив, — нет. Поэтому стало интересно с ней пообщаться.
-
-В диалоге я узнал, что она раньше жила на Китеже и крайне любит свою малую землю. Хочет в будущем получить книги и литературу свободного характера о Китеже. Также она крайне желает получить плакаты и фотографии с его изображением. Проявила желание заниматься педагогикой в отношении штрафного персонала. Как я понимаю, она хочет научить всех на своих ошибках, помочь пройти тот же путь, где, когда она шла, запнулась и упала.
-
-Из предметов, которые она хотела бы получить в ближайшее время, были: гитара, книга детских сказок и украшение из серебра с рубином — последнее будет отклонено даже в случае, если у неё будут марки. Также в случае, если она проявит себя, она сможет стать следующей на получение комнаты в блоке С, но пока это тоже отклонено. Но предложение по поводу гитары было интересным.
-
-Отшельник — карта, которая была вытянута для неё, говорит о том, что она сторонница прошлого. Она не желает уйти от всех, напротив, она хочет помогать и вести людей, дабы помочь им не совершить тех же ошибок. Но она не хочет идти в новый мир столь же быстро, как и другие. Вокруг себя она хочет сохранить вещи из своего прошлого…
-
-Иногда выделяю часть своего свободного времени на разговоры с ней. Зачастую они выходят короткими, и всё же для меня полезными. Через них я зачастую стараюсь почерпнуть информацию по штрафному персоналу и работу других отделов, хотя нередко она пытается выяснить моё прошлое. В целом, говорить о себе я не столь сильно люблю, и ответы выходят сухими и без особенностей, но что есть, то есть.
-(05.08)
-Выделилась среди прочих старост, проверив данные и информацию, я заметно разочаровался в структуре старост. Данная должность вообще не имела эффективности и скорее была для галочки в плане обязательных мер по реабилитации. Но теперь, когда я начал работу в этом направлении, Анна будет лучшим инструментом для реализации всех планов, что она уже и делает.
-
-Забавно, что она так же подтвердила мою теорию про карты: её низкий образовательный уровень и слепая вера в таро показали, что они действуют исключительно на тех, кто обладает малым критическим сознанием. Но после того как она опросила меня и выбрала мне карту, я как та разочаровался в них. Карта, что была выбрана, стала подходить и мне по вводным данным, и в целом я понял их суть. Спасибо Анне за этот цикл.
-
-Хотела сыграть мне на гитаре, думаю, явно не в ближайшие циклы.
-
-Структура, что появилась из твоего образа в виде рабочего, что продолжает держать под крылом штрафной персонал, оказалась столь полезной, что пережила твой уход и продолжила дальше существовать. Вопрос теперь лишь, как будет потом испытаний менять эту структуру и твое наследие.
-
-Внеуставные, я никогда не думал о том, что заведу их с гештальтом. Они столь переменчивы, хаотичны и эмоционально непредсказуемы, что казалось слишком... Очевидным мой отказ, но итог стал иным. Может из-за того, что ты трудилась за троих или же, что столь часто интересовалась мной и ходе этих циклов, не знаю. Но я рад, что это случилось.
-
-Конечно, ты не смогла стать адъютантом из-за рабочей занятости, но кто знает, как покажет себя будущее и ты сама. Более нет того столь мягкого и легкого воробья, что мог ценой своей репутации и даже положения рисковать ради защиты штрафного персонала. Теперь ты стала хищником, что выискивает слабых и выбрасывает их из общей системы. Ты поняла, что такому гнилью нет места среди нас, ты ощутила всю тяжесть, когда те садятся на шею и лишь наглеют.
-
-Я рад, что во время отдыха могу провести часы с тобой за книгами, просмотром фильмов, обсуждением работы или всего, чего только можно... Это столь приятно, что заставляет на время забыться, что это за объект и какие тут условия.
-
-Когда мою шею разорвали и монстр настиг меня, смотря в мои глаза, я думал лишь о том, что не смогу служить командующей, что не смогу более взглянуть на океан и что не смогу услышать твой голос. Тогда меня впервые охватила злоба, за такую несправедливость, что я сам не заметил, как убил искаженную Шторх. Монтировка так легко прошла и столь же сложно вышла... И все ради того, чтобы я вернулся в ЖБ, к вам... к тебе... Даже смешно звучит, что Адлеру пришлось сражаться, чтобы выжить и вернуться домой.</div>
-              </div>
-              <div class="rel-tags">
-                <span class="mini-tag c-respect">УВАЖЕНИЕ</span>
-                <span class="mini-tag c-strong">КРЕПКАЯ СВЯЗЬ</span>
-                <span class="mini-tag c-love">ЛЮБОВЬ</span>
-              </div>
-            </div>
-
-            <!-- GSCP. Сэйра Штраусс -->
-            <div class="sub-card" id="card-gscpseira" data-relations="c-respect c-friend">
-              <div class="sub-header">GSCP. Сэйра Штраусс <span class="close-btn" data-close="gscpseira">✕</span></div>
-              <div class="sub-body">
-                <div class="no-data-box"><span class="no-data-text">NO<br>DATA</span></div>
-                <div class="sub-desc">Когда я лишь приступил к работе на этом комплексе, мне передали, что Сэйру выбрал прошлый администратор и также геноссе командующая. Поэтому у меня не было права спорить или же препятствовать её кандидатуре. Поначалу у меня были сомнения в её навыках и компетентности, так как я узнал, что она лишь совсем недавно стала работчей, и причина такого быстрого повышения мне неизвестна.
-
-Проявила себя хорошо, показала полезные навыки и способности в административной работе. Но некоторые пункты были крайне необычными. Итогом стало, что самые спорные вопросы со временем отпали, но основные вопросы для работы всё так же актуальны. Хотя сейчас её статус спорный, так как я понимаю, что ей придётся отдать приоритет службе в ННА в случае одобрения её прошения.
-
-По характеру она приятная девушка, любит пообщаться, и у неё интересная история. Хотя меня всё ещё интересует, почему командующая так заинтересована в ней. Почему именно пал выбор на геноссе Сокола, почему не на других. Что за секреты она скрывает от всех и от меня. Думаю, кроме истории про брата и церковь (собор), она скрывает ещё более ценную информацию. Думаю, в будущем эта информация крайне сильно повлияет на дальнейшую работу.
-(05.08)
-Стала редко заступать на смены, надеюсь, вскоре это изменится, и она будет снова часто в дневной и работать. Товарищи рабочие крайне сильно ждут, когда будут культурные мероприятия.
-
-Вновь появилась в дневной, радует, хотя она больше не мой адъютант, она не унывает и продолжает дальше трудиться на благо нации... Не ожидал лишь, что она выберет шахты как основу для себя, но что я могу сказать — прекрасный выбор. Мало кто добровольно его сделает, тяжелый физический труд обычно предпочитают передавать репликам или ШЭ. Интересно, а через что она прошла за эти циклы?</div>
-              </div>
-              <div class="rel-tags">
-                <span class="mini-tag c-respect">УВАЖЕНИЕ</span>
-                <span class="mini-tag c-friend">ДРУЖБА</span>
-              </div>
-            </div>
-
-            <!-- GSCP. Кенто Годжо -->
-            <div class="sub-card" id="card-gscpgodjo" data-relations="c-respect c-fear">
-              <div class="sub-header">GSCP. Кенто Годжо <span class="close-btn" data-close="gscpgodjo">✕</span></div>
-              <div class="sub-body">
-                <div class="no-data-box"><span class="no-data-text">NO<br>DATA</span></div>
-                <div class="sub-desc">Товарищ Годжо — самый старший на объекте и является его прямым руководителем. По характеру он показывает себя часто спокойным "простым" гештальтом, не проявляя замашек "руководящих" лиц. Отличается лишь когда впадает в злость. Часто может совершать резкие и жестокие действия. К примеру, на месте списать или прострелить конечность. В защиту можно сказать, что такое не столь частое и зачастую за крайне резкие ошибки. К примеру, за мои ошибки он лишь пригрозил мне, чего в целом и хватило. Думаю, он понимает, чего стоят резкие эмоции и спуск курка, потому он крайне редко его использует, но куда чаще прочих.
-
-Может проявить милосердие или интересоваться жизнью прочих гештальтов, интересно, что стоит за его биографией и историей. Может, стоит узнать?</div>
-              </div>
-              <div class="rel-tags">
-                <span class="mini-tag c-respect">УВАЖЕНИЕ</span>
-                <span class="mini-tag c-fear">СТРАХ</span>
-              </div>
-            </div>
-
-            <!-- GSCP. 316 -->
-            <div class="sub-card" id="card-gscp316" data-relations="c-neutral c-respect">
-              <div class="sub-header">GSCP. 316 <span class="close-btn" data-close="gscp316">✕</span></div>
-              <div class="sub-body">
-                <div class="no-data-box"><span class="no-data-text">NO<br>DATA</span></div>
-                <div class="sub-desc">Интересный гештальт, кажется, будто на этом объекте она расцветает как военный специалист. Ранее так осматривала все с открытыми глазами, а что же сейчас... Сейчас она самый эффективный гештальт-специалист, реже всего получающий повреждения. Интересно, для чего она брала "интервью" в один из первых наших циклов... Может, она раньше работала в схожей специфике... Не знаю, как-нибудь позже уточню...
-
-Спасибо тебе за то, что помогла Анне один раз.</div>
-              </div>
-              <div class="rel-tags">
-                <span class="mini-tag c-neutral">НЕЙТРАЛИТЕТ</span>
-                <span class="mini-tag c-respect">УВАЖЕНИЕ</span>
-              </div>
-            </div>
-
-            <!-- GSCP. 168 -->
-            <div class="sub-card" id="card-gscp168" data-relations="c-neutral">
-              <div class="sub-header">GSCP. 168 — Аделина Краусс <span class="close-btn" data-close="gscp168">✕</span></div>
-              <div class="sub-body">
-                <div class="no-data-box"><span class="no-data-text">NO<br>DATA</span></div>
-                <div class="sub-desc">Староста штрафного персонала. Я способствовал ее обучению в МО на будущее, а также процессу реабилитации. Проявляет себя эффективно, если бы еще чаще были лекции, но это вопрос к отделу дознания и их материалу.
-(05.08)
-Когда я прибыл, она была старостой, занимая должность, которую я не до конца понимал поначалу. Но сейчас, в целом, осознавая рабочую деятельность, весьма проявила себя небрежно. Выполняла работу по крайней мере на минимальной планке. В целом не её вина, видимо, прошлый администратор и отдел дознания не были этим заинтересованы.
-
-В плане карт Таро слегка разочаровала, в моём эксперименте проявила себя крайне натянуто. Поэтому считаю результат неточным и в целом опыт крайне сумбурным. У неё было мало времени, и она решила провести его за этим занятием, в целом я бы не стал проводить с солдатом ННА подобного рода эксперименты, но исключительно из‑за любопытства решил пренебречь.
-
-В целом, думаю, если и буду использовать карты Таро, то исключительно выделяя более часа‑двух и исключительно на заинтересованных. Тратить время на подобные глупости лучше с теми, кто их поддержит, а не на посредственное время с похожими на нее.
-
-Теперь она стала интендантом ГБР, сказать мне мало про нее. Она пока не проявила себя как предшественница ее, но и чего-то отрицательного тоже не заметил. Опыт прибудет со временем, главное, чтобы последней частицы "человечности" не лишилась в КЗ.</div>
-              </div>
-              <div class="rel-tags"><span class="mini-tag c-neutral">НЕЙТРАЛИТЕТ</span></div>
-            </div>
-
-            <!-- GSCP. 999 -->
-            <div class="sub-card" id="card-gscp999" data-relations="c-respect c-neutral">
-              <div class="sub-header">GSCP. 999 <span class="close-btn" data-close="gscp999">✕</span></div>
-              <div class="sub-body">
-                <div class="no-data-box"><span class="no-data-text">NO<br>DATA</span></div>
-                <div class="sub-desc">Геноссе Кайзер показала себя жестокой, строгой и рассудительной девушкой. Но интересно, как столь жестокая девушка, приверженка закона, полюбила гештальтку, нарушившую закон и проявившую крайне... слабое следование порядку и системности. Да, из слов Анны я могу сделать вывод, что это лишь ее холодная маска, с "друзьями" она более мягкая и открытая. В целом... Мне это не важно, она прекратила быть для меня чем-то интересным, как только прекратила быть представителем ОК.
-
-С другой стороны, она крайне быстро поднялась по званию, прибыв на EREC, и после проявила себя весьма жестоко. Думаю, ее используют как инструмент дисциплины внутри СБ.
-
-В целом, она почти не прибывает более в дневной, так что траты МО на доп. протезы сократились. Приятный бонус, лучше бы она сидела чаще в ЖБ и работала тут, чем ходила в КЗ и получала критические ранения.</div>
-              </div>
-              <div class="rel-tags">
-                <span class="mini-tag c-respect">УВАЖЕНИЕ</span>
-                <span class="mini-tag c-neutral">НЕЙТРАЛИТЕТ</span>
-              </div>
-            </div>
-
+            <div class="empty-state">◈ ОЖИДАНИЕ ВЫБОРА ПЕРСОНАЛА ◈</div>
           </div>
         </div>
       </div>
 
-      <!-- ==================== СТАТУС МОДУЛЯ (ПОД КОДОМ) ==================== -->
+      <!-- ==================== СТАТУС ==================== -->
       <div id="tab5" class="tab-content">
         <div class="lock-screen" id="lockScreen">
           <div class="lock-title">▓ ДОСТУП ЗАПРЕЩЁН ▓</div>
@@ -1769,7 +1622,6 @@
             <p class="warning" style="margin-top:8px;">⚠ Записи данного раздела подлежат немедленной передаче куратору.</p>
           </div>
 
-          <!-- ФЕТИШ-БЛОК -->
           <div class="status-card">
             <h4>▸ ФЕТИШ ОБЪЕКТЫ</h4>
             <div class="ops-grid">
@@ -1987,7 +1839,6 @@
         loadingLog.textContent = "> HOLD AT 99%...";
         playBeep(400);
 
-        // Запускаем смех
         try {
           laughAudio.currentTime = 0;
           laughAudio.play().catch(() => {});
@@ -2015,7 +1866,6 @@
 
         laughAudio.addEventListener('ended', onLaughEnded);
 
-        // Резервный таймер на случай, если аудио не загрузится
         setTimeout(() => {
           laughAudio.removeEventListener('ended', onLaughEnded);
           finishLoading();
@@ -2150,88 +2000,17 @@
   `;
   document.head.appendChild(styleShake);
 
-  const panel = document.getElementById('descPanel');
-  const emptyState = panel.querySelector('.empty-state');
-
-  function showCard(cardId) {
-    panel.querySelectorAll('.sub-card').forEach(c => c.classList.remove('open'));
-    emptyState.style.display = 'block';
-    const card = document.getElementById('card-' + cardId);
-    if (card) { emptyState.style.display = 'none'; card.classList.add('open'); }
-  }
-  function closeCard() {
-    panel.querySelectorAll('.sub-card').forEach(c => c.classList.remove('open'));
-    emptyState.style.display = 'block';
-  }
-
-  document.querySelectorAll('.item-link').forEach(link => {
-    link.addEventListener('click', function(e) {
-      const target = this.dataset.target;
-      const card = document.getElementById('card-' + target);
-      if (card && card.classList.contains('open')) closeCard();
-      else showCard(target);
-      playSwitchSound();
-    });
-  });
-
-  document.querySelectorAll('.close-btn').forEach(btn => {
-    btn.addEventListener('click', function(e) {
-      e.stopPropagation();
-      closeCard();
-      playSwitchSound();
-    });
-  });
-
-  document.querySelectorAll('.rel-tag').forEach(tag => {
-    tag.addEventListener('click', function(e) {
-      const relClass = this.dataset.rel;
-      if (!relClass) return;
-
-      this.classList.toggle('active-filter');
-      const isActive = this.classList.contains('active-filter');
-
-      document.querySelectorAll('.sub-card').forEach(card => {
-        const cardRels = card.dataset.relations ? card.dataset.relations.split(' ') : [];
-        if (isActive) {
-          if (cardRels.includes(relClass)) {
-            card.style.borderColor = getComputedStyle(this).color;
-            card.style.boxShadow = `0 0 20px ${getComputedStyle(this).color}`;
-          } else {
-            card.style.borderColor = '#440000';
-            card.style.boxShadow = 'none';
-          }
-        } else {
-          card.style.borderColor = '#440000';
-          card.style.boxShadow = 'none';
-        }
-      });
-
-      document.querySelectorAll('.item-link').forEach(item => {
-        const target = item.dataset.target;
-        const card = document.getElementById('card-' + target);
-        if (card && isActive) {
-          const cardRels = card.dataset.relations ? card.dataset.relations.split(' ') : [];
-          if (cardRels.includes(relClass)) item.classList.add('highlight');
-          else item.classList.remove('highlight');
-        } else {
-          item.classList.remove('highlight');
-        }
-      });
-
-      playSwitchSound();
-    });
-  });
-
+  // Раскрытие групп персонала
   document.querySelectorAll('.group-header').forEach(header => {
     header.addEventListener('click', function(e) {
       const group = this.dataset.group;
       const items = document.getElementById('group-' + group);
       if (items) {
-        if (items.style.display === 'block') {
-          items.style.display = 'none';
+        if (items.classList.contains('open')) {
+          items.classList.remove('open');
           this.classList.remove('open');
         } else {
-          items.style.display = 'block';
+          items.classList.add('open');
           this.classList.add('open');
         }
         playSwitchSound();
@@ -2239,7 +2018,8 @@
     });
   });
 
-  document.querySelectorAll('.rel-tag, .med-card, .sub-card .sub-header').forEach(el => {
+  // Звуки на интерактивных элементах
+  document.querySelectorAll('.rel-tag, .med-card, .dossier-card').forEach(el => {
     el.addEventListener('click', function(e) {
       playBeep(600 + Math.random() * 400);
     });
