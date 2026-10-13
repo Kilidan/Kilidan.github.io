@@ -1,44 +1,25 @@
-Я полностью переработал визуал, добавив **советскую эстетику** и вайб **Atomic Heart**. Теперь это выглядит как терминал секретного объекта НАЦИИ: глубокий черный фон, кроваво-красные акценты, промышленные желтые предупреждения, рифленые панели, заклепки, гайки, вентиляционные решетки и гербовая символика. Добавлены пропагандистские лозунги, предупреждающие полосы и "ржавые" текстуры.
-
-### Что добавлено:
-1. **Советский колорит:** Красные звезды, шестеренки, лозунги «СЛАВА НАЦИИ!», «ЗА РОДИНУ!», стилизованные заголовки.
-2. **Промышленный дизайн:** Рифленый металл, заклепки, болты, вентиляционные решетки, аварийные полосы (черно-желтые).
-3. **Atomic Heart:** Огромные механические шестерни в фоне, датчики, измерительные приборы, красные "лампы тревоги".
-4. **Цвета:** Глубокий черный + темно-красный (`#8b0000`) + яркий красный (`#ff1a1a`) + янтарный (`#ffb000`) + ржавый (`#4a2a15`).
-5. **Загрузка:** Имитация советского терминала с проверкой систем.
-6. **Экран блокировки:** Военный протокол с "печатью" и красной лампой.
-
-Вот готовый код:
-
-```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>СЕКРЕТНО // ЕРЕС-М-427</title>
+<title>SIRACUSA // LUPO // ДОСЬЕ</title>
 <style>
   /* ==================== СБРОСЫ И ПЕРЕМЕННЫЕ ==================== */
   * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
   
   :root {
     --bg-deep: #050505;
-    --bg-panel: #0a0806;
-    --bg-panel-light: #12100c;
-    --soviet-red: #d40000;
-    --soviet-red-bright: #ff1a1a;
-    --soviet-red-dark: #8b0000;
-    --amber: #ffb000;
-    --amber-dim: #8a5f00;
-    --rust: #4a2a15;
-    --text-main: #e0d5c0;
-    --text-dim: #6b5f4a;
-    --text-bright: #ffb000;
-    --warning-yellow: #ffcc00;
-    --border-color: #2a1a10;
-    --glow-red: 0 0 10px rgba(212, 0, 0, 0.6);
-    --glow-amber: 0 0 8px rgba(255, 176, 0, 0.5);
-    --glow-amber-strong: 0 0 15px rgba(255, 176, 0, 0.9);
+    --bg-panel: #0a0a0a;
+    --bg-panel-light: #121212;
+    --red-main: #cc0000;
+    --red-bright: #ff1a1a;
+    --red-dark: #660000;
+    --white-main: #e0e0e0;
+    --white-dim: #888888;
+    --border-sharp: #cc0000;
+    --glow-red: 0 0 12px rgba(204, 0, 0, 0.6);
+    --glow-white: 0 0 8px rgba(255, 255, 255, 0.4);
   }
 
   html, body {
@@ -46,7 +27,7 @@
     background: #000;
     overflow-x: hidden;
     font-family: 'Courier New', 'VT323', 'Lucida Console', monospace;
-    color: var(--text-main);
+    color: var(--white-main);
   }
 
   /* ==================== ЭФФЕКТЫ CRT, ШУМ, ВИНЬЕТКА ==================== */
@@ -55,8 +36,8 @@
     width: 100%; height: 100%;
     pointer-events: none; z-index: 100;
     background: repeating-linear-gradient(0deg,
-        rgba(255, 176, 0, 0.04) 0px, rgba(0,0,0,0) 2px,
-        rgba(255, 176, 0, 0.01) 4px, rgba(0,0,0,0) 6px);
+        rgba(255, 255, 255, 0.03) 0px, rgba(0,0,0,0) 2px,
+        rgba(255, 255, 255, 0.01) 4px, rgba(0,0,0,0) 6px);
     mix-blend-mode: screen;
   }
   
@@ -64,22 +45,22 @@
     position: fixed; top: 0; left: 0;
     width: 100%; height: 100%;
     pointer-events: none; z-index: 99;
-    opacity: 0.08;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
   }
 
   .vignette {
     position: fixed; inset: 0;
     pointer-events: none; z-index: 98;
-    background: radial-gradient(ellipse at center, transparent 25%, rgba(0,0,0,0.95) 100%);
-    box-shadow: inset 0 0 250px rgba(0,0,0,1), inset 0 0 100px rgba(139, 0, 0, 0.15);
+    background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.95) 100%);
+    box-shadow: inset 0 0 200px rgba(0,0,0,1), inset 0 0 50px rgba(204, 0, 0, 0.15);
   }
 
   /* ==================== ЗАГРУЗКА ==================== */
   #loadingScreen {
     position: fixed; inset: 0;
     z-index: 99999; pointer-events: none; opacity: 0;
-    background: #000; color: var(--amber);
+    background: #000; color: var(--white-main);
     display: flex; justify-content: center; align-items: center;
     transition: opacity 0.5s ease;
   }
@@ -87,35 +68,37 @@
 
   .loading-box {
     position: relative; z-index: 5;
-    width: 90%; max-width: 850px;
+    width: 90%; max-width: 800px;
     display: flex; flex-direction: column; gap: 8px;
     font-size: 14px;
-    text-shadow: var(--glow-amber);
-    padding: 30px;
-    border: 2px solid var(--soviet-red-dark);
-    background: rgba(10, 5, 5, 0.9);
-    box-shadow: 0 0 40px rgba(212, 0, 0, 0.3), inset 0 0 40px rgba(0,0,0,0.9);
+    padding: 40px;
+    border: 2px solid var(--red-main);
+    background: rgba(5, 5, 5, 0.95);
+    box-shadow: 0 0 50px rgba(204, 0, 0, 0.4), inset 0 0 30px rgba(0,0,0,0.9);
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
   }
   .loading-header {
-    color: var(--soviet-red-bright);
-    font-size: 18px;
-    letter-spacing: 4px;
+    color: var(--red-bright);
+    font-size: 20px;
+    letter-spacing: 6px;
     text-align: center;
     padding-bottom: 15px;
-    border-bottom: 1px solid var(--soviet-red-dark);
+    border-bottom: 1px solid var(--red-dark);
     margin-bottom: 15px;
     text-transform: uppercase;
     text-shadow: var(--glow-red);
+    animation: glitchText 0.5s infinite;
   }
   .loading-log {
     min-height: 20px;
     white-space: nowrap;
     overflow: hidden;
-    color: var(--amber);
+    color: var(--white-main);
+    text-shadow: var(--glow-white);
   }
-  .loading-log::before { content: "» "; color: var(--soviet-red); }
-  .loading-log.done { color: #55ff55; }
-  .loading-log.done::before { content: "✓ "; color: #55ff55; }
+  .loading-log::before { content: ">> "; color: var(--red-main); }
+  .loading-log.done { color: var(--red-bright); }
+  .loading-log.done::before { content: "✓ "; color: var(--red-bright); }
 
   /* ==================== ОСНОВНОЙ ИНТЕРФЕЙС ==================== */
   #mainSite {
@@ -127,51 +110,46 @@
   }
   #mainSite.visible { opacity: 1; }
 
-  /* Корпус терминала */
   .monitor-frame {
     position: relative;
     width: 1400px; max-width: 98vw;
     height: 92vh; min-height: 700px;
     background: 
-      repeating-linear-gradient(45deg, #0a0806 0px, #0a0806 2px, #0d0a07 2px, #0d0a07 4px),
-      #0a0806;
-    border: 3px solid #1a1008;
-    border-radius: 8px;
+      linear-gradient(135deg, rgba(204, 0, 0, 0.05) 0%, transparent 50%),
+      #050505;
+    border: 2px solid var(--red-dark);
     box-shadow: 
       0 0 0 1px #000,
-      0 0 40px rgba(212, 0, 0, 0.15),
-      inset 0 0 60px rgba(0,0,0,0.9),
-      inset 0 0 20px rgba(139, 0, 0, 0.1);
+      0 0 40px rgba(204, 0, 0, 0.2),
+      inset 0 0 60px rgba(0,0,0,0.9);
     display: flex;
     flex-direction: column;
     overflow: hidden;
     padding: 12px;
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 30px), calc(100% - 30px) 100%, 0 100%);
   }
-  /* Заклепки на корпусе */
-  .monitor-frame::before,
-  .monitor-frame::after {
+  /* Царапины на корпусе */
+  .monitor-frame::before {
     content: '';
     position: absolute;
-    width: 100%; height: 100%;
-    top: 0; left: 0;
+    top: 0; left: 0; right: 0; bottom: 0;
     pointer-events: none;
-    background-image: 
-      radial-gradient(circle at 8px 8px, #2a1a10 2px, transparent 2.5px),
-      radial-gradient(circle at calc(100% - 8px) 8px, #2a1a10 2px, transparent 2.5px),
-      radial-gradient(circle at 8px calc(100% - 8px), #2a1a10 2px, transparent 2.5px),
-      radial-gradient(circle at calc(100% - 8px) calc(100% - 8px), #2a1a10 2px, transparent 2.5px);
+    background: 
+      linear-gradient(45deg, transparent 48%, rgba(204, 0, 0, 0.2) 49%, rgba(204, 0, 0, 0.2) 51%, transparent 52%),
+      linear-gradient(-45deg, transparent 48%, rgba(204, 0, 0, 0.1) 49%, rgba(204, 0, 0, 0.1) 51%, transparent 52%);
+    background-size: 100px 100px, 150px 150px;
+    background-position: 10% 20%, 80% 70%;
     background-repeat: no-repeat;
-    background-size: 100% 100%;
   }
 
   /* ==================== ВЕРХНЯЯ ПАНЕЛЬ ==================== */
   .top-bar {
     display: flex; justify-content: space-between; align-items: center;
     padding: 10px 16px;
-    border-bottom: 2px solid var(--soviet-red-dark);
-    background: linear-gradient(180deg, #0f0a05 0%, #080503 100%);
+    border-bottom: 2px solid var(--red-main);
+    background: linear-gradient(180deg, #0a0a0a 0%, #050505 100%);
     font-size: 12px;
-    color: var(--text-dim);
+    color: var(--white-dim);
     text-transform: uppercase;
     letter-spacing: 2px;
     position: relative;
@@ -182,37 +160,31 @@
     bottom: -2px; left: 0;
     width: 100%; height: 2px;
     background: repeating-linear-gradient(90deg, 
-      var(--warning-yellow) 0px, var(--warning-yellow) 12px,
-      #000 12px, #000 24px);
-    opacity: 0.7;
+      var(--red-bright) 0px, var(--red-bright) 15px,
+      #000 15px, #000 30px);
+    opacity: 0.8;
   }
   .top-bar .brand { 
     display: flex; align-items: center; gap: 10px;
-    color: var(--soviet-red-bright); 
+    color: var(--red-bright); 
     text-shadow: var(--glow-red);
     font-weight: bold;
     font-size: 14px;
+    letter-spacing: 4px;
   }
   .top-bar .brand::before {
-    content: '★';
-    color: var(--soviet-red-bright);
+    content: '🐺';
     font-size: 18px;
-    text-shadow: var(--glow-red);
+    filter: grayscale(1) brightness(2);
   }
   .top-bar .status { display: flex; gap: 24px; align-items: center; }
   .top-bar .status span { display: flex; align-items: center; gap: 6px; }
   .top-bar .status span::before { 
     content: "●"; 
-    color: #55ff55; 
-    text-shadow: 0 0 8px #55ff55;
-    animation: pulseDot 2s infinite;
-  }
-  .top-bar .status span.alarm::before { 
-    color: var(--soviet-red-bright); 
+    color: var(--red-bright); 
     text-shadow: var(--glow-red);
     animation: pulseAlarm 0.8s infinite;
   }
-  @keyframes pulseDot { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
   @keyframes pulseAlarm { 0%,100% { opacity: 1; } 50% { opacity: 0.2; } }
 
   /* ==================== ОСНОВНОЙ КОНТЕНТ ==================== */
@@ -227,11 +199,9 @@
   /* ==================== САЙДБАР ==================== */
   .sidebar {
     width: 260px;
-    background: 
-      repeating-linear-gradient(0deg, #080503 0px, #080503 3px, #0a0604 3px, #0a0604 6px),
-      #080503;
-    border: 2px solid #1a1008;
-    border-right: 3px solid var(--soviet-red-dark);
+    background: #080808;
+    border: 1px solid var(--red-dark);
+    border-left: 4px solid var(--red-main);
     display: flex;
     flex-direction: column;
     padding: 14px 0;
@@ -239,16 +209,16 @@
     position: relative;
   }
   .sidebar::before {
-    content: 'НАВИГАЦИЯ';
+    content: 'CONTATTI';
     position: absolute;
-    top: -1px; left: 50%;
+    top: -10px; left: 50%;
     transform: translateX(-50%);
-    background: var(--soviet-red-dark);
-    color: var(--text-main);
-    padding: 2px 12px;
+    background: #080808;
+    color: var(--red-bright);
+    padding: 0 10px;
     font-size: 10px;
-    letter-spacing: 3px;
-    border: 1px solid var(--soviet-red-bright);
+    letter-spacing: 4px;
+    border: 1px solid var(--red-dark);
   }
   .nav-btn {
     display: flex;
@@ -257,60 +227,54 @@
     padding: 12px 20px;
     background: transparent;
     border: none;
-    border-left: 4px solid transparent;
-    color: var(--text-dim);
+    border-left: 3px solid transparent;
+    color: var(--white-dim);
     font-family: inherit;
     font-size: 13px;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
     cursor: pointer;
     transition: 0.15s;
     text-align: left;
     position: relative;
   }
   .nav-btn::before {
-    content: "▸";
-    color: var(--soviet-red-dark);
+    content: "//";
+    color: var(--red-dark);
     font-size: 14px;
     transition: 0.15s;
   }
   .nav-btn:hover {
-    background: rgba(139, 0, 0, 0.15);
-    color: var(--text-main);
-    border-left-color: var(--soviet-red);
+    background: rgba(204, 0, 0, 0.15);
+    color: var(--white-main);
+    border-left-color: var(--red-main);
   }
-  .nav-btn:hover::before { color: var(--soviet-red-bright); }
+  .nav-btn:hover::before { color: var(--red-bright); }
   .nav-btn.active {
-    background: linear-gradient(90deg, rgba(212, 0, 0, 0.25) 0%, rgba(212, 0, 0, 0.05) 100%);
-    color: var(--amber);
-    border-left: 4px solid var(--soviet-red-bright);
-    text-shadow: var(--glow-amber);
+    background: linear-gradient(90deg, rgba(204, 0, 0, 0.3) 0%, rgba(204, 0, 0, 0.05) 100%);
+    color: var(--white-main);
+    border-left: 3px solid var(--red-bright);
+    text-shadow: var(--glow-white);
     font-weight: bold;
   }
   .nav-btn.active::before { 
-    content: "★"; 
-    color: var(--soviet-red-bright); 
+    content: ">>"; 
+    color: var(--red-bright); 
     text-shadow: var(--glow-red);
   }
-  .nav-btn.locked { color: #3a2820; cursor: not-allowed; }
-  .nav-btn.locked::before { content: "🔒"; color: #3a2820; }
+  .nav-btn.locked { color: #333; cursor: not-allowed; }
+  .nav-btn.locked::before { content: "🔒"; color: #333; }
   .nav-btn.locked:hover { background: transparent; border-left-color: transparent; }
 
   .sidebar-footer {
     margin-top: auto;
     padding: 10px 16px;
-    border-top: 1px solid var(--border-color);
+    border-top: 1px solid var(--red-dark);
     font-size: 10px;
-    color: var(--text-dim);
+    color: var(--red-dark);
     text-align: center;
-    letter-spacing: 2px;
-  }
-  .sidebar-footer .star {
-    color: var(--soviet-red-bright);
-    display: block;
-    font-size: 20px;
-    margin-bottom: 4px;
-    text-shadow: var(--glow-red);
+    letter-spacing: 3px;
+    text-transform: uppercase;
   }
 
   /* ==================== ПАНЕЛЬ КОНТЕНТА ==================== */
@@ -320,24 +284,14 @@
     overflow-y: auto;
     position: relative;
     background: 
-      radial-gradient(ellipse at top, rgba(139, 0, 0, 0.08) 0%, transparent 60%),
-      #050403;
-    border: 2px solid #1a1008;
+      radial-gradient(circle at top right, rgba(204, 0, 0, 0.1) 0%, transparent 40%),
+      #050505;
+    border: 1px solid var(--red-dark);
   }
-  /* Вентиляционная решетка в углу */
-  .content-panel::before {
-    content: '';
-    position: absolute;
-    top: 10px; right: 10px;
-    width: 60px; height: 30px;
-    background: repeating-linear-gradient(0deg, #1a1008 0px, #1a1008 2px, transparent 2px, transparent 5px);
-    border: 1px solid #2a1a10;
-    opacity: 0.6;
-  }
-  .content-panel::-webkit-scrollbar { width: 8px; background: #0a0806; }
+  .content-panel::-webkit-scrollbar { width: 6px; background: #0a0a0a; }
   .content-panel::-webkit-scrollbar-thumb { 
-    background: var(--soviet-red-dark); 
-    border: 1px solid var(--soviet-red-bright);
+    background: var(--red-main); 
+    border: 1px solid var(--red-bright);
   }
 
   /* ==================== ВКЛАДКИ ==================== */
@@ -347,33 +301,34 @@
 
   .section-title {
     font-size: 22px;
-    color: var(--amber);
-    text-shadow: var(--glow-amber-strong);
-    border-bottom: 2px solid var(--soviet-red-dark);
+    color: var(--white-main);
+    text-shadow: var(--glow-red);
+    border-bottom: 2px solid var(--red-main);
     padding-bottom: 12px;
     margin-bottom: 20px;
     text-transform: uppercase;
-    letter-spacing: 6px;
+    letter-spacing: 8px;
     display: flex;
     align-items: center;
     gap: 12px;
     position: relative;
     font-weight: bold;
+    font-style: italic;
   }
   .section-title::before { 
-    content: '★'; 
-    color: var(--soviet-red-bright); 
-    font-size: 24px;
+    content: '///'; 
+    color: var(--red-bright); 
+    font-size: 20px;
     text-shadow: var(--glow-red);
   }
   .section-title::after {
     content: '';
     position: absolute;
     bottom: -2px; right: 0;
-    width: 100px; height: 2px;
+    width: 150px; height: 2px;
     background: repeating-linear-gradient(90deg, 
-      var(--warning-yellow) 0px, var(--warning-yellow) 6px,
-      transparent 6px, transparent 12px);
+      var(--red-bright) 0px, var(--red-bright) 8px,
+      transparent 8px, transparent 16px);
   }
 
   /* ==================== ОСНОВНАЯ ИНФОРМАЦИЯ ==================== */
@@ -383,42 +338,43 @@
   .photo-frame {
     width: 100%;
     height: 280px;
-    border: 3px solid var(--soviet-red-dark);
+    border: 2px solid var(--red-main);
     background: #000;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 0 20px rgba(212, 0, 0, 0.3), inset 0 0 30px rgba(0,0,0,0.9);
+    box-shadow: 0 0 25px rgba(204, 0, 0, 0.4), inset 0 0 30px rgba(0,0,0,0.9);
   }
   .photo-frame img {
     width: 100%; height: 100%;
     object-fit: cover;
-    filter: sepia(0.8) hue-rotate(-10deg) saturate(1.4) contrast(1.3) brightness(0.75);
+    filter: grayscale(1) contrast(1.4) brightness(0.8);
+    mix-blend-mode: luminosity;
   }
   .photo-frame::before {
-    content: 'ФОТО // СЕКРЕТНО';
+    content: 'LUPO // LAPPLAND';
     position: absolute;
-    top: 4px; left: 4px;
-    background: var(--soviet-red-dark);
-    color: var(--text-main);
-    padding: 2px 8px;
-    font-size: 9px;
-    letter-spacing: 2px;
+    top: 6px; left: 6px;
+    background: var(--red-main);
+    color: #fff;
+    padding: 3px 10px;
+    font-size: 10px;
+    letter-spacing: 3px;
     z-index: 2;
-    border: 1px solid var(--soviet-red-bright);
+    font-weight: bold;
   }
   .photo-frame::after {
     content: '';
     position: absolute; inset: 0;
     background: 
-      linear-gradient(180deg, transparent 70%, rgba(139, 0, 0, 0.3) 100%),
-      repeating-linear-gradient(0deg, transparent 0px, transparent 3px, rgba(255, 176, 0, 0.03) 3px, rgba(255, 176, 0, 0.03) 4px);
+      linear-gradient(180deg, transparent 60%, rgba(204, 0, 0, 0.4) 100%),
+      repeating-linear-gradient(0deg, transparent 0px, transparent 3px, rgba(255, 255, 255, 0.05) 3px, rgba(255, 255, 255, 0.05) 4px);
     pointer-events: none;
   }
 
   .data-block {
-    border: 1px solid var(--border-color);
-    border-left: 3px solid var(--soviet-red);
-    background: rgba(212, 0, 0, 0.04);
+    border: 1px solid var(--red-dark);
+    border-left: 3px solid var(--red-main);
+    background: rgba(204, 0, 0, 0.05);
     padding: 12px 14px;
     position: relative;
   }
@@ -428,119 +384,122 @@
     top: 0; left: 0; right: 0;
     height: 2px;
     background: repeating-linear-gradient(90deg,
-      var(--soviet-red) 0px, var(--soviet-red) 8px,
-      transparent 8px, transparent 16px);
-    opacity: 0.5;
+      var(--red-main) 0px, var(--red-main) 6px,
+      transparent 6px, transparent 12px);
+    opacity: 0.6;
   }
   .data-row {
     display: flex; justify-content: space-between;
     padding: 6px 0;
-    border-bottom: 1px dashed rgba(139, 0, 0, 0.3);
+    border-bottom: 1px dashed rgba(204, 0, 0, 0.2);
     font-size: 12px;
     gap: 8px;
   }
   .data-row:last-child { border-bottom: none; }
   .data-row .label { 
-    color: var(--text-dim); 
+    color: var(--white-dim); 
     text-transform: uppercase;
     flex-shrink: 0;
     letter-spacing: 1px;
   }
   .data-row .value { 
-    color: var(--amber); 
+    color: var(--white-main); 
     font-weight: bold; 
-    text-shadow: var(--glow-amber);
+    text-shadow: var(--glow-white);
     text-align: right;
   }
   .data-row .value.status-alive { 
-    color: #55ff55; 
-    text-shadow: 0 0 8px #55ff55;
+    color: var(--red-bright); 
+    text-shadow: var(--glow-red);
   }
   .data-row .value.status-alive::before { content: '● '; }
 
   .info-right { flex: 1; display: flex; flex-direction: column; gap: 16px; }
 
   .bio-section {
-    border: 1px solid var(--border-color);
-    background: rgba(10, 5, 5, 0.6);
+    border: 1px solid var(--red-dark);
+    background: rgba(10, 10, 10, 0.8);
     padding: 14px 16px;
     position: relative;
   }
   .bio-section::before {
     content: '';
     position: absolute;
-    top: 6px; right: 6px;
-    width: 8px; height: 8px;
-    background: var(--soviet-red);
-    border-radius: 50%;
-    box-shadow: 0 0 8px var(--soviet-red-bright);
+    top: 0; right: 0;
+    width: 0; height: 0;
+    border-style: solid;
+    border-width: 0 20px 20px 0;
+    border-color: transparent var(--red-main) transparent transparent;
   }
   .bio-section summary {
     font-weight: bold;
-    color: var(--amber);
+    color: var(--white-main);
     cursor: pointer;
     text-transform: uppercase;
     letter-spacing: 3px;
     list-style: none;
     display: flex; align-items: center; gap: 10px;
-    text-shadow: var(--glow-amber);
+    text-shadow: var(--glow-red);
     font-size: 14px;
+    font-style: italic;
   }
   .bio-section summary::-webkit-details-marker { display: none; }
   .bio-section summary::before { 
     content: "[+]"; 
-    color: var(--soviet-red-bright);
+    color: var(--red-bright);
     font-family: monospace;
   }
   .bio-section[open] summary::before { content: "[-]"; }
   .bio-section ul { list-style: none; padding-top: 12px; }
   .bio-section ul li {
     padding: 5px 0;
-    border-bottom: 1px solid rgba(139, 0, 0, 0.15);
+    border-bottom: 1px solid rgba(204, 0, 0, 0.15);
     font-size: 13px;
-    color: var(--text-main);
+    color: var(--white-main);
     display: flex;
     gap: 8px;
   }
   .bio-section ul li::before { 
     content: "▸"; 
-    color: var(--soviet-red); 
+    color: var(--red-bright); 
     flex-shrink: 0;
   }
 
   .med-card {
-    border: 2px solid var(--soviet-red-dark);
+    border: 1px solid var(--red-main);
     padding: 18px;
     background: 
-      radial-gradient(ellipse at top left, rgba(139, 0, 0, 0.15) 0%, transparent 60%),
-      #080503;
-    box-shadow: inset 0 0 30px rgba(0,0,0,0.9), 0 0 15px rgba(139, 0, 0, 0.2);
+      linear-gradient(135deg, rgba(204, 0, 0, 0.1) 0%, transparent 50%),
+      #0a0a0a;
+    box-shadow: inset 0 0 30px rgba(0,0,0,0.9), 0 0 15px rgba(204, 0, 0, 0.2);
     position: relative;
   }
   .med-card::before {
-    content: '★';
+    content: '!!!';
     position: absolute;
     top: -10px; left: 20px;
-    background: #080503;
-    color: var(--soviet-red-bright);
+    background: #0a0a0a;
+    color: var(--red-bright);
     padding: 0 8px;
     font-size: 14px;
     text-shadow: var(--glow-red);
+    font-weight: bold;
   }
   .med-card h4 {
-    color: var(--amber);
+    color: var(--white-main);
     text-transform: uppercase;
     letter-spacing: 4px;
     margin-bottom: 12px;
-    border-bottom: 1px solid var(--soviet-red-dark);
+    border-bottom: 1px solid var(--red-dark);
     padding-bottom: 8px;
-    text-shadow: var(--glow-amber);
+    text-shadow: var(--glow-white);
     font-size: 15px;
+    font-style: italic;
   }
   .med-card p {
     font-size: 14px;
     line-height: 1.8;
-    color: var(--text-main);
+    color: var(--white-main);
     white-space: pre-wrap;
     text-align: justify;
   }
@@ -549,23 +508,23 @@
   .history-text {
     font-size: 15px;
     line-height: 1.9;
-    color: var(--text-main);
+    color: var(--white-main);
     white-space: pre-wrap;
     text-align: justify;
-    border-left: 4px solid var(--soviet-red);
+    border-left: 3px solid var(--red-main);
     padding: 20px 24px;
-    background: rgba(139, 0, 0, 0.05);
+    background: rgba(204, 0, 0, 0.05);
     position: relative;
   }
   .history-text::before {
-    content: 'СЕКРЕТНО';
+    content: 'CONFIDENTIAL';
     position: absolute;
     top: 8px; right: 12px;
-    color: var(--soviet-red-bright);
+    color: var(--red-bright);
     font-size: 11px;
     letter-spacing: 4px;
     text-shadow: var(--glow-red);
-    border: 1px solid var(--soviet-red-bright);
+    border: 1px solid var(--red-bright);
     padding: 2px 8px;
     transform: rotate(-3deg);
     opacity: 0.8;
@@ -576,49 +535,50 @@
   .classifier-block {
     display: flex; flex-wrap: wrap; gap: 6px;
     padding: 14px;
-    border: 2px solid var(--border-color);
-    background: rgba(10, 5, 5, 0.7);
+    border: 1px solid var(--red-dark);
+    background: rgba(10, 10, 10, 0.8);
     position: relative;
   }
   .classifier-block::before {
-    content: 'КЛАССИФИКАТОР СВЯЗЕЙ';
+    content: 'RELAZIONI';
     position: absolute;
     top: -8px; left: 16px;
-    background: #080503;
-    color: var(--amber);
+    background: #050505;
+    color: var(--red-bright);
     font-size: 10px;
     letter-spacing: 3px;
     padding: 0 8px;
-    text-shadow: var(--glow-amber);
+    text-shadow: var(--glow-red);
   }
   .rel-tag {
     padding: 4px 12px;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--red-dark);
     font-size: 11px;
     text-transform: uppercase;
     cursor: pointer;
     transition: 0.1s;
-    color: var(--text-dim);
+    color: var(--white-dim);
     background: transparent;
     letter-spacing: 1px;
   }
   .rel-tag:hover { 
-    border-color: var(--soviet-red-bright); 
-    color: var(--amber); 
-    background: rgba(139, 0, 0, 0.2);
+    border-color: var(--red-bright); 
+    color: var(--white-main); 
+    background: rgba(204, 0, 0, 0.2);
+    box-shadow: var(--glow-red);
   }
   .rel-tag.active-filter { 
-    background: var(--soviet-red); 
-    color: var(--text-main); 
-    border-color: var(--soviet-red-bright); 
+    background: var(--red-main); 
+    color: var(--white-main); 
+    border-color: var(--red-bright); 
     font-weight: bold;
     box-shadow: var(--glow-red);
   }
 
   .social-lists { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
   .social-col {
-    border: 2px solid var(--border-color);
-    background: rgba(5, 3, 2, 0.8);
+    border: 1px solid var(--red-dark);
+    background: rgba(5, 5, 5, 0.9);
     max-height: 300px;
     overflow-y: auto;
     padding: 12px;
@@ -628,27 +588,28 @@
     content: '';
     position: absolute;
     top: 0; left: 0;
-    width: 100%; height: 3px;
+    width: 100%; height: 2px;
     background: repeating-linear-gradient(90deg,
-      var(--soviet-red) 0px, var(--soviet-red) 10px,
-      var(--warning-yellow) 10px, var(--warning-yellow) 20px);
+      var(--red-bright) 0px, var(--red-bright) 10px,
+      transparent 10px, transparent 20px);
   }
-  .social-col::-webkit-scrollbar { width: 6px; background: #0a0806; }
-  .social-col::-webkit-scrollbar-thumb { background: var(--soviet-red-dark); }
+  .social-col::-webkit-scrollbar { width: 4px; background: #0a0a0a; }
+  .social-col::-webkit-scrollbar-thumb { background: var(--red-main); }
   .social-col h3 {
-    color: var(--amber);
+    color: var(--white-main);
     font-size: 15px;
     text-transform: uppercase;
     letter-spacing: 3px;
-    border-bottom: 1px solid var(--soviet-red-dark);
+    border-bottom: 1px solid var(--red-dark);
     padding: 6px 0 8px 0;
     margin-bottom: 10px;
-    text-shadow: var(--glow-amber);
+    text-shadow: var(--glow-white);
     display: flex; align-items: center; gap: 8px;
+    font-style: italic;
   }
   .social-col h3::before {
-    content: '★';
-    color: var(--soviet-red-bright);
+    content: '///';
+    color: var(--red-bright);
     text-shadow: var(--glow-red);
   }
   
@@ -656,56 +617,56 @@
     display: block;
     padding: 7px 10px;
     font-size: 13px;
-    color: var(--text-main);
+    color: var(--white-main);
     cursor: pointer;
-    border-bottom: 1px solid rgba(139, 0, 0, 0.15);
+    border-bottom: 1px solid rgba(204, 0, 0, 0.15);
     text-transform: uppercase;
     transition: 0.1s;
     letter-spacing: 1px;
     position: relative;
   }
   .group-header::before {
-    content: '▸ ';
-    color: var(--soviet-red);
+    content: '> ';
+    color: var(--red-dark);
   }
   .group-header:hover { 
-    background: rgba(139, 0, 0, 0.2); 
-    color: var(--amber); 
+    background: rgba(204, 0, 0, 0.2); 
+    color: var(--white-main); 
   }
   .group-header.open { 
-    background: rgba(212, 0, 0, 0.25); 
-    color: var(--amber); 
-    border-left: 3px solid var(--soviet-red-bright);
+    background: rgba(204, 0, 0, 0.3); 
+    color: var(--white-main); 
+    border-left: 3px solid var(--red-bright);
   }
-  .group-header.open::before { content: '▾ '; }
+  .group-header.open::before { content: 'v '; color: var(--red-bright); }
   
   .sub-items { display: none; padding-left: 20px; padding-top: 4px; }
   .item-link {
     display: block;
     padding: 4px 0;
     font-size: 12px;
-    color: var(--text-dim);
+    color: var(--white-dim);
     cursor: pointer;
     transition: 0.1s;
     letter-spacing: 0.5px;
   }
-  .item-link::before { content: "› "; color: var(--soviet-red); }
+  .item-link::before { content: "· "; color: var(--red-main); }
   .item-link:hover { 
-    color: var(--amber); 
+    color: var(--white-main); 
     padding-left: 5px; 
-    text-shadow: var(--glow-amber);
+    text-shadow: var(--glow-white);
   }
   .item-link.highlight { 
-    color: var(--soviet-red-bright); 
+    color: var(--red-bright); 
     font-weight: bold; 
     text-shadow: var(--glow-red);
   }
 
   .desc-panel {
-    border: 2px solid var(--soviet-red-dark);
+    border: 1px solid var(--red-main);
     background: 
-      linear-gradient(180deg, rgba(139, 0, 0, 0.08) 0%, transparent 100%),
-      #050302;
+      radial-gradient(circle at bottom right, rgba(204, 0, 0, 0.1) 0%, transparent 50%),
+      #050505;
     padding: 18px;
     min-height: 200px;
     margin-top: 10px;
@@ -713,24 +674,25 @@
     box-shadow: inset 0 0 30px rgba(0,0,0,0.9);
   }
   .desc-panel::before {
-    content: 'ДОСЬЕ // АГЕНТУРА';
+    content: 'TARGET DOSSIER';
     position: absolute;
     top: -9px; left: 16px;
-    background: #050302;
-    color: var(--amber);
+    background: #050505;
+    color: var(--red-bright);
     font-size: 10px;
     letter-spacing: 3px;
     padding: 0 8px;
-    text-shadow: var(--glow-amber);
+    text-shadow: var(--glow-red);
   }
   .empty-state {
     text-align: center;
-    color: var(--soviet-red-dark);
+    color: var(--red-dark);
     padding: 50px 0;
     font-size: 16px;
     letter-spacing: 6px;
     animation: blink 1.5s step-end infinite;
     text-transform: uppercase;
+    font-style: italic;
   }
   @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
 
@@ -738,75 +700,76 @@
   .sub-card.open { display: block; }
   .sub-header {
     display: flex; justify-content: space-between; align-items: center;
-    color: var(--amber);
+    color: var(--white-main);
     font-size: 17px;
     text-transform: uppercase;
-    border-bottom: 2px solid var(--soviet-red-dark);
+    border-bottom: 2px solid var(--red-main);
     padding-bottom: 10px;
     margin-bottom: 14px;
-    text-shadow: var(--glow-amber);
+    text-shadow: var(--glow-white);
     letter-spacing: 3px;
+    font-style: italic;
   }
   .sub-header::before {
-    content: '★';
-    color: var(--soviet-red-bright);
+    content: '///';
+    color: var(--red-bright);
     margin-right: 8px;
     text-shadow: var(--glow-red);
   }
   .close-btn {
     cursor: pointer;
-    color: var(--text-dim);
-    border: 1px solid var(--border-color);
+    color: var(--white-dim);
+    border: 1px solid var(--red-dark);
     padding: 2px 10px;
     font-size: 12px;
     letter-spacing: 2px;
     transition: 0.1s;
   }
   .close-btn:hover { 
-    background: var(--soviet-red); 
-    color: var(--text-main); 
-    border-color: var(--soviet-red-bright);
+    background: var(--red-main); 
+    color: var(--white-main); 
+    border-color: var(--red-bright);
     box-shadow: var(--glow-red);
   }
   
   .sub-body { display: flex; gap: 18px; }
   .sub-photo {
     width: 110px; height: 110px;
-    border: 2px solid var(--soviet-red-dark);
+    border: 1px solid var(--red-main);
     flex-shrink: 0;
     overflow: hidden;
     position: relative;
-    box-shadow: 0 0 12px rgba(139, 0, 0, 0.4);
+    box-shadow: 0 0 15px rgba(204, 0, 0, 0.4);
   }
   .sub-photo img {
     width: 100%; height: 100%;
     object-fit: cover;
-    filter: sepia(0.9) hue-rotate(-15deg) saturate(1.5) contrast(1.3) brightness(0.75);
+    filter: grayscale(1) contrast(1.4) brightness(0.8);
   }
   .sub-photo::after {
     content: '';
     position: absolute; inset: 0;
-    background: linear-gradient(180deg, transparent 60%, rgba(139, 0, 0, 0.4) 100%);
+    background: linear-gradient(180deg, transparent 60%, rgba(204, 0, 0, 0.4) 100%);
     pointer-events: none;
   }
   .sub-desc {
     font-size: 14px;
     line-height: 1.8;
-    color: var(--text-main);
+    color: var(--white-main);
     text-align: justify;
     flex: 1;
   }
-  .rel-tags { margin-top: 14px; display: flex; gap: 8px; flex-wrap: wrap; padding-top: 10px; border-top: 1px dashed var(--border-color); }
+  .rel-tags { margin-top: 14px; display: flex; gap: 8px; flex-wrap: wrap; padding-top: 10px; border-top: 1px dashed var(--red-dark); }
   .mini-tag {
-    background: var(--soviet-red); 
-    color: var(--text-main);
+    background: var(--red-main); 
+    color: var(--white-main);
     padding: 3px 12px; 
     font-size: 11px; 
     font-weight: bold; 
     text-transform: uppercase;
     letter-spacing: 2px;
-    border: 1px solid var(--soviet-red-bright);
-    box-shadow: 0 0 8px rgba(212, 0, 0, 0.5);
+    border: 1px solid var(--red-bright);
+    box-shadow: 0 0 8px rgba(204, 0, 0, 0.5);
   }
 
   /* ==================== ЭКРАН БЛОКИРОВКИ ==================== */
@@ -820,62 +783,63 @@
     content: '';
     position: absolute;
     top: 20px; left: 20px; right: 20px;
-    height: 8px;
+    height: 4px;
     background: repeating-linear-gradient(45deg,
-      var(--warning-yellow) 0px, var(--warning-yellow) 12px,
-      #000 12px, #000 24px);
-    opacity: 0.6;
+      var(--red-bright) 0px, var(--red-bright) 10px,
+      #000 10px, #000 20px);
+    opacity: 0.8;
   }
   .lock-screen::after {
     content: '';
     position: absolute;
     bottom: 20px; left: 20px; right: 20px;
-    height: 8px;
+    height: 4px;
     background: repeating-linear-gradient(45deg,
-      var(--warning-yellow) 0px, var(--warning-yellow) 12px,
-      #000 12px, #000 24px);
-    opacity: 0.6;
+      var(--red-bright) 0px, var(--red-bright) 10px,
+      #000 10px, #000 20px);
+    opacity: 0.8;
   }
   .lock-title {
-    font-size: 34px; color: var(--soviet-red-bright);
+    font-size: 34px; color: var(--red-bright);
     text-transform: uppercase; letter-spacing: 10px;
     text-shadow: var(--glow-red);
     animation: alertBlink 1s step-end infinite;
-    border: 2px solid var(--soviet-red-bright);
+    border: 2px solid var(--red-bright);
     padding: 12px 32px;
-    background: rgba(139, 0, 0, 0.15);
+    background: rgba(204, 0, 0, 0.15);
+    font-style: italic;
   }
   @keyframes alertBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
   .lock-sub { 
     font-size: 13px; 
-    color: var(--text-dim); 
+    color: var(--white-dim); 
     letter-spacing: 4px;
     text-transform: uppercase;
   }
   .lock-sub::before, .lock-sub::after {
     content: ' // ';
-    color: var(--soviet-red);
+    color: var(--red-main);
   }
   
   .lock-input-wrap { display: flex; flex-direction: column; gap: 16px; margin-top: 20px; align-items: center; }
   .lock-input {
     background: #000; 
-    border: 2px solid var(--soviet-red-bright);
-    color: var(--amber); 
+    border: 2px solid var(--red-bright);
+    color: var(--white-main); 
     font-size: 24px; letter-spacing: 10px;
     padding: 14px 20px; text-align: center; outline: none;
     font-family: inherit; width: 380px;
-    box-shadow: 0 0 25px rgba(212, 0, 0, 0.5), inset 0 0 20px rgba(139, 0, 0, 0.3);
-    text-shadow: var(--glow-amber);
+    box-shadow: 0 0 25px rgba(204, 0, 0, 0.5), inset 0 0 20px rgba(204, 0, 0, 0.3);
+    text-shadow: var(--glow-white);
   }
-  .lock-input::placeholder { color: #3a2010; letter-spacing: 4px; }
+  .lock-input::placeholder { color: #333; letter-spacing: 4px; }
   .lock-input:focus {
-    box-shadow: 0 0 40px rgba(255, 26, 26, 0.7), inset 0 0 30px rgba(139, 0, 0, 0.4);
+    box-shadow: 0 0 40px rgba(255, 26, 26, 0.7), inset 0 0 30px rgba(204, 0, 0, 0.4);
   }
   .lock-btn {
     background: transparent; 
-    border: 2px solid var(--soviet-red-bright);
-    color: var(--soviet-red-bright); 
+    border: 2px solid var(--red-bright);
+    color: var(--red-bright); 
     font-size: 14px; letter-spacing: 4px;
     padding: 12px 34px; cursor: pointer; text-transform: uppercase;
     font-family: inherit; transition: 0.2s;
@@ -883,12 +847,12 @@
     position: relative;
   }
   .lock-btn:hover { 
-    background: var(--soviet-red); 
-    color: var(--text-main); 
+    background: var(--red-main); 
+    color: var(--white-main); 
     box-shadow: var(--glow-red);
   }
   .lock-error { 
-    color: var(--soviet-red-bright); 
+    color: var(--red-bright); 
     font-size: 13px; 
     letter-spacing: 3px; 
     text-transform: uppercase; 
@@ -899,49 +863,51 @@
   /* ==================== ФЕТИШ ОБЪЕКТЫ ==================== */
   .ops-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
   .ops-card {
-    border: 1px solid var(--border-color);
-    border-top: 3px solid var(--soviet-red);
-    background: rgba(10, 5, 5, 0.7);
+    border: 1px solid var(--red-dark);
+    border-top: 2px solid var(--red-main);
+    background: rgba(10, 10, 10, 0.8);
     padding: 16px;
     position: relative;
   }
   .ops-card::before {
     content: '';
     position: absolute;
-    top: 8px; right: 8px;
-    width: 6px; height: 6px;
-    background: var(--amber);
-    box-shadow: 0 0 8px var(--amber);
+    top: 0; right: 0;
+    width: 0; height: 0;
+    border-style: solid;
+    border-width: 0 20px 20px 0;
+    border-color: transparent var(--red-main) transparent transparent;
   }
   .ops-card h4 {
-    color: var(--amber); 
+    color: var(--white-main); 
     text-transform: uppercase; 
     letter-spacing: 3px;
-    border-bottom: 1px solid var(--soviet-red-dark); 
+    border-bottom: 1px solid var(--red-dark); 
     padding-bottom: 8px; 
     margin-bottom: 12px;
-    text-shadow: var(--glow-amber);
+    text-shadow: var(--glow-white);
     font-size: 14px;
+    font-style: italic;
   }
   .ops-card ul { list-style: none; }
   .ops-card ul li { 
     padding: 5px 0; 
-    border-bottom: 1px dashed rgba(139, 0, 0, 0.2); 
+    border-bottom: 1px dashed rgba(204, 0, 0, 0.2); 
     font-size: 13px; 
-    color: var(--text-main); 
+    color: var(--white-main); 
   }
-  .ops-card ul li::before { content: "▸ "; color: var(--soviet-red); }
+  .ops-card ul li::before { content: "▸ "; color: var(--red-bright); }
   .ops-full { grid-column: 1 / -1; }
-  .empty-note { color: var(--text-dim); font-style: italic; font-size: 12px; letter-spacing: 1px; }
+  .empty-note { color: var(--white-dim); font-style: italic; font-size: 12px; letter-spacing: 1px; }
 
   /* ==================== НИЖНЯЯ ПАНЕЛЬ ==================== */
   .bottom-bar {
     display: flex; justify-content: space-between; align-items: center;
     padding: 10px 16px;
-    border-top: 2px solid var(--soviet-red-dark);
-    background: linear-gradient(0deg, #0f0a05 0%, #080503 100%);
+    border-top: 2px solid var(--red-main);
+    background: linear-gradient(0deg, #0a0a0a 0%, #050505 100%);
     font-size: 11px;
-    color: var(--text-dim);
+    color: var(--white-dim);
     text-transform: uppercase;
     letter-spacing: 2px;
     position: relative;
@@ -952,40 +918,42 @@
     top: -2px; left: 0;
     width: 100%; height: 2px;
     background: repeating-linear-gradient(90deg, 
-      var(--warning-yellow) 0px, var(--warning-yellow) 12px,
-      #000 12px, #000 24px);
-    opacity: 0.7;
+      var(--red-bright) 0px, var(--red-bright) 15px,
+      #000 15px, #000 30px);
+    opacity: 0.8;
   }
   .bottom-bar .brand { 
-    color: var(--soviet-red-bright);
+    color: var(--red-bright);
     display: flex; align-items: center; gap: 8px;
+    font-weight: bold;
   }
-  .bottom-bar .brand::before { content: '★'; text-shadow: var(--glow-red); }
+  .bottom-bar .brand::before { content: '🐺'; filter: grayscale(1) brightness(2); }
   .bottom-bar .controls { display: flex; gap: 24px; }
-  .bottom-bar .controls span::before { content: "[ "; color: var(--soviet-red); }
-  .bottom-bar .controls span::after { content: " ]"; color: var(--soviet-red); }
+  .bottom-bar .controls span::before { content: "[ "; color: var(--red-main); }
+  .bottom-bar .controls span::after { content: " ]"; color: var(--red-main); }
 
-  /* ==================== ПРОПАГАНДА-ЛОЗУНГ ==================== */
+  /* ==================== ЛОЗУНГ ==================== */
   .slogan-bar {
-    background: var(--soviet-red-dark);
-    color: var(--text-main);
+    background: var(--red-dark);
+    color: var(--white-main);
     padding: 6px;
     text-align: center;
     font-size: 12px;
-    letter-spacing: 6px;
+    letter-spacing: 8px;
     text-transform: uppercase;
-    border-top: 1px solid var(--soviet-red-bright);
-    border-bottom: 1px solid var(--soviet-red-bright);
+    border-top: 1px solid var(--red-bright);
+    border-bottom: 1px solid var(--red-bright);
     margin-top: 10px;
     text-shadow: 0 0 5px rgba(0,0,0,0.8);
     font-weight: bold;
+    font-style: italic;
   }
-  .slogan-bar span { color: var(--warning-yellow); }
+  .slogan-bar span { color: var(--red-bright); text-shadow: var(--glow-red); }
 
   /* ==================== АДАПТИВ ==================== */
   @media (max-width: 900px) {
     .main-content { flex-direction: column; }
-    .sidebar { width: 100%; border-right: none; border-bottom: 3px solid var(--soviet-red-dark); flex-direction: row; overflow-x: auto; padding: 5px; }
+    .sidebar { width: 100%; border-left: none; border-bottom: 2px solid var(--red-main); flex-direction: row; overflow-x: auto; padding: 5px; }
     .sidebar::before { display: none; }
     .nav-btn { padding: 8px 12px; font-size: 11px; white-space: nowrap; }
     .sidebar-footer { display: none; }
@@ -995,7 +963,7 @@
     .ops-grid { grid-template-columns: 1fr; }
     .sub-body { flex-direction: column; align-items: center; }
     .lock-input { width: 100%; max-width: 320px; }
-    .section-title { font-size: 16px; letter-spacing: 3px; }
+    .section-title { font-size: 16px; letter-spacing: 4px; }
   }
 </style>
 </head>
@@ -1009,12 +977,12 @@
 <!-- ЭКРАН ЗАГРУЗКИ -->
 <div id="loadingScreen">
   <div class="loading-box">
-    <div class="loading-header">★ СИСТЕМА НАЦИИ ★</div>
-    <div class="loading-log" id="loadingLog">ИНИЦИАЛИЗАЦИЯ ЯДРА...</div>
-    <div class="loading-log" id="loadingLog2">ПОДКЛЮЧЕНИЕ К УЗЛУ NEUMOND...</div>
-    <div class="loading-log" id="loadingLog3">ДЕШИФРОВКА АРХИВА...</div>
-    <div class="loading-log" id="loadingLog4">ПРОВЕРКА ЛОЯЛЬНОСТИ...</div>
-    <div style="color: var(--amber); font-size: 22px; margin-top: 25px; text-align: center; letter-spacing: 6px;" id="loadingStatus">ЗАГРУЗКА...</div>
+    <div class="loading-header">SIRACUSA // LUPO // ДОСЬЕ</div>
+    <div class="loading-log" id="loadingLog">ИНИЦИАЛИЗАЦИЯ...</div>
+    <div class="loading-log" id="loadingLog2">ПОИСК ЦЕЛИ: TEXAS...</div>
+    <div class="loading-log" id="loadingLog3">ДЕШИФРОВКА ДАННЫХ...</div>
+    <div class="loading-log" id="loadingLog4">УРОВЕНЬ УГРОЗЫ: КРИТИЧЕСКИЙ...</div>
+    <div style="color: var(--red-bright); font-size: 22px; margin-top: 25px; text-align: center; letter-spacing: 8px; font-style: italic;" id="loadingStatus">ЗАГРУЗКА...</div>
   </div>
 </div>
 
@@ -1024,11 +992,11 @@
     
     <!-- ВЕРХНЯЯ ПАНЕЛЬ -->
     <div class="top-bar">
-      <div class="brand">СЕКРЕТНО // ЕРЕС-М-427 // АДМИРАЛ</div>
+      <div class="brand">SIRACUSA // LUPO // LAPPLAND</div>
       <div class="status">
-        <span>СЕССИЯ: АКТИВНА</span>
-        <span>ID: ADLR-018</span>
-        <span class="alarm" id="liveClock">00:00:00</span>
+        <span>СТАТУС: АКТИВЕН</span>
+        <span>ID: LAPP-001</span>
+        <span id="liveClock">00:00:00</span>
       </div>
     </div>
 
@@ -1040,11 +1008,10 @@
         <button class="nav-btn active" data-tab="tab1">ОСНОВНАЯ ИНФОРМАЦИЯ</button>
         <button class="nav-btn" data-tab="tab2">ПРЕДЫСТОРИЯ</button>
         <button class="nav-btn" data-tab="tab3">СОЦИАЛИЗАЦИЯ</button>
-        <button class="nav-btn locked" data-tab="tab4" id="statusTabBtn">ФЕТИШ ОБЪЕКТЫ</button>
+        <button class="nav-btn locked" data-tab="tab4" id="statusTabBtn">СЕКРЕТНЫЕ ФАЙЛЫ</button>
         
         <div class="sidebar-footer">
-          <span class="star">★ ★ ★</span>
-          СЛАВА НАЦИИ!
+          TEXAS...<br>ГДЕ ТЫ?
         </div>
       </div>
 
@@ -1057,48 +1024,47 @@
           <div class="info-grid">
             <div class="info-left">
               <div class="photo-frame">
-                <img src="https://i.ibb.co/svptbbT8/2026-09-11-131846.png" alt="ADLR">
+                <!-- Замените эту ссылку на изображение Лаппланд -->
+                <img src="https://i.pinimg.com/736x/8a/3a/0e/8a3a0e8c9f2b1a0d8e7f6c5b4a3d2e1f.jpg" alt="LAPPLAND">
               </div>
               <div class="data-block">
-                <div class="data-row"><span class="label">МОДУЛЬ:</span><span class="value">ADLR №018</span></div>
-                <div class="data-row"><span class="label">М.ПРОИЗВОДСТВА:</span><span class="value">ХАЙМАТ</span></div>
-                <div class="data-row"><span class="label">ПР. ОБЪЕКТ:</span><span class="value">ОРБИТА ВИНЕТЫ</span></div>
-                <div class="data-row"><span class="label">СТАНЦИЯ:</span><span class="value">NEUMOND</span></div>
+                <div class="data-row"><span class="label">ИМЯ:</span><span class="value">ЛАППЛАНД</span></div>
+                <div class="data-row"><span class="label">РАСА:</span><span class="value">ЛУПО</span></div>
+                <div class="data-row"><span class="label">ФРАКЦИЯ:</span><span class="value">СИРАКУЗЫ</span></div>
+                <div class="data-row"><span class="label">КЛАСС:</span><span class="value">БОЕЦ</span></div>
               </div>
               <div class="data-block">
-                <div class="data-row"><span class="label">СТАТУС:</span><span class="value status-alive">ЖИВ | АКТИВЕН</span></div>
-                <div class="data-row"><span class="label">ОБОЛОЧКА:</span><span class="value">РЕПЛИКА</span></div>
-                <div class="data-row"><span class="label">ФРАКЦИЯ:</span><span class="value">Нация Евсан</span></div>
-                <div class="data-row"><span class="label">ДОСТУП:</span><span class="value">Руководство</span></div>
+                <div class="data-row"><span class="label">СТАТУС:</span><span class="value status-alive">ЖИВ | ОПАСЕН</span></div>
+                <div class="data-row"><span class="label">УГРОЗА:</span><span class="value" style="color: #ff1a1a;">КРИТИЧЕСКАЯ</span></div>
+                <div class="data-row"><span class="label">ОРУЖИЕ:</span><span class="value">ПАРА КЛИНКОВ</span></div>
+                <div class="data-row"><span class="label">ДОСТУП:</span><span class="value">ОГРАНИЧЕН</span></div>
               </div>
             </div>
             
             <div class="info-right">
               <details class="bio-section" open>
-                <summary>ОСОБЕННОСТИ ЛИЧНОСТИ</summary>
+                <summary>ВНЕШНИЕ ОСОБЕННОСТИ</summary>
                 <ul>
-                  <li>Ношение бронежилета</li>
-                  <li>Волосы длиннее стандартного</li>
-                  <li>Подсумки на поясе</li>
-                  <li>Аксессуар в виде "каменного цветка"</li>
+                  <li>Белые растрепанные волосы</li>
+                  <li>Волчьи уши и хвост</li>
+                  <li>Шрам на левой стороне лица</li>
+                  <li>Оскал и острые клыки</li>
+                  <li>Черно-белый костюм с красными элементами</li>
                 </ul>
               </details>
               <details class="bio-section">
                 <summary>ПСИХОЛОГИЧЕСКИЙ ПРОФИЛЬ</summary>
                 <ul>
-                  <li>Взгляд зачастую холодный</li>
-                  <li>Походка спокойная, руки за спиной</li>
-                  <li>Говорит на вы, редко переходит на неформальное общение</li>
-                  <li>Часто задумчив</li>
-                  <li>В голосе эмоции сведены к минимуму</li>
+                  <li>Маниакальное поведение</li>
+                  <li>Одержимость Техас</li>
+                  <li>Склонность к насилию</li>
+                  <li>Хаотичный боевой стиль</li>
+                  <li>Нестабильное эмоциональное состояние</li>
                 </ul>
               </details>
               <div class="med-card">
                 <h4>✑ ЛИЧНЫЕ ЗАПИСИ</h4>
-                <p>«Бюрократия - это не сухие бумаги и печати, а тихий, невидимый каркас, на котором держится порядок. 
-Она превращает хаос в правила, случай - в справедливость, а обещания - в обязательства, которые переживут смену правителей и поколений. 
-Там, где всё рушится, она хранит память о договорах; там, где страсти кипят, она даёт холодную, но спасительную стену процедур. 
-Без неё даже самая добрая воля осталась бы прекрасным порывом, который никто не сумел бы воплотить в жизнь.» - ADLR.</p>
+                <p>«Техас... Я знаю, ты где-то здесь. Ты чувствуешь это? Этот запах крови и пороха. Он ведет меня к тебе. Мы еще не закончили нашу игру. Я найду тебя, где бы ты ни пряталась. И тогда... мы устроим настоящий праздник. Ха-ха-ха!» — LAPPLAND.</p>
               </div>
             </div>
           </div>
@@ -1108,11 +1074,11 @@
         <div id="tab2" class="tab-content">
           <div class="section-title">ПРЕДЫСТОРИЯ</div>
           <div class="history-text">
-Модуль ADLR-018 произведен 18.12.2156 на репликационном комплексе URSIUS-881, что располагается на центральном мире Хаймат. Первые циклы как и прочие модели данной серии провел на учебном полигоне APPOLIONE, предназначен для подготовки всех административных единиц к работе на различных объектах АЕОН и НАЦИИ.
+Лаппланд — бывшая член семьи Сиракуз, одна из самых опасных и непредсказуемых фигур в преступном мире. Её имя вызывает страх даже у самых закаленных бойцов. Когда-то она была наследницей влиятельной семьи, но предательство и жажда власти превратили её в изгоя.
 
-Согласно протоколам тестирования, модуль не демонстрировал отклонений, деградации, отхождения от поведенческой нормы. Физических дефектов или же брака также не наблюдалось. Показатели исполнительности, логической обработки и следования протоколам, предписаниям находились в стандартной отметке нормы. Модуль признан пригодным к дальнейшему распределению на один из объектов для службы НАЦИИ.
+После событий, связанных с Техас, Лаппланд полностью потеряла связь с реальностью. Её единственная цель — найти Техас и завершить их давнюю вражду. Она не остановится ни перед чем: ни перед законами Сиракуз, ни перед правилами Родоса, ни перед здравым смыслом.
 
-По завершению курса подготовки модуль ADLR-018 был перенаправлен на ОРБИТАЛЬНУЮ СТАНЦИЮ РЕТРАНСЛЯТОР NEUMOND, в качестве административной единицы управления.
+Её боевой стиль — это хаос и ярость. Она использует пару клинков, нанося молниеносные удары, не оставляя противнику ни единого шанса. Многие считают её сумасшедшей, но в этом безумии есть своя логика. Лаппланд — хищник, а хищники не знают пощады.
           </div>
         </div>
 
@@ -1139,71 +1105,29 @@
 
             <div class="social-lists">
               <div class="social-col">
-                <h3>РЕПЛИКИ</h3>
-                <span class="group-header" data-group="eulr">EULR</span>
-                <div class="sub-items" id="group-eulr">
-                  <span class="item-link" data-target="eulr724">EULR.724</span>
-                  <span class="item-link" data-target="eulr546">EULR.546</span>
-                  <span class="item-link" data-target="eulr381">EULR.381</span>
-                  <span class="item-link" data-target="eulr401">EULR.401</span>
-                  <span class="item-link" data-target="eulr322">EULR.322</span>
+                <h3>ОПЕРАТОРЫ</h3>
+                <span class="group-header" data-group="texas">TEXAS</span>
+                <div class="sub-items" id="group-texas">
+                  <span class="item-link" data-target="texas">TEXAS</span>
                 </div>
-                <span class="group-header" data-group="arar">ARAR</span>
-                <div class="sub-items" id="group-arar">
-                  <span class="item-link" data-target="arar841">ARAR.841</span>
-                  <span class="item-link" data-target="arar978">ARAR.978</span>
-                  <span class="item-link" data-target="arar595">ARAR.595</span>
-                  <span class="item-link" data-target="arar102">ARAR.102</span>
-                  <span class="item-link" data-target="arar669">ARAR.669</span>
-                  <span class="item-link" data-target="arar505">ARAR.505</span>
+                <span class="group-header" data-group="siracusa">SIRACUSA</span>
+                <div class="sub-items" id="group-siracusa">
+                  <span class="item-link" data-target="siracusa">ДОН СИРАКУЗА</span>
                 </div>
-                <span class="group-header" data-group="mnhr">MNHR</span>
-                <div class="sub-items" id="group-mnhr">
-                  <span class="item-link" data-target="mnhr.300">MNHR.300</span>
-                  <span class="item-link" data-target="mnhr.063">MNHR.063</span>
-                </div>
-                <span class="group-header" data-group="star">STAR</span>
-                <div class="sub-items" id="group-star">
-                  <span class="item-link" data-target="star114">STAR.114</span>
-                  <span class="item-link" data-target="star603">STAR.603</span>
-                  <span class="item-link" data-target="star762">STAR.762</span>
-                </div>
-                <span class="group-header" data-group="stcr">STCR</span>
-                <div class="sub-items" id="group-stcr">
-                  <span class="item-link" data-target="strc213">STRC.213</span>
-                </div>
-                <span class="group-header" data-group="klbr">KLBR</span>
-                <div class="sub-items" id="group-klbr">
-                  <span class="item-link" data-target="klbr080">KLBR.080</span>
-                </div>
-                <span class="group-header" data-group="kahr">KAHR</span>
-                <div class="sub-items" id="group-kahr">
-                  <span class="item-link" data-target="kahr">KAHR</span>
-                </div>
-                <span class="group-header" data-group="fklr">FKLR</span>
-                <div class="sub-items" id="group-fklr">
-                  <span class="item-link" data-target="fklr">FKLR</span>
+                <span class="group-header" data-group="rhodes">RHODES ISLAND</span>
+                <div class="sub-items" id="group-rhodes">
+                  <span class="item-link" data-target="rhodes">ДОКТОР</span>
+                  <span class="item-link" data-target="amiya">АМИЯ</span>
+                  <span class="item-link" data-target="kaltsit">КЕЛЬСИТ</span>
                 </div>
               </div>
 
               <div class="social-col">
-                <h3>ГЕШТАЛЬТЫ</h3>
-                <span class="group-header" data-group="gscc">GSCC</span>
-                <div class="sub-items" id="group-gscc">
-                  <span class="item-link" data-target="gsccberta">GSCC.Берта Фёгель</span>
-                  <span class="item-link" data-target="gsccartem">GSCC.Артемий Овечкин</span>
-                  <span class="item-link" data-target="gsccfrida">GSCC.Фрида Шульц</span>
-                  <span class="item-link" data-target="gsccrahab">GSCC.Рахаб Йокинен</span>
-                  <span class="item-link" data-target="gscckirra">GSCC.Кирра Фостер</span>
-                </div>
-                <span class="group-header" data-group="gscp">GSCP</span>
-                <div class="sub-items" id="group-gscp">
-                  <span class="item-link" data-target="gscpanna">GSCP.Анна Леонхард</span>
-                  <span class="item-link" data-target="gscpseira">GSCP.Сейра</span>
-                  <span class="item-link" data-target="gscpgodjo">GSCP.Годжо</span>
-                  <span class="item-link" data-target="gscp316">GSCP.316</span>
-                  <span class="item-link" data-target="gscp168">GSCP.168</span>
-                  <span class="item-link" data-target="gscp999">GSCP.999</span>
+                <h3>ЦЕЛИ</h3>
+                <span class="group-header" data-group="targets">АКТИВНЫЕ ЦЕЛИ</span>
+                <div class="sub-items" id="group-targets">
+                  <span class="item-link" data-target="texas">TEXAS (ОСНОВНАЯ)</span>
+                  <span class="item-link" data-target="unknown">НЕИЗВЕСТНО</span>
                 </div>
               </div>
             </div>
@@ -1212,147 +1136,59 @@
             <div class="desc-panel" id="descPanel">
               <div class="empty-state">ОЖИДАНИЕ ВВОДА _</div>
 
-              <div class="sub-card" id="card-eulr724" data-relations="c-respect">
-                <div class="sub-header">EULR.724 <span class="close-btn" data-close="eulr724">[X]</span></div>
+              <div class="sub-card" id="card-texas" data-relations="c-enemy c-love">
+                <div class="sub-header">TEXAS <span class="close-btn" data-close="texas">[X]</span></div>
                 <div class="sub-body">
-                  <div class="sub-photo"><img src="https://i.ibb.co/tMjg59rn/SIGNALIS-games-Eule-Signalis-8612334.png" alt="EULR.724"></div>
-                  <div class="sub-desc">Хорошо себя проявила как глава отдела и как "старшая сестра" среди прочих Сов. Отличается более холодным и рассудительным характером. По началу мне казалось, что она сама серьезность, но заметив некоторые фрагменты ее "личности" прихожу к простому выводу. Она такая же совушка как и прочие, но только отличается тем имеет намного больше опыта. Поэтому каждое ее слово, действие, поступок и даже мимика крайне выверенная за это время. Что же до ее прошлого, то мне известно крайне мало, Анна была с Рот-Фронта и работала ранее там в мед учреждение. Часто интересуется моим состоянием, приятно с ней общаться, хоть и крайне редко выходит. Оценка: крайне хороший модуль, хочу с ней поговорить побольше в будущем.</div>
+                  <div class="sub-photo"><img src="https://i.pinimg.com/736x/8a/3a/0e/8a3a0e8c9f2b1a0d8e7f6c5b4a3d2e1f.jpg" alt="TEXAS"></div>
+                  <div class="sub-desc">Она... она всегда была особенной. Техас. Моя навязчивая идея. Моя цель. Мой враг. Мой... всё. Я не могу перестать думать о ней. Её запах, её движения, её холодный взгляд. Я найду её. Я заставлю её ответить за всё. За предательство. За то, что она бросила меня. За то, что она пыталась стать кем-то другим. Мы связаны кровью, и только кровью это можно разорвать. Ха-ха-ха! Я уже чувствую, как мои клинки впиваются в её плоть. Это будет... прекрасно.</div>
                 </div>
-                <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
+                <div class="rel-tags">
+                  <span class="mini-tag c-enemy">ВРАЖДА</span>
+                  <span class="mini-tag c-love">ОДЕРЖИМОСТЬ</span>
+                </div>
               </div>
 
-              <div class="sub-card" id="card-eulr546" data-relations="c-respect">
-                <div class="sub-header">EULR.546 <span class="close-btn" data-close="eulr546">[X]</span></div>
+              <div class="sub-card" id="card-rhodes" data-relations="c-neutral">
+                <div class="sub-header">ДОКТОР <span class="close-btn" data-close="rhodes">[X]</span></div>
                 <div class="sub-body">
-                  <div class="sub-photo"><img src="https://img1.joyreactor.com/pics/post/full/SIGNALIS-games-Eule-(Signalis)-9459619.jpeg" alt="EULR.546"></div>
-                  <div class="sub-desc">Отличается своей добротой даже среди совушек. Кажется у нее нет конфликтов с модулями и рабочими и даже напротив. Взаимоотношение на крайне высоком уровне со всеми рабочими и военными. Так же проявила интерес в общение со мной, ответил тем же. Так она получила две кассеты с кинофильмами на временное пользование. Взамен она подарила мне крайне прекрасный дневник, кажется фирма, что их выпускала была сокращенна еще несколько лет назад... Но видимо Шафо смогла урвать хороший вариант. Думаю в будущем нужно как то ей ответить...</div>
-                </div>
-                <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
-              </div>
-
-              <div class="sub-card" id="card-eulr381" data-relations="c-respect">
-                <div class="sub-header">EULR.381 <span class="close-btn" data-close="eulr381">[X]</span></div>
-                <div class="sub-body">
-                  <div class="sub-photo"><img src="https://img1.joyreactor.com/pics/post/SIGNALIS-games-Eule-(Signalis)-8578899.jpeg"></div>
-                  <div class="sub-desc">Так же одна из самых "староживущих" модулей, отличается среди прочих сов своей "двуличностью". Перед административным модулями старается показывать крайне... "холодный" - "механический" характер. Но когда рядом с ней ее сестры или же АРЫ, становится крайне "возбужденной" совой на тактильные действия. 
-Запомнилась тем, что во время того как гравитация спала к нулевому уровню на нашем комплексе, помогал ей добраться до МО. Интересно помнит ли она такое?</div>
-                </div>
-                <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
-              </div>
-
-              <div class="sub-card" id="card-eulr401" data-relations="c-respect">
-                <div class="sub-header">EULR.401 <span class="close-btn" data-close="eulr401">[X]</span></div>
-                <div class="sub-body">
-                  <div class="sub-photo"><img src="https://img1.joyreactor.com/pics/post/SIGNALIS-games-Eule-(Signalis)-8571543.png"></div>
-                  <div class="sub-desc">Одна из самых юных среди модулей Сов, отличилась по началу своими незначительными ошибками, но со временем проявила хорошие навыки в медицине, а так же в социальном взаимодействие. Ошибки в основе своей лишь касались ее неопытности работы на Ерес, где смерть, травмы и БРУ не исключения, а постоянные вызовы персоналу. Что же до модуля Руми, можно выделить, что хорошая сова. Лишь чаще появлялась бы на сменах и на окладах. 
-Более нет вопросов к ее рабочей эффективности.</div>
-                </div>
-                <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
-              </div>
-
-              <div class="sub-card" id="card-eulr322" data-relations="c-respect">
-                <div class="sub-header">EULR.322 <span class="close-btn" data-close="eulr322">[X]</span></div>
-                <div class="sub-body">
-                  <div class="sub-photo"><img src="https://img1.joyreactor.com/pics/post/SIGNALIS-games-Eule-(Signalis)-9151211.jpeg"></div>
-                  <div class="sub-desc">Совушка совой, работает исправно, что то более я не замечал за ней. Ходила хвостиком за остальными совушками, думая она в хороших отношениях с ними. В целом... Достойный модуль, но интереса для взаимодействия крайне низкое.</div>
-                </div>
-                <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
-              </div>
-
-              <div class="sub-card" id="card-fklr" data-relations="c-respect">
-                <div class="sub-header">FKLR <span class="close-btn" data-close="fklr">[X]</span></div>
-                <div class="sub-body">
-                  <div class="sub-photo"><img src="https://i.pinimg.com/1200x/b4/b6/0f/b4b60f73159f04c50274cec210be7d61.jpg"></div>
-                  <div class="sub-desc">Командующая, первая за все мои циклы. Крайне мудрая и расчетливая. Действия ее аккуратны и грамотны. Каждый разговор с ней схожий на игру шахмат, где никогда не знает как она поставит фигуру, но каждый раз расчетливо обдумывает свои слова и действия. Слова ее зачастую не несут ответа, а лишь оценку и будто ветер направляет к собственному выводу. В свободном разговоре, она все так же обдумывает и перебирает информацию, произнеся лишь самое необходимое. Никто не похож на нее, даже хоть немного. Мои ожидания оправдались.
-Она вытащила карту императрицы, это застало меня врасплох. Кхм, интересно, а что она знает об этой загадочной личности? 
-В простом общение не многословна. Отвечает полу ответами и зачастую крайне... Неоднозначно. Старается или всегда так говорит, но скрывает любые полноценные факты о себе. Все, что я смог узнать. Работала в НИИ, что занимался резонанс технологиями и находился на Рот-Фронте. Деталей прочих.., К сожалению не смог выведать. В будущем планирую сделать ей подарок/сюрприз. Пару раз заставлял ее улыбаться... Это было приятно и красиво.
-Если брать мифологию ей крайне подошел бы образ "Афины".</div>
-                </div>
-                <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
-              </div>
-
-              <div class="sub-card" id="card-kahr" data-relations="c-respect">
-                <div class="sub-header">KAHR <span class="close-btn" data-close="kahr">[X]</span></div>
-                <div class="sub-body">
-                  <div class="sub-photo"><img src="https://avatars.mds.yandex.net/i?id=ed02ad9281bd5ab9ab0b35d6be02e831_l-4549902-images-thumbs&n=13"></div>
-                  <div class="sub-desc">Что можно сказать о командующей Крахе? Мало говорит, а что говорит то всегда по дело, лаконичность ее главная черта в общение. Остра на язык, в отличие от командующей Фальке, не сдерживается на яркие выражения. Наши взаимодействия крайне редки и все же, сомнения в ее действиях отсутствуют. Если сравнивать ее с богом из мифологии... Аид.
-Интересно, почему она так любит закрывать двери... Чем вызвано ее столь страстное желание их закрывать... Думаю, я явно что-то не знаю.</div>
-                </div>
-                <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
-              </div>
-
-              <div class="sub-card" id="card-klbr080" data-relations="c-respect">
-                <div class="sub-header">KLBR.080 <span class="close-btn" data-close="klbr080">[X]</span></div>
-                <div class="sub-body">
-                  <div class="sub-photo"><img src="https://i.ibb.co/0pggLsYc/KLBRmim808.png"></div>
-                  <div class="sub-desc">Последняя колибри среди тех с кем я был знаком на этом объекте. Весьма приятная в разговоре, работает так же крайне эффективно. Жаль, что мы мало пока общались, думаю она многое сможет мне сообщить полезное или же интересное. Она так же крайне любит шоколад... Кхм, даже интересно, сколько его в общежитие их. </div>
-                </div>
-                <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
-              </div>
-
-              <div class="sub-card" id="card-strc213" data-relations="c-respect">
-                <div class="sub-header">STRC.213 <span class="close-btn" data-close="strc213">[X]</span></div>
-                <div class="sub-body">
-                  <div class="sub-photo"><img src="https://i.ibb.co/PG77SnTT/2026-04-10-14-01-29.png"></div>
-                  <div class="sub-desc">Шторхи и ранее мне казались строгими, но данный модуль крайне... Вежливым и аккуратным. Сравнивая с некоторыми другими представителями СБ, а до этого и ВП, она и вовсе показалось "нежной" в своих действия. В рабочем плане я могу лишь сказать, что она крайне ответственный модуль.
-Я замечал они часто общались с Анной, интересно как такая дружба возникла.</div>
-                </div>
-                <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
-              </div>
-
-              <div class="sub-card" id="card-star603" data-relations="c-respect">
-                <div class="sub-header">STAR.603 <span class="close-btn" data-close="star603">[X]</span></div>
-                <div class="sub-body">
-                  <div class="sub-photo"><img src="https://i.ibb.co/TMZTkhM1/star1.png"></div>
-                  <div class="sub-desc">Хороший модуль Штар, добросовестно выполняющий свою работу. Излишне мне говорить про нее нечего... Хотя... Я заметил ее интерес в сторону Сов, а после разговора с Анной, думаю она крайне социальная в отношение одной совы, но которой, мне неизвестно. Кхм... В целом, пускай отдыхает вне рабочее время.</div>
-                </div>
-                <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
-              </div>
-
-              <div class="sub-card" id="card-star762" data-relations="c-neutral">
-                <div class="sub-header">STAR.762 <span class="close-btn" data-close="star762">[X]</span></div>
-                <div class="sub-body">
-                  <div class="sub-photo"><img src="https://i.ibb.co/TMZTkhM1/star1.png"></div>
-                  <div class="sub-desc">Хороший модуль, большего мне сказать нечего.</div>
+                  <div class="sub-photo"><img src="https://i.pinimg.com/736x/8a/3a/0e/8a3a0e8c9f2b1a0d8e7f6c5b4a3d2e1f.jpg" alt="DOCTOR"></div>
+                  <div class="sub-desc">Доктор Родоса... Интересный человек. Он пытается понять меня, но это бесполезно. Я не нуждаюсь в понимании. Мне нужна только охота. Он дает мне цели, а я выполняю работу. Пока это выгодно нам обоим. Но если он встанет у меня на пути... что ж, посмотрим, как он справится с волком.</div>
                 </div>
                 <div class="rel-tags"><span class="mini-tag c-neutral">НЕЙТРАЛИТЕТ</span></div>
               </div>
 
-              <div class="sub-card" id="card-star114" data-relations="c-neutral">
-                <div class="sub-header">STAR.114 <span class="close-btn" data-close="star114">[X]</span></div>
+              <div class="sub-card" id="card-amiya" data-relations="c-neutral">
+                <div class="sub-header">АМИЯ <span class="close-btn" data-close="amiya">[X]</span></div>
                 <div class="sub-body">
-                  <div class="sub-photo"><img src="https://i.ibb.co/TMZTkhM1/star1.png"></div>
-                  <div class="sub-desc">Только вышла с ночной и стала активно работать. Посмотрим как покажет.</div>
+                  <div class="sub-photo"><img src="https://i.pinimg.com/736x/8a/3a/0e/8a3a0e8c9f2b1a0d8e7f6c5b4a3d2e1f.jpg" alt="AMIYA"></div>
+                  <div class="sub-desc">Маленький кролик. Она пытается быть лидером, но у нее еще молоко на губах не обсохло. Забавно наблюдать за ее потугами. Впрочем, она не мешает мне. Пока.</div>
                 </div>
                 <div class="rel-tags"><span class="mini-tag c-neutral">НЕЙТРАЛИТЕТ</span></div>
               </div>
 
-              <div class="sub-card" id="card-mnhr.300" data-relations="c-respect">
-                <div class="sub-header">MNHR.300 <span class="close-btn" data-close="mnhr.300">[X]</span></div>
+              <div class="sub-card" id="card-kaltsit" data-relations="c-cautious">
+                <div class="sub-header">КЕЛЬСИТ <span class="close-btn" data-close="kaltsit">[X]</span></div>
                 <div class="sub-body">
-                  <div class="sub-photo"><img src="https://i.ibb.co/WJrBSN3/MNHR1.webp"></div>
-                  <div class="sub-desc">Хороший надежный модуль, проявила себя как прекрасный глава отдела. Смогла отработать свои ПН и после не нарушала. Правда с отделом слегка ей не свезло, модулей Майн крайне редко к нам привозят на объект, что создает свои трудности.
-Проявила интерес к Китежу... Планировал как то ее спросить об этом, но утерял нить и прошло крайне много времени. 
-Сейчас приходит ко мне на оклады в отдельное время... Стоит ее задержать и разговорить, заодно узнаю как идет ее работа. 
-Самый работящий модуль на нашем объекте, кажется она вовсе не отдыхает.</div>
+                  <div class="sub-photo"><img src="https://i.pinimg.com/736x/8a/3a/0e/8a3a0e8c9f2b1a0d8e7f6c5b4a3d2e1f.jpg" alt="KALTSIT"></div>
+                  <div class="sub-desc">Эта женщина... она слишком много знает. И она смотрит на меня так, будто видит насквозь. Мне это не нравится. С ней нужно быть осторожнее. Очень осторожно.</div>
                 </div>
-                <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
+                <div class="rel-tags"><span class="mini-tag c-cautious">НАСТОРОЖЕННОСТЬ</span></div>
               </div>
 
-              <div class="sub-card" id="card-mnhr.063" data-relations="c-respect">
-                <div class="sub-header">MNHR.063 <span class="close-btn" data-close="mnhr.063">[X]</span></div>
+              <div class="sub-card" id="card-unknown" data-relations="c-fear">
+                <div class="sub-header">НЕИЗВЕСТНО <span class="close-btn" data-close="unknown">[X]</span></div>
                 <div class="sub-body">
-                  <div class="sub-photo"><img src="https://i.ibb.co/WJrBSN3/MNHR1.webp"></div>
-                  <div class="sub-desc">Проявила пока себя не столь значимо. Работает хорошо, в общение не видел. Прибыла вместе со своей сестрой, но осталась теперь тут одна. Стоит ее повысить в ранге.</div>
+                  <div class="sub-photo"><img src="https://i.pinimg.com/736x/8a/3a/0e/8a3a0e8c9f2b1a0d8e7f6c5b4a3d2e1f.jpg" alt="UNKNOWN"></div>
+                  <div class="sub-desc">Тьма. Она шепчет мне. Я слышу голоса. Они зовут меня. Они говорят, что я должна убивать. И я слушаю. Потому что это единственное, что имеет смысл.</div>
                 </div>
-                <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
+                <div class="rel-tags"><span class="mini-tag c-fear">СТРАХ</span></div>
               </div>
 
             </div>
           </div>
         </div>
 
-        <!-- ВКЛАДКА 4: ФЕТИШ ОБЪЕКТЫ (ЗАБЛОКИРОВАНО) -->
+        <!-- ВКЛАДКА 4: СЕКРЕТНЫЕ ФАЙЛЫ (ЗАБЛОКИРОВАНО) -->
         <div id="tab4" class="tab-content">
           <div class="lock-screen" id="lockScreen">
             <div class="lock-title">[ ДОСТУП ЗАПРЕЩЁН ]</div>
@@ -1367,55 +1203,44 @@
           <div class="status-unlocked" id="statusUnlocked">
             <div class="ops-grid">
               <div class="ops-card">
-                <h4>История: Античного Мира</h4>
+                <h4>СЕКРЕТНЫЕ ФАЙЛЫ: СИРАКУЗЫ</h4>
                 <ul>
-                  <li>Эллинистический Египет</li>
-                  <li>Империя Селевкидов</li>
-                  <li>Парфия</li>
+                  <li>Досье на семью Техас</li>
+                  <li>История предательства</li>
+                  <li>Карта преступной сети</li>
                 </ul>
               </div>
               <div class="ops-card">
-                <h4>История: Древних Государств</h4>
+                <h4>ПСИХИАТРИЧЕСКИЕ ОТЧЕТЫ</h4>
                 <ul>
-                  <li>Рим</li>
-                  <li>Египет</li>
-                  <li>Персия</li>
-                  <li>Греция</li>
-                  <li>Шумеры</li>
-                  <li>Крит</li>
+                  <li>Диагноз: Маниакальный психоз</li>
+                  <li>Одержимость: Техас</li>
+                  <li>Рекомендации: Изоляция</li>
                 </ul>
               </div>
               <div class="ops-card">
-                <h4>Мифология Древней Винеты</h4>
+                <h4>БОЕВЫЕ ХАРАКТЕРИСТИКИ</h4>
                 <ul>
-                  <li>Греческая</li>
-                  <li>Египетская</li>
-                  <li>Персидская</li>
-                  <li>Шумерская</li>
+                  <li>Скорость: Высокая</li>
+                  <li>Сила: Средняя</li>
+                  <li>Агрессия: Максимальная</li>
                 </ul>
               </div>
               <div class="ops-card">
-                <h4>Забота о папоротнике</h4>
-                <p class="empty-note">— раздел в разработке —</p>
-              </div>
-              <div class="ops-card">
-                <h4>Фильмы</h4>
+                <h4>ЛИЧНЫЕ ВЕЩИ</h4>
                 <ul>
-                  <li>Исторические</li>
-                  <li>Детективные</li>
-                  <li>Повседневность</li>
+                  <li>Пара клинков</li>
+                  <li>Порванный плащ</li>
+                  <li>Фотография Техас (порвана)</li>
                 </ul>
-              </div>
-              <div class="ops-card">
-                <h4>Плюшевая FKLR</h4>
-                <p class="empty-note">— без подпунктов —</p>
               </div>
               <div class="ops-card ops-full">
                 <h4>ПРИМЕЧАНИЕ ОТ РУКОВОДСТВА</h4>
                 <p class="empty-note">
-                  Данные раздела «ФЕТИШ ОБЪЕКТЫ» заполняются администратором комплекса вручную. 
-                  Незаполненные поля помечены как [ОЖИДАНИЕ ДАННЫХ]. 
-                  При обнаружении ошибок или неточностей — доложить куратору объекта.
+                  Доступ к данному разделу строго ограничен. 
+                  При обнаружении Лаппланд в состоянии агрессии — немедленно сообщить в службу безопасности. 
+                  Не приближаться. Не пытаться вступить в контакт. 
+                  Повторяю: НЕ ПРИБЛИЖАТЬСЯ.
                 </p>
               </div>
             </div>
@@ -1427,16 +1252,16 @@
 
     <!-- ЛОЗУНГ -->
     <div class="slogan-bar">
-      ★ СЛАВА НАЦИИ! ★ ДОЛГ ПРЕВЫШЕ ВСЕГО! ★ <span>ЕВСАН НЕПОБЕДИМ!</span> ★
+      ★ SIRACUSA ★ TEXAS ★ LUPO ★ <span>НАЙДИ ЕЁ. УБЕЙ ЕЁ. ИЛИ УМРИ.</span> ★
     </div>
 
     <!-- НИЖНЯЯ ПАНЕЛЬ -->
     <div class="bottom-bar">
-      <div class="brand">ТЕРМИНАЛ // ЕРЕС-М-427 // СЕКТОР Д</div>
+      <div class="brand">TERMINALE // LUPO // SIRACUSA</div>
       <div class="controls">
         <span>F1: СПРАВКА</span>
         <span>F2: ВЫХОД</span>
-        <span>F10: МЕНЮ</span>
+        <span>F10: ОХОТА</span>
       </div>
     </div>
 
@@ -1461,7 +1286,7 @@
       const gain = ctx.createGain();
       osc.connect(gain); gain.connect(ctx.destination);
       osc.frequency.value = freq || 600;
-      osc.type = 'square';
+      osc.type = 'sawtooth'; // Более резкий звук для Лаппланд
       gain.gain.setValueAtTime(0.02, ctx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
       osc.start(ctx.currentTime); osc.stop(ctx.currentTime + duration);
@@ -1489,10 +1314,10 @@
     loadingScreen.classList.add('active');
     
     const steps = [
-      { el: loadingLog, text: "ИНИЦИАЛИЗАЦИЯ ЯДРА... ", delay: 400, freq: 500 },
-      { el: loadingLog2, text: "ПОДКЛЮЧЕНИЕ К УЗЛУ NEUMOND... ", delay: 500, freq: 600 },
-      { el: loadingLog3, text: "ДЕШИФРОВКА АРХИВА... ", delay: 600, freq: 700 },
-      { el: loadingLog4, text: "ПРОВЕРКА ЛОЯЛЬНОСТИ... ", delay: 700, freq: 800 }
+      { el: loadingLog, text: "ИНИЦИАЛИЗАЦИЯ СИСТЕМЫ... ", delay: 400, freq: 500 },
+      { el: loadingLog2, text: "ПОИСК ЦЕЛИ: TEXAS... ", delay: 500, freq: 600 },
+      { el: loadingLog3, text: "ДЕШИФРОВКА ДАННЫХ... ", delay: 600, freq: 700 },
+      { el: loadingLog4, text: "УРОВЕНЬ УГРОЗЫ: КРИТИЧЕСКИЙ... ", delay: 700, freq: 800 }
     ];
 
     let delay = 500;
@@ -1572,7 +1397,7 @@
   });
 
   // Логика блокировки
-  const SECRET_CODE = "Харибта";
+  const SECRET_CODE = "Харибта"; // Можно изменить на "TEXAS" или "SIRACUSA"
   const lockInput = document.getElementById('lockInput');
   const lockBtn = document.getElementById('lockBtn');
   const lockError = document.getElementById('lockError');
@@ -1584,7 +1409,7 @@
     const value = lockInput.value.trim();
 
     if (value.toLowerCase() === SECRET_CODE.toLowerCase()) {
-      lockError.textContent = "> ДОСТУП РАЗРЕШЁН. СЛАВА НАЦИИ!";
+      lockError.textContent = "> ДОСТУП РАЗРЕШЁН. ДОБРО ПОЖАЛОВАТЬ, LUPO.";
       playAccessGranted();
 
       statusUnlocked = true;
@@ -1597,7 +1422,7 @@
       }, 800);
     } else {
       playAccessDenied();
-      lockError.textContent = "> НЕВЕРНЫЙ КОД. ДОСТУП ЗАПРЕЩЁН. ПОПЫТКА ЗАПРОТОКОЛИРОВАНА.";
+      lockError.textContent = "> НЕВЕРНЫЙ КОД. ДОСТУП ЗАПРЕЩЁН. ТЫ НЕ ОДНА ИЗ НАС.";
       lockInput.value = "";
       lockInput.focus();
 
@@ -1622,6 +1447,14 @@
       60%  { transform: translateX(-5px); }
       80%  { transform: translateX(5px); }
       100% { transform: translateX(0); }
+    }
+    @keyframes glitchText {
+      0% { transform: translate(0); }
+      20% { transform: translate(-2px, 1px); }
+      40% { transform: translate(2px, -1px); }
+      60% { transform: translate(-1px, -1px); }
+      80% { transform: translate(1px, 1px); }
+      100% { transform: translate(0); }
     }
   `;
   document.head.appendChild(styleShake);
@@ -1671,9 +1504,9 @@
         const cardRels = card.dataset.relations ? card.dataset.relations.split(' ') : [];
         if (isActive) {
           if (cardRels.includes(relClass)) {
-            card.style.border = '2px solid var(--soviet-red-bright)';
-            card.style.background = 'rgba(212, 0, 0, 0.1)';
-            card.style.boxShadow = '0 0 20px rgba(212, 0, 0, 0.4)';
+            card.style.border = '2px solid var(--red-bright)';
+            card.style.background = 'rgba(204, 0, 0, 0.1)';
+            card.style.boxShadow = '0 0 20px rgba(204, 0, 0, 0.5)';
           } else {
             card.style.border = 'none';
             card.style.background = 'transparent';
@@ -1723,4 +1556,3 @@
 </script>
 </body>
 </html>
-```
