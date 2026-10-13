@@ -15,6 +15,7 @@
       overflow: hidden;
       font-family: 'Courier New', monospace;
     }
+
     /* Экран загрузки */
     #loader {
       position: fixed;
@@ -34,23 +35,52 @@
       opacity: 0;
       pointer-events: none;
     }
-    /* Полноэкранная гифка */
-    #gifScreen {
+
+    /* Область с гифкой (появляется после загрузки) */
+    #clickArea {
       position: fixed;
       inset: 0;
       display: none;
       justify-content: center;
       align-items: center;
-      background: #000;
       z-index: 20;
+      background: #000;
     }
-    #gifScreen.show {
+    #clickArea.show {
       display: flex;
     }
-    #gifScreen img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+
+    /* Контейнер для гифки — не на весь экран */
+    #gifContainer {
+      max-width: 70vw;
+      max-height: 70vh;
+      border: 2px solid #333;
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      background: #111;
+      padding: 20px;
+      transition: transform 0.2s;
+    }
+    #gifContainer:hover {
+      transform: scale(1.02);
+    }
+    #gifContainer img {
+      max-width: 100%;
+      max-height: 70vh;
+      width: auto;
+      height: auto;
+      display: block;
+    }
+
+    .placeholder-text {
+      color: #fff;
+      font-size: 20px;
+      text-align: center;
+      user-select: none;
     }
   </style>
 </head>
@@ -60,16 +90,58 @@
     пока просто, готовы начать представление
   </div>
 
-  <div id="gifScreen">
-    <img src="Lappupa.gif" alt="Lappupa.gif">
+  <div id="clickArea">
+    <div id="gifContainer">
+      <div class="placeholder-text">Нажмите, чтобы начать представление</div>
+    </div>
   </div>
 
   <script>
-    // Через 3 секунды скрываем загрузку и показываем гифку
+    // ЗАМЕНИТЕ НА АДРЕС ВАШЕГО ОСНОВНОГО САЙТА
+    const MAIN_SITE_URL = 'https://example.com';
+
+    const loader = document.getElementById('loader');
+    const clickArea = document.getElementById('clickArea');
+    const gifContainer = document.getElementById('gifContainer');
+
+    // Через 3 секунды скрываем загрузку и показываем область с гифкой
     setTimeout(() => {
-      document.getElementById('loader').classList.add('hide');
-      document.getElementById('gifScreen').classList.add('show');
+      loader.classList.add('hide');
+      clickArea.classList.add('show');
     }, 3000);
+
+    // Клик по контейнеру запускает представление
+    gifContainer.addEventListener('click', function startShow() {
+      // Убираем обработчик, чтобы нельзя было кликнуть дважды
+      gifContainer.removeEventListener('click', startShow);
+
+      // Очищаем контейнер от текста-заглушки
+      gifContainer.innerHTML = '';
+
+      // Создаём и вставляем гифку
+      const img = document.createElement('img');
+      img.src = 'Lappupa.gif';
+      img.alt = 'Lappupa.gif';
+      gifContainer.appendChild(img);
+
+      // Воспроизводим смех Лаппланд
+      const audio = new Audio('Hahaha.mp3');
+      audio.play().catch(e => {
+        console.warn('Не удалось воспроизвести звук:', e);
+      });
+
+      // Когда смех закончится — переходим на основной сайт
+      audio.onended = () => {
+        window.location.href = MAIN_SITE_URL;
+      };
+
+      // Резервный таймер на случай, если звук не загрузится или не закончится
+      setTimeout(() => {
+        if (window.location.href !== MAIN_SITE_URL) {
+          window.location.href = MAIN_SITE_URL;
+        }
+      }, 10000);
+    });
   </script>
 
 </body>
