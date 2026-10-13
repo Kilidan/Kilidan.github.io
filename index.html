@@ -273,6 +273,21 @@
   }
   #mainSite.visible { opacity: 1; }
 
+  /* ТЁМНАЯ ГИФКА НА ФОНЕ ОСНОВНОГО САЙТА */
+  #mainSite::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url('Lappupa.gif');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.06;
+    filter: brightness(0.08) contrast(1.4);
+    z-index: 0;
+    pointer-events: none;
+  }
+
   .crt-overlay {
     position: fixed; top: 0; left: 0;
     width: 100%; height: 100%;
@@ -1843,6 +1858,11 @@
   const loadingPercent = document.getElementById('loadingPercent');
   const loadingLog = document.getElementById('loadingLog');
 
+  // === Смех ===
+  const laughAudio = new Audio('Hahaha.mp3');
+  laughAudio.preload = 'auto';
+  laughAudio.volume = 0.7;
+
   function playBootSound() {
     try {
       const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -1967,7 +1987,16 @@
         loadingLog.textContent = "> HOLD AT 99%...";
         playBeep(400);
 
-        setTimeout(() => {
+        // Запускаем смех
+        try {
+          laughAudio.currentTime = 0;
+          laughAudio.play().catch(() => {});
+        } catch (e) {}
+
+        let finished = false;
+        const finishLoading = () => {
+          if (finished) return;
+          finished = true;
           loadingLog.textContent = "> COMPLETE.";
           loadingPercent.textContent = "100%";
           loadingBarFill.style.width = "100%";
@@ -1977,7 +2006,20 @@
             loadingScreen.classList.remove('active');
             if (typeof callback === 'function') callback();
           }, 500);
-        }, 1500);
+        };
+
+        const onLaughEnded = () => {
+          laughAudio.removeEventListener('ended', onLaughEnded);
+          finishLoading();
+        };
+
+        laughAudio.addEventListener('ended', onLaughEnded);
+
+        // Резервный таймер на случай, если аудио не загрузится
+        setTimeout(() => {
+          laughAudio.removeEventListener('ended', onLaughEnded);
+          finishLoading();
+        }, 8000);
       }
 
       loadingBarFill.style.width = percent + '%';
