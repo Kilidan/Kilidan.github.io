@@ -270,14 +270,19 @@
     position: relative; opacity: 0;
     transition: opacity 1s ease;
     background: #000;
+    animation: breathe 10s ease-in-out infinite;
   }
   #mainSite.visible { opacity: 1; }
 
-  /* ТЁМНАЯ ГИФКА НА ФОНЕ ОСНОВНОГО САЙТА */
+  @keyframes breathe {
+    0%, 100% { filter: brightness(1); }
+    50%      { filter: brightness(1.03); }
+  }
+
+  /* ТЁМНАЯ ГИФКА НА ФОНЕ */
   #mainSite::before {
     content: '';
-    position: fixed;
-    inset: 0;
+    position: fixed; inset: 0;
     background-image: url('Lappupa.gif');
     background-size: cover;
     background-position: center;
@@ -286,6 +291,16 @@
     filter: brightness(0.08) contrast(1.4);
     z-index: 0;
     pointer-events: none;
+  }
+
+  /* ШУМ-ОВЕРЛЕЙ */
+  .noise-overlay {
+    position: fixed; inset: 0;
+    pointer-events: none;
+    z-index: 101;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
   }
 
   .crt-overlay {
@@ -352,12 +367,24 @@
     font-size: 14px; text-transform: uppercase;
     font-family: 'VT323', 'Courier New', monospace;
     letter-spacing: 2px;
+    gap: 12px;
+    flex-wrap: wrap;
   }
   .title-bar span:first-child {
     color: #ff3333; font-weight: bold; font-size: 18px;
     text-shadow: 0 0 12px #cc2222, 0 0 24px rgba(255,50,50,0.5);
   }
-  .title-bar span:last-child { font-size: 13px; color: #661111; }
+  .title-bar .bar-mid {
+    flex: 1; text-align: center;
+    font-size: 11px; color: #661111;
+    letter-spacing: 3px;
+  }
+  .title-bar .bar-date {
+    font-family: 'VT323', monospace;
+    color: #cc2222;
+    font-size: 13px;
+    letter-spacing: 2px;
+  }
 
   .tabs {
     display: flex; gap: 4px; margin-bottom: 10px; flex-wrap: wrap;
@@ -407,14 +434,42 @@
   }
   .tab-content.active { display: block; }
 
+  /* ============ ПОД-ВКЛАДКИ ЛИЧНОГО ДЕЛА ============ */
+  .sub-tabs {
+    display: flex; gap: 4px; margin-bottom: 14px; flex-wrap: wrap;
+    border-bottom: 1px dashed #2a0000;
+    padding-bottom: 8px;
+  }
+  .sub-tab {
+    background: #0a0000;
+    border: 1px solid #440000;
+    padding: 4px 14px;
+    color: #661111;
+    font-family: 'VT323', monospace;
+    font-size: 14px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: 0.15s;
+  }
+  .sub-tab:hover { color: #cc2222; border-color: #661111; }
+  .sub-tab.active {
+    color: #ff3333; border-color: #cc2222;
+    box-shadow: 0 0 10px rgba(200,30,30,0.3);
+    background: #1a0000;
+    text-shadow: 0 0 8px #cc2222;
+  }
+  .sub-pane { display: none; animation: paneFade 0.3s ease-out; }
+  .sub-pane.active { display: block; }
+  @keyframes paneFade {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
   /* ============ ЛИЧНОЕ ДЕЛО ============ */
   .dossier-block {
     display: flex; flex-wrap: wrap; gap: 16px;
     margin-bottom: 16px;
-  }
-  .dossier-main {
-    display: flex; flex-wrap: wrap; gap: 14px;
-    flex: 1; min-width: 260px;
   }
   .info-left { flex: 0 0 220px; min-width: 200px; }
 
@@ -460,6 +515,21 @@
     -webkit-mask-image: radial-gradient(ellipse 95% 95% at center, #000 55%, rgba(0,0,0,0.7) 80%, transparent 100%);
     mask-image: radial-gradient(ellipse 95% 95% at center, #000 55%, rgba(0,0,0,0.7) 80%, transparent 100%);
   }
+  .photo-place .stamp {
+    position: absolute;
+    bottom: 14px; right: 14px;
+    color: #cc2222;
+    font-family: 'VT323', monospace;
+    font-size: 14px;
+    letter-spacing: 4px;
+    border: 2px solid #cc2222;
+    padding: 3px 10px;
+    transform: rotate(-8deg);
+    opacity: 0.45;
+    text-shadow: 0 0 6px #cc2222;
+    font-weight: bold;
+    z-index: 5;
+  }
 
   .info-column {
     background: #0a0000;
@@ -504,114 +574,6 @@
     padding-left: 8px;
   }
 
-  /* БЛОКИ-КАРТОЧКИ В ЛИЧНОМ ДЕЛЕ */
-  .dossier-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 12px;
-    margin-top: 12px;
-  }
-  .dossier-card {
-    background: #0a0000;
-    border: 1px solid #440000;
-    border-left: 3px solid #cc2222;
-    border-radius: 2px;
-    padding: 12px 14px;
-    box-shadow: inset 0 0 20px rgba(80,0,0,0.3);
-    position: relative;
-    transition: 0.15s;
-  }
-  .dossier-card:hover {
-    border-left-color: #ff3333;
-    box-shadow: inset 0 0 20px rgba(80,0,0,0.3), 0 0 15px rgba(200,30,30,0.25);
-  }
-  .dossier-card::before {
-    content: '';
-    position: absolute; top: 6px; right: 6px;
-    width: 5px; height: 5px;
-    background: #cc2222;
-    box-shadow: 0 0 6px #cc2222;
-  }
-  .dossier-card h4 {
-    font-family: 'VT323', monospace;
-    font-size: 17px; color: #ff3333;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-    padding-bottom: 4px;
-    border-bottom: 1px solid #2a0000;
-    text-shadow: 0 0 8px rgba(200,30,30,0.5);
-    display: flex; align-items: center; gap: 6px;
-  }
-  .dossier-card h4 .card-icon {
-    font-size: 14px;
-    color: #cc2222;
-  }
-  .dossier-card p,
-  .dossier-card ul {
-    font-size: 13px; line-height: 1.6;
-    color: #cc6666;
-    white-space: pre-wrap;
-  }
-  .dossier-card ul {
-    list-style: none; padding-left: 0;
-  }
-  .dossier-card ul li {
-    padding: 3px 0 3px 14px;
-    position: relative;
-    border-bottom: 1px dashed #1a0000;
-  }
-  .dossier-card ul li:last-child { border-bottom: none; }
-  .dossier-card ul li::before {
-    content: "▪";
-    position: absolute; left: 0;
-    color: #cc2222;
-  }
-  .dossier-card .placeholder {
-    color: #441111;
-    font-style: italic;
-    letter-spacing: 1px;
-    font-size: 12px;
-  }
-
-  .status-block {
-    margin-top: 12px;
-    padding: 10px 12px;
-    background: #0a0000;
-    border: 1px solid #440000;
-    border-left: 3px solid #cc2222;
-    border-radius: 2px;
-    box-shadow: inset 0 0 20px rgba(80,0,0,0.3);
-    display: flex; flex-direction: column; gap: 10px;
-  }
-  .status-row { display: flex; flex-direction: column; gap: 4px; }
-  .status-row .label {
-    font-size: 11px; color: #ff3333;
-    letter-spacing: 2px; text-transform: uppercase;
-    font-weight: bold;
-    text-shadow: 0 0 6px rgba(200,30,30,0.6);
-    padding-left: 8px; position: relative;
-  }
-  .status-row .label::before {
-    content: "▸";
-    position: absolute; left: 0;
-    color: #cc2222; font-size: 10px;
-    text-shadow: 0 0 6px #cc2222;
-  }
-  .status-row .value {
-    display: inline-block;
-    background: #1a0000;
-    padding: 3px 10px;
-    border-left: 3px solid #cc2222;
-    color: #ff3333;
-    font-size: 14px; letter-spacing: 1px;
-    text-shadow: 0 0 8px rgba(200,30,30,0.6);
-    align-self: flex-start;
-    min-width: 120px;
-  }
-  .status-row .value.green { color: #ff4444; text-shadow: 0 0 10px #cc2222; }
-  .status-row .value.yellow { color: #ff6666; text-shadow: 0 0 10px #cc2222; }
-
   .right-col { flex: 1; min-width: 220px; display: flex; flex-direction: column; gap: 10px; }
 
   .med-card {
@@ -621,12 +583,6 @@
     background: #0a0000;
     box-shadow: inset 0 0 20px rgba(80,0,0,0.3);
     position: relative;
-  }
-  .med-card::after {
-    content: '';
-    position: absolute; bottom: 6px; right: 6px;
-    width: 5px; height: 5px;
-    background: #440000;
   }
   .med-card h4 {
     font-family: 'VT323', monospace;
@@ -656,6 +612,131 @@
     box-shadow: 0 0 12px rgba(200,30,30,0.25);
     padding: 4px;
     background: #000;
+  }
+
+  /* СЕТКА КАРТОЧЕК ЛИЧНОГО ДЕЛА */
+  .dossier-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+    margin-top: 12px;
+  }
+  .dossier-card {
+    background: #0a0000;
+    border: 1px solid #440000;
+    border-left: 3px solid #cc2222;
+    border-radius: 2px;
+    padding: 12px 14px;
+    box-shadow: inset 0 0 20px rgba(80,0,0,0.3);
+    position: relative;
+    transition: 0.15s;
+  }
+  .dossier-card:hover {
+    border-left-color: #ff3333;
+    box-shadow: inset 0 0 20px rgba(80,0,0,0.3), 0 0 15px rgba(200,30,30,0.25);
+  }
+  /* Уголки */
+  .dossier-card::before {
+    content: '';
+    position: absolute; top: 4px; right: 4px;
+    width: 8px; height: 8px;
+    border-top: 1px solid #cc2222;
+    border-right: 1px solid #cc2222;
+  }
+  .dossier-card::after {
+    content: '';
+    position: absolute; bottom: 4px; left: 4px;
+    width: 8px; height: 8px;
+    border-bottom: 1px solid #cc2222;
+    border-left: 1px solid #cc2222;
+  }
+  .dossier-card h4 {
+    font-family: 'VT323', monospace;
+    font-size: 17px; color: #ff3333;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #2a0000;
+    text-shadow: 0 0 8px rgba(200,30,30,0.5);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .dossier-card h4 .card-icon {
+    font-size: 14px;
+    color: #cc2222;
+  }
+  .dossier-card p,
+  .dossier-card ul {
+    font-size: 13px; line-height: 1.6;
+    color: #cc6666;
+    white-space: pre-wrap;
+  }
+  .dossier-card ul { list-style: none; padding-left: 0; }
+  .dossier-card ul li {
+    padding: 3px 0 3px 14px;
+    position: relative;
+    border-bottom: 1px dashed #1a0000;
+  }
+  .dossier-card ul li:last-child { border-bottom: none; }
+  .dossier-card ul li::before {
+    content: "▪";
+    position: absolute; left: 0;
+    color: #cc2222;
+  }
+  .dossier-card .placeholder {
+    color: #441111;
+    font-style: italic;
+    letter-spacing: 1px;
+    font-size: 12px;
+  }
+
+  /* Редактируемое поле */
+  .editable {
+    display: inline-block;
+    min-width: 30px;
+    color: #cc6666;
+    outline: none;
+    border-bottom: 1px dashed #2a0000;
+    padding: 0 4px;
+    cursor: text;
+    transition: 0.15s;
+    user-select: text;
+  }
+  .editable:focus {
+    background: #1a0000;
+    border-bottom-color: #cc2222;
+    color: #ff5555;
+    box-shadow: 0 0 8px rgba(200,30,30,0.3);
+  }
+  .editable:empty::before {
+    content: attr(data-placeholder);
+    color: #441111;
+    font-style: italic;
+  }
+
+  /* Стат-бары */
+  .stat-bar {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; margin: 6px 0;
+  }
+  .stat-bar .stat-label {
+    flex: 0 0 140px; color: #cc6666; letter-spacing: 1px;
+    text-transform: uppercase; font-size: 11px;
+  }
+  .stat-bar .stat-track {
+    flex: 1; height: 8px; background: #0a0000;
+    border: 1px solid #440000;
+    position: relative; overflow: hidden;
+  }
+  .stat-bar .stat-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #440000, #cc2222);
+    box-shadow: 0 0 8px #cc2222;
+    transition: width 0.6s ease;
+  }
+  .stat-bar .stat-val {
+    flex: 0 0 42px; text-align: right; color: #ff3333;
+    font-family: 'VT323', monospace; font-size: 13px;
   }
 
   /* ============ ДНЕВНИК ============ */
@@ -692,16 +773,47 @@
     margin-top: 4px;
   }
 
-  /* Запись дневника */
+  /* Фильтр тегов */
+  .diary-filters {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    padding: 8px 12px;
+    background: #0a0000;
+    border: 1px solid #440000;
+    border-radius: 2px;
+    align-items: center;
+  }
+  .diary-filters .filter-label {
+    font-size: 11px; color: #661111;
+    letter-spacing: 2px; margin-right: 6px;
+    text-transform: uppercase;
+  }
+  .diary-tag-btn {
+    background: #0a0000;
+    border: 1px solid #440000;
+    padding: 2px 10px;
+    color: #661111;
+    font-family: 'VT323', monospace;
+    font-size: 13px;
+    letter-spacing: 2px;
+    cursor: pointer; transition: 0.15s;
+    text-transform: uppercase;
+  }
+  .diary-tag-btn:hover { color: #cc2222; border-color: #661111; }
+  .diary-tag-btn.active {
+    color: #ff3333; border-color: #cc2222;
+    background: #1a0000;
+    box-shadow: 0 0 10px rgba(200,30,30,0.4);
+  }
+
   .diary-entry {
     background: #0a0000;
     border: 1px solid #440000;
     border-left: 3px solid #cc2222;
     border-radius: 2px;
-    padding: 14px 18px 16px;
     box-shadow: inset 0 0 30px rgba(80,0,0,0.3);
     position: relative;
     transition: 0.2s;
+    overflow: hidden;
   }
   .diary-entry:hover {
     border-left-color: #ff3333;
@@ -714,16 +826,35 @@
     background: #cc2222;
     box-shadow: 0 0 8px #cc2222;
     animation: diaryPulse 2s ease-in-out infinite;
+    z-index: 2;
   }
   @keyframes diaryPulse {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.3; }
   }
-  .diary-entry-meta {
+  .diary-entry-head {
+    padding: 12px 18px;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 12px;
+    transition: background 0.15s;
+  }
+  .diary-entry-head:hover { background: #150000; }
+  .diary-entry-toggle {
+    color: #cc2222;
+    font-size: 12px;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+    width: 14px;
+    text-align: center;
+  }
+  .diary-entry.open .diary-entry-toggle {
+    transform: rotate(90deg);
+    color: #ff3333;
+  }
+  .diary-entry-head-meta {
+    flex: 1;
     display: flex; justify-content: space-between; align-items: baseline;
-    border-bottom: 1px dashed #2a0000;
-    padding-bottom: 6px;
-    margin-bottom: 10px;
+    gap: 12px; flex-wrap: wrap;
   }
   .diary-entry-date {
     font-family: 'VT323', monospace;
@@ -745,11 +876,20 @@
   .diary-entry-title {
     font-family: 'VT323', 'Courier New', monospace;
     color: #ff5555;
-    font-size: 20px;
+    font-size: 16px;
     letter-spacing: 2px;
-    margin-bottom: 10px;
     text-shadow: 0 0 10px rgba(200,30,30,0.5);
     text-transform: uppercase;
+  }
+  .diary-entry-body-wrap {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.3s ease;
+    padding: 0 18px;
+  }
+  .diary-entry.open .diary-entry-body-wrap {
+    max-height: 800px;
+    padding: 0 18px 14px;
   }
   .diary-entry-body {
     color: #cc6666;
@@ -757,7 +897,8 @@
     line-height: 1.75;
     letter-spacing: 0.3px;
     white-space: pre-wrap;
-    min-height: 40px;
+    padding-top: 8px;
+    border-top: 1px dashed #2a0000;
   }
   .diary-entry-body .placeholder {
     color: #441111;
@@ -820,6 +961,40 @@
   .rel-tag.c-sympathy { color: #c97ac9; border-color: #c97ac9; background: rgba(201,122,201,0.08); }
   .rel-tag.c-respect { color: #ffcc44; border-color: #ffcc44; background: rgba(255,204,68,0.10); }
 
+  /* Поиск */
+  .search-wrap {
+    margin-bottom: 12px;
+    position: relative;
+  }
+  .search-input {
+    width: 100%;
+    background: #0a0000;
+    border: 1px solid #440000;
+    border-left: 3px solid #cc2222;
+    padding: 8px 12px 8px 34px;
+    color: #ff3333;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    letter-spacing: 2px;
+    outline: none;
+    transition: 0.15s;
+  }
+  .search-input::placeholder { color: #441111; letter-spacing: 2px; }
+  .search-input:focus {
+    border-color: #cc2222;
+    box-shadow: 0 0 12px rgba(200,30,30,0.3);
+  }
+  .search-wrap::before {
+    content: '⌕';
+    position: absolute;
+    left: 12px; top: 50%;
+    transform: translateY(-50%);
+    color: #cc2222;
+    font-size: 18px;
+    pointer-events: none;
+    font-weight: bold;
+  }
+
   .social-lists { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
   .social-col {
     background: #0a0000;
@@ -828,7 +1003,7 @@
     padding: 12px 16px;
     box-shadow: inset 0 0 20px rgba(80,0,0,0.3);
     min-height: 260px;
-    max-height: 400px; overflow-y: auto;
+    max-height: 420px; overflow-y: auto;
   }
   .social-col::-webkit-scrollbar { width: 4px; background: #0a0000; }
   .social-col::-webkit-scrollbar-thumb { background: #661111; border-radius: 4px; }
@@ -840,6 +1015,7 @@
     border-bottom: 1px solid #440000;
     padding-bottom: 4px; margin-bottom: 10px;
     text-shadow: 0 0 12px rgba(200,30,30,0.6);
+    text-transform: uppercase;
   }
 
   .social-col .group-header {
@@ -860,8 +1036,15 @@
     color: #440000;
     font-size: 12px;
   }
-  .social-col .group-header:hover { color: #ff5555; background: #150000; text-shadow: 0 0 10px #ff3333; border-left-color: #cc2222; }
-  .social-col .group-header.open { color: #ff3333; background: #1a0000; border-left-color: #ff3333; }
+  .social-col .group-header:hover {
+    color: #ff5555; background: #150000;
+    text-shadow: 0 0 10px #ff3333;
+    border-left-color: #cc2222;
+  }
+  .social-col .group-header.open {
+    color: #ff3333; background: #1a0000;
+    border-left-color: #ff3333;
+  }
   .social-col .group-header.open::after { content: '▾'; color: #cc2222; }
 
   .sub-items {
@@ -870,6 +1053,50 @@
     border-left: 1px dashed #2a0000;
   }
   .sub-items.open { display: block; }
+
+  .personnel-entry {
+    display: flex; align-items: center; gap: 8px;
+    padding: 5px 8px;
+    border-bottom: 1px solid #0a0000;
+    cursor: pointer;
+    transition: 0.15s;
+    font-size: 13px;
+    color: #cc6666;
+    position: relative;
+  }
+  .personnel-entry:hover {
+    background: #150000;
+    color: #ff5555;
+    border-left: 2px solid #cc2222;
+    padding-left: 6px;
+  }
+  .personnel-entry.hidden { display: none; }
+  .personnel-entry .personnel-name {
+    flex: 1;
+    letter-spacing: 0.5px;
+  }
+  .personnel-entry .personnel-rel {
+    font-size: 10px;
+    color: #661111;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .status-dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .status-dot.alive { background: #6fcf97; box-shadow: 0 0 6px #6fcf97; }
+  .status-dot.wounded { background: #ffcc44; box-shadow: 0 0 6px #ffcc44; }
+  .status-dot.dead { background: #ff3333; box-shadow: 0 0 6px #ff3333; animation: deadPulse 2s infinite; }
+  .status-dot.unknown { background: #661111; box-shadow: 0 0 6px #661111; }
+  @keyframes deadPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
   .sub-items .empty-note {
     color: #441111;
     font-style: italic;
@@ -884,7 +1111,7 @@
     border-radius: 2px;
     padding: 14px 16px;
     margin-top: 14px;
-    min-height: 200px; max-height: 320px;
+    min-height: 200px; max-height: 340px;
     overflow-y: auto;
     box-shadow: inset 0 0 30px rgba(80,0,0,0.3);
     transition: all 0.15s;
@@ -1025,6 +1252,27 @@
     100% { transform: translate(0, 0); }
   }
 
+  /* Глитч-строки */
+  .glitch-line {
+    font-size: 11px;
+    color: #ff2222;
+    letter-spacing: 2px;
+    margin-top: 6px;
+    opacity: 0;
+    font-family: 'VT323', monospace;
+    animation: glitchAppear 10s infinite;
+  }
+  .glitch-line:nth-child(1) { animation-delay: 0s; }
+  .glitch-line:nth-child(2) { animation-delay: 3.5s; }
+  .glitch-line:nth-child(3) { animation-delay: 7s; }
+  @keyframes glitchAppear {
+    0%, 88%, 100% { opacity: 0; transform: translateX(0); }
+    90% { opacity: 1; transform: translateX(-2px); }
+    92% { opacity: 0.5; transform: translateX(2px); }
+    94% { opacity: 1; transform: translateX(0); }
+    96% { opacity: 0.7; }
+  }
+
   /* ФЕТИШ-КАРТОЧКИ */
   .ops-grid {
     display: grid;
@@ -1079,6 +1327,31 @@
     letter-spacing: 2px;
   }
 
+  /* КНОПКА ЗВУКА */
+  .mute-btn {
+    position: fixed; top: 12px; right: 110px;
+    z-index: 200;
+    padding: 6px 12px;
+    border: 2px solid #cc2222;
+    background: rgba(10,0,0,0.85);
+    color: #cc2222;
+    font-family: 'Courier New', monospace;
+    font-size: 12px; letter-spacing: 2px;
+    cursor: pointer; transition: 0.2s;
+    text-transform: uppercase;
+    text-shadow: 0 0 6px rgba(200,30,30,0.5);
+  }
+  .mute-btn:hover {
+    background: #cc2222; color: #000;
+    box-shadow: 0 0 20px rgba(200,30,30,0.8);
+    text-shadow: none;
+  }
+  .mute-btn.muted {
+    border-color: #661111;
+    color: #661111;
+    text-shadow: none;
+  }
+
   .logout-btn {
     position: fixed; top: 12px; right: 12px;
     z-index: 200;
@@ -1098,6 +1371,15 @@
     text-shadow: none;
   }
 
+  /* ПЕЧАТЬ */
+  @media print {
+    body { background: #fff; color: #000; }
+    .intro-crt, .intro-vignette, .intro-red-glow,
+    .crt-overlay, .fish-eye, .side-frame, .noise-overlay,
+    .logout-btn, .mute-btn, #introScreen, #loadingScreen { display: none !important; }
+    .computer { border-color: #000; box-shadow: none; }
+  }
+
   @media (max-width: 750px) {
     .intro-main { flex-direction: column; align-items: center; gap: 20px; }
     .intro-portrait { width: 160px; height: 190px; }
@@ -1114,8 +1396,9 @@
     .lock-input { width: 100%; max-width: 280px; }
     .loading-kanji span { font-size: 90px; letter-spacing: 30px; }
     .loading-kanji .kanji-small { font-size: 50px; letter-spacing: 20px; }
-    .diary-entry-meta { flex-direction: column; gap: 4px; }
+    .diary-entry-head-meta { flex-direction: column; gap: 4px; }
     .dossier-grid { grid-template-columns: 1fr; }
+    .mute-btn { right: 100px; font-size: 10px; padding: 4px 8px; }
   }
 </style>
 </head>
@@ -1191,16 +1474,19 @@
 <div id="mainSite">
   <div class="crt-overlay"></div>
   <div class="fish-eye"></div>
+  <div class="noise-overlay"></div>
   <div class="side-frame side-frame-left"></div>
   <div class="side-frame side-frame-right"></div>
 
+  <button class="mute-btn" id="muteBtn" title="Звук вкл/выкл">♪ ЗВУК ВКЛ</button>
   <button class="logout-btn" id="logoutBtn">⟵ НАЗАД</button>
 
   <div class="computer">
     <div class="screen">
       <div class="title-bar">
         <span>◈ ЕРЕС-М-427 · ДОСЬЕ</span>
-        <span>СОТРУДНИК · С. СИРАКУЗА</span>
+        <span class="bar-mid">◆ СИСТЕМА АКТИВНА ◆</span>
+        <span class="bar-date" id="liveDate">CYCLE 0000 · 00:00</span>
       </div>
 
       <div class="tabs">
@@ -1213,164 +1499,276 @@
       <!-- ==================== ЛИЧНОЕ ДЕЛО ==================== -->
       <div id="tab1" class="tab-content active">
 
-        <!-- ВЕРХНИЙ БЛОК: фото + основная информация + личные записи -->
-        <div class="dossier-block">
-          <div class="info-left">
-            <div class="photo-place">
-              <img src="ava.jpeg" alt="Фото: С. Сиракуза">
+        <!-- ПОД-ВКЛАДКИ -->
+        <div class="sub-tabs">
+          <div class="sub-tab active" data-sub="sub-base">БАЗА</div>
+          <div class="sub-tab" data-sub="sub-service">СЛУЖБА</div>
+          <div class="sub-tab" data-sub="sub-med">МЕДИЦИНА</div>
+          <div class="sub-tab" data-sub="sub-psy">ПСИХОЛОГИЯ</div>
+          <div class="sub-tab" data-sub="sub-special">ОСОБОЕ</div>
+        </div>
+
+        <!-- БАЗА -->
+        <div class="sub-pane active" id="sub-base">
+          <div class="dossier-block">
+            <div class="info-left">
+              <div class="photo-place">
+                <img src="ava.jpeg" alt="Фото: С. Сиракуза">
+                <span class="stamp">АРХИВ</span>
+              </div>
+              <div class="info-column">
+                <div class="info-item">
+                  <span class="info-label">Ф.И.О.</span>
+                  <span class="info-value">Сицилия Сиракуза</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">Дата рождения</span>
+                  <span class="info-value">18.12.2132</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">Место рождения</span>
+                  <span class="info-value">Буян (Восточная сторона /// Дворец Maior Italia)</span>
+                </div>
+              </div>
             </div>
-            <div class="info-column">
-              <div class="info-item">
-                <span class="info-label">Ф.И.О.</span>
-                <span class="info-value">Сицилия Сиракуза</span>
+
+            <div class="right-col">
+              <div class="med-card">
+                <h4>✑ ЛИЧНЫЕ ЗАПИСИ</h4>
+                <p class="editable" contenteditable="true" data-key="personal-note" data-placeholder="[ ТЕКСТ БУДЕТ ЗАПОЛНЕН ПОЗЖЕ ]"></p>
               </div>
-              <div class="info-item">
-                <span class="info-label">Дата рождения</span>
-                <span class="info-value">18.12.2132</span>
-              </div>
-              <div class="info-item">
-                <span class="info-label">Место рождения</span>
-                <span class="info-value">Буян (Восточная сторона /// Дворец Maior Italia)</span>
+
+              <div class="status-block">
+                <div class="status-row">
+                  <span class="label">Статус</span>
+                  <span class="value green">ЖИВ | АКТИВЕН</span>
+                </div>
+                <div class="status-row">
+                  <span class="label">Оболочка</span>
+                  <span class="value">ГЕШТАЛЬТ</span>
+                </div>
+                <div class="status-row">
+                  <span class="label">Фракция</span>
+                  <span class="value yellow">AEON</span>
+                </div>
+                <div class="status-row">
+                  <span class="label">Назначение</span>
+                  <span class="value">Боевой гештальт-резонатор</span>
+                </div>
               </div>
             </div>
           </div>
 
-          <div class="right-col">
-            <div class="med-card">
-              <h4>✑ ЛИЧНЫЕ ЗАПИСИ</h4>
-              <p class="placeholder" style="color:#441111;font-style:italic;letter-spacing:2px;font-size:12px;">[ ТЕКСТ БУДЕТ ЗАПОЛНЕН ПОЗЖЕ ]</p>
+          <div class="dossier-grid">
+            <div class="dossier-card">
+              <h4><span class="card-icon">▸</span> БИОМЕТРИЧЕСКИЕ ДАННЫЕ</h4>
+              <ul>
+                <li><strong>Рост:</strong> 178 см</li>
+                <li><strong>Вес:</strong> 68 кг</li>
+                <li><strong>Группа крови:</strong> 0(I) Rh⁻</li>
+                <li><strong>Цвет глаз:</strong> <span class="editable" contenteditable="true" data-key="bio-eyes" data-placeholder="[ ДАННЫЕ ]"></span></li>
+                <li><strong>Цвет волос:</strong> <span class="editable" contenteditable="true" data-key="bio-hair" data-placeholder="[ ДАННЫЕ ]"></span></li>
+                <li><strong>Особые приметы:</strong> <span class="editable" contenteditable="true" data-key="bio-marks" data-placeholder="[ ДАННЫЕ ]"></span></li>
+              </ul>
             </div>
 
-            <div class="status-block">
-              <div class="status-row">
-                <span class="label">Статус</span>
-                <span class="value green">ЖИВ | АКТИВЕН</span>
-              </div>
-              <div class="status-row">
-                <span class="label">Оболочка</span>
-                <span class="value">ГЕШТАЛЬТ</span>
-              </div>
-              <div class="status-row">
-                <span class="label">Фракция</span>
-                <span class="value yellow">AEON</span>
-              </div>
-              <div class="status-row">
-                <span class="label">Назначение</span>
-                <span class="value">Боевой гештальт-резонатор</span>
-              </div>
+            <div class="dossier-card">
+              <h4><span class="card-icon">▸</span> ОБРАЗОВАНИЕ</h4>
+              <ul>
+                <li><strong>Уровень:</strong> Высшее</li>
+                <li><strong>Учреждение:</strong> Центральный Хайматский Государственный исторический институт</li>
+                <li><strong>Специализация:</strong> <span class="editable" contenteditable="true" data-key="edu-spec" data-placeholder="[ ДАННЫЕ ]"></span></li>
+                <li><strong>Доп. курсы:</strong> <span class="editable" contenteditable="true" data-key="edu-extra" data-placeholder="[ ДАННЫЕ ]"></span></li>
+              </ul>
+            </div>
+
+            <div class="dossier-card">
+              <h4><span class="card-icon">▸</span> ЛИЧНЫЕ ДАННЫЕ</h4>
+              <ul>
+                <li><strong>Возраст:</strong> <span class="editable" contenteditable="true" data-key="pers-age" data-placeholder="[ ДАННЫЕ ]"></span></li>
+                <li><strong>Пол:</strong> <span class="editable" contenteditable="true" data-key="pers-sex" data-placeholder="[ ДАННЫЕ ]"></span></li>
+                <li><strong>Семейное положение:</strong> <span class="editable" contenteditable="true" data-key="pers-family" data-placeholder="[ ДАННЫЕ ]"></span></li>
+                <li><strong>Родственники:</strong> <span class="editable" contenteditable="true" data-key="pers-relatives" data-placeholder="[ ДАННЫЕ ]"></span></li>
+              </ul>
             </div>
           </div>
         </div>
 
-        <!-- РАСШИРЕННЫЕ БЛОКИ ЛИЧНОГО ДЕЛА -->
-        <div class="dossier-grid">
+        <!-- СЛУЖБА -->
+        <div class="sub-pane" id="sub-service">
+          <div class="dossier-grid">
+            <div class="dossier-card">
+              <h4><span class="card-icon">▸</span> РАСПРЕДЕЛЕНИЕ</h4>
+              <ul>
+                <li><strong>Пояс:</strong> Астер</li>
+                <li><strong>Комплекс:</strong> ERES M-427</li>
+                <li><strong>Должность:</strong> Боевой гештальт-резонатор</li>
+                <li><strong>Дата прибытия:</strong> <span class="editable" contenteditable="true" data-key="arrival" data-placeholder="[ ДАННЫЕ ]"></span></li>
+              </ul>
+            </div>
 
-          <div class="dossier-card">
-            <h4><span class="card-icon">▸</span> БИОМЕТРИЧЕСКИЕ ДАННЫЕ</h4>
-            <ul>
-              <li><strong>Рост:</strong> 178 см</li>
-              <li><strong>Вес:</strong> 68 кг</li>
-              <li><strong>Группа крови:</strong> 0(I) Rh⁻</li>
-              <li><strong>Цвет глаз:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
-              <li><strong>Цвет волос:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
-              <li><strong>Особые приметы:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
-            </ul>
-          </div>
+            <div class="dossier-card">
+              <h4><span class="card-icon">▸</span> СЛУЖЕБНАЯ ИСТОРИЯ</h4>
+              <ul>
+                <li><strong>Предыдущие назначения:</strong> <span class="editable" contenteditable="true" data-key="prev-assign" data-placeholder="[ ДАННЫЕ ]"></span></li>
+                <li><strong>Звания и ранги:</strong> <span class="editable" contenteditable="true" data-key="ranks" data-placeholder="[ ДАННЫЕ ]"></span></li>
+                <li><strong>Награды:</strong> <span class="editable" contenteditable="true" data-key="rewards" data-placeholder="[ ДАННЫЕ ]"></span></li>
+                <li><strong>Дисциплинарные взыскания:</strong> <span class="editable" contenteditable="true" data-key="penalties" data-placeholder="[ ДАННЫЕ ]"></span></li>
+              </ul>
+            </div>
 
-          <div class="dossier-card">
-            <h4><span class="card-icon">▸</span> ОБРАЗОВАНИЕ</h4>
-            <ul>
-              <li><strong>Уровень:</strong> Высшее</li>
-              <li><strong>Учреждение:</strong> Центральный Хайматский Государственный исторический институт</li>
-              <li><strong>Специализация:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
-              <li><strong>Доп. курсы:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
-            </ul>
-          </div>
+            <div class="dossier-card">
+              <h4><span class="card-icon">▸</span> КВАЛИФИКАЦИИ И ДОПУСКИ</h4>
+              <ul>
+                <li><strong>Уровень допуска:</strong> <span class="editable" contenteditable="true" data-key="access-level" data-placeholder="[ ДАННЫЕ ]"></span></li>
+                <li><strong>Боевая подготовка:</strong> <span class="editable" contenteditable="true" data-key="combat" data-placeholder="[ ДАННЫЕ ]"></span></li>
+                <li><strong>Резонансные способности:</strong> <span class="editable" contenteditable="true" data-key="resonance" data-placeholder="[ ДАННЫЕ ]"></span></li>
+                <li><strong>Специальные допуски:</strong> <span class="editable" contenteditable="true" data-key="spec-access" data-placeholder="[ ДАННЫЕ ]"></span></li>
+              </ul>
+            </div>
 
-          <div class="dossier-card">
-            <h4><span class="card-icon">▸</span> РАСПРЕДЕЛЕНИЕ</h4>
-            <ul>
-              <li><strong>Пояс:</strong> Астер</li>
-              <li><strong>Комплекс:</strong> ERES M-427</li>
-              <li><strong>Должность:</strong> Боевой гештальт-резонатор</li>
-              <li><strong>Дата прибытия:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
-            </ul>
-          </div>
-
-          <div class="dossier-card">
-            <h4><span class="card-icon">▸</span> СЛУЖЕБНАЯ ИСТОРИЯ</h4>
-            <ul>
-              <li><strong>Предыдущие назначения:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
-              <li><strong>Звания и ранги:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
-              <li><strong>Награды:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
-              <li><strong>Дисциплинарные взыскания:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
-            </ul>
-          </div>
-
-          <div class="dossier-card">
-            <h4><span class="card-icon">▸</span> ПСИХОЛОГИЧЕСКИЙ ПРОФИЛЬ</h4>
-            <ul>
-              <li><strong>Темперамент:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
-              <li><strong>Стрессоустойчивость:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
-              <li><strong>Особенности поведения:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
-              <li><strong>Рекомендации:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
-            </ul>
-          </div>
-
-          <div class="dossier-card">
-            <h4><span class="card-icon">▸</span> МЕДИЦИНСКИЕ ДАННЫЕ</h4>
-            <ul>
-              <li><strong>Физическое состояние:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
-              <li><strong>Хронические заболевания:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
-              <li><strong>Имплантаты / протезы:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
-              <li><strong>Противопоказания:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
-            </ul>
-          </div>
-
-          <div class="dossier-card">
-            <h4><span class="card-icon">▸</span> КВАЛИФИКАЦИИ И ДОПУСКИ</h4>
-            <ul>
-              <li><strong>Уровень допуска:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
-              <li><strong>Боевая подготовка:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
-              <li><strong>Резонансные способности:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
-              <li><strong>Специальные допуски:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
-            </ul>
-          </div>
-
-          <div class="dossier-card">
-            <h4><span class="card-icon">▸</span> ЛИЧНОСТНЫЕ ОСОБЕННОСТИ</h4>
-            <ul>
-              <li><strong>Интересы:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
-              <li><strong>Привычки:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
-              <li><strong>Слабости:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
-              <li><strong>Сильные стороны:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
-            </ul>
-          </div>
-
-          <div class="dossier-card">
-            <h4><span class="card-icon">▸</span> ВЗАИМОДЕЙСТВИЕ С ПЕРСОНАЛОМ</h4>
-            <ul>
-              <li><strong>Отношение к репликам:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
-              <li><strong>Отношение к гештальтам:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
-              <li><strong>Конфликты:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
-              <li><strong>Дружеские связи:</strong> <span class="placeholder">[ ДАННЫЕ ]</span></li>
-            </ul>
-          </div>
-
-          <div class="dossier-card">
-            <h4><span class="card-icon">▸</span> ОСОБЫЕ ОТМЕТКИ</h4>
-            <p class="placeholder">[ ЗАПИСИ КУРАТОРА / РУКОВОДСТВА ]</p>
-          </div>
-
-        </div>
-
-        <!-- ФОТОГРАФИЯ-ЗАПИСЬ -->
-        <div class="dossier-block" style="margin-top:14px;">
-          <div class="med-card plain" style="flex:1;">
-            <img src="ava.jpeg" alt="Запись"
-                 onerror="this.outerHTML='&lt;span style=&quot;color:#661111;font-style:italic;letter-spacing:2px;font-size:12px;padding:20px;display:block;text-align:center;&quot;&gt;[ ИЗОБРАЖЕНИЕ НЕДОСТУПНО ]&lt;/span&gt;'">
+            <div class="dossier-card">
+              <h4><span class="card-icon">▸</span> ОСОБЫЕ ОТМЕТКИ</h4>
+              <p class="editable" contenteditable="true" data-key="spec-notes" data-placeholder="[ ЗАПИСИ КУРАТОРА / РУКОВОДСТВА ]"></p>
+            </div>
           </div>
         </div>
+
+        <!-- МЕДИЦИНА -->
+        <div class="sub-pane" id="sub-med">
+          <div class="dossier-grid">
+            <div class="dossier-card">
+              <h4><span class="card-icon">▸</span> МЕДИЦИНСКИЕ ДАННЫЕ</h4>
+              <ul>
+                <li><strong>Физическое состояние:</strong> <span class="editable" contenteditable="true" data-key="med-physical" data-placeholder="[ ДАННЫЕ ]"></span></li>
+                <li><strong>Хронические заболевания:</strong> <span class="editable" contenteditable="true" data-key="med-chronic" data-placeholder="[ ДАННЫЕ ]"></span></li>
+                <li><strong>Имплантаты / протезы:</strong> <span class="editable" contenteditable="true" data-key="med-implants" data-placeholder="[ ДАННЫЕ ]"></span></li>
+                <li><strong>Противопоказания:</strong> <span class="editable" contenteditable="true" data-key="med-contra" data-placeholder="[ ДАННЫЕ ]"></span></li>
+              </ul>
+            </div>
+
+            <div class="dossier-card">
+              <h4><span class="card-icon">▸</span> ИНДИКАТОРЫ СОСТОЯНИЯ</h4>
+              <div class="stat-bar">
+                <div class="stat-label">Физическое</div>
+                <div class="stat-track"><div class="stat-fill" style="width:70%"></div></div>
+                <div class="stat-val">70%</div>
+              </div>
+              <div class="stat-bar">
+                <div class="stat-label">Психическое</div>
+                <div class="stat-track"><div class="stat-fill" style="width:65%"></div></div>
+                <div class="stat-val">65%</div>
+              </div>
+              <div class="stat-bar">
+                <div class="stat-label">Резонанс</div>
+                <div class="stat-track"><div class="stat-fill" style="width:82%"></div></div>
+                <div class="stat-val">82%</div>
+              </div>
+              <div class="stat-bar">
+                <div class="stat-label">Стабильность</div>
+                <div class="stat-track"><div class="stat-fill" style="width:58%"></div></div>
+                <div class="stat-val">58%</div>
+              </div>
+            </div>
+
+            <div class="dossier-card">
+              <h4><span class="card-icon">▸</span> ЖУРНАЛ МЕДОСМОТРОВ</h4>
+              <p class="editable" contenteditable="true" data-key="med-log" data-placeholder="[ ЗАПИСИ ОСМОТРОВ ]"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ПСИХОЛОГИЯ -->
+        <div class="sub-pane" id="sub-psy">
+          <div class="dossier-grid">
+            <div class="dossier-card">
+              <h4><span class="card-icon">▸</span> ПСИХОЛОГИЧЕСКИЙ ПРОФИЛЬ</h4>
+              <ul>
+                <li><strong>Темперамент:</strong> <span class="editable" contenteditable="true" data-key="psy-temp" data-placeholder="[ ДАННЫЕ ]"></span></li>
+                <li><strong>Стрессоустойчивость:</strong> <span class="editable" contenteditable="true" data-key="psy-stress" data-placeholder="[ ДАННЫЕ ]"></span></li>
+                <li><strong>Особенности поведения:</strong> <span class="editable" contenteditable="true" data-key="psy-behavior" data-placeholder="[ ДАННЫЕ ]"></span></li>
+                <li><strong>Рекомендации:</strong> <span class="editable" contenteditable="true" data-key="psy-rec" data-placeholder="[ ДАННЫЕ ]"></span></li>
+              </ul>
+            </div>
+
+            <div class="dossier-card">
+              <h4><span class="card-icon">▸</span> ПСИХОМЕТРИЯ</h4>
+              <div class="stat-bar">
+                <div class="stat-label">Стрессоустойчивость</div>
+                <div class="stat-track"><div class="stat-fill" style="width:78%"></div></div>
+                <div class="stat-val">78%</div>
+              </div>
+              <div class="stat-bar">
+                <div class="stat-label">Импульсивность</div>
+                <div class="stat-track"><div class="stat-fill" style="width:52%"></div></div>
+                <div class="stat-val">52%</div>
+              </div>
+              <div class="stat-bar">
+                <div class="stat-label">Лояльность</div>
+                <div class="stat-track"><div class="stat-fill" style="width:90%"></div></div>
+                <div class="stat-val">90%</div>
+              </div>
+              <div class="stat-bar">
+                <div class="stat-label">Эмпатия</div>
+                <div class="stat-track"><div class="stat-fill" style="width:64%"></div></div>
+                <div class="stat-val">64%</div>
+              </div>
+              <div class="stat-bar">
+                <div class="stat-label">Агрессия</div>
+                <div class="stat-track"><div class="stat-fill" style="width:41%"></div></div>
+                <div class="stat-val">41%</div>
+              </div>
+              <div class="stat-bar">
+                <div class="stat-label">Дисциплина</div>
+                <div class="stat-track"><div class="stat-fill" style="width:86%"></div></div>
+                <div class="stat-val">86%</div>
+              </div>
+            </div>
+
+            <div class="dossier-card">
+              <h4><span class="card-icon">▸</span> ЛИЧНОСТНЫЕ ОСОБЕННОСТИ</h4>
+              <ul>
+                <li><strong>Интересы:</strong> <span class="editable" contenteditable="true" data-key="pers-interests" data-placeholder="[ ДАННЫЕ ]"></span></li>
+                <li><strong>Привычки:</strong> <span class="editable" contenteditable="true" data-key="pers-habits" data-placeholder="[ ДАННЫЕ ]"></span></li>
+                <li><strong>Слабости:</strong> <span class="editable" contenteditable="true" data-key="pers-weak" data-placeholder="[ ДАННЫЕ ]"></span></li>
+                <li><strong>Сильные стороны:</strong> <span class="editable" contenteditable="true" data-key="pers-strong" data-placeholder="[ ДАННЫЕ ]"></span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- ОСОБОЕ -->
+        <div class="sub-pane" id="sub-special">
+          <div class="dossier-grid">
+            <div class="dossier-card">
+              <h4><span class="card-icon">▸</span> ВЗАИМОДЕЙСТВИЕ С ПЕРСОНАЛОМ</h4>
+              <ul>
+                <li><strong>Отношение к репликам:</strong> <span class="editable" contenteditable="true" data-key="rel-repl" data-placeholder="[ ДАННЫЕ ]"></span></li>
+                <li><strong>Отношение к гештальтам:</strong> <span class="editable" contenteditable="true" data-key="rel-gest" data-placeholder="[ ДАННЫЕ ]"></span></li>
+                <li><strong>Конфликты:</strong> <span class="editable" contenteditable="true" data-key="rel-conflicts" data-placeholder="[ ДАННЫЕ ]"></span></li>
+                <li><strong>Дружеские связи:</strong> <span class="editable" contenteditable="true" data-key="rel-friends" data-placeholder="[ ДАННЫЕ ]"></span></li>
+              </ul>
+            </div>
+
+            <div class="dossier-card">
+              <h4><span class="card-icon">▸</span> ОСОБЫЕ ОТМЕТКИ</h4>
+              <p class="editable" contenteditable="true" data-key="special-notes" data-placeholder="[ ЗАПИСИ КУРАТОРА / РУКОВОДСТВА ]"></p>
+            </div>
+
+            <div class="dossier-card">
+              <h4><span class="card-icon">▸</span> ДОПОЛНИТЕЛЬНО</h4>
+              <p class="editable" contenteditable="true" data-key="extra-notes" data-placeholder="[ СВОБОДНАЯ ФОРМА ]"></p>
+            </div>
+          </div>
+
+          <div class="dossier-block" style="margin-top:14px;">
+            <div class="med-card plain" style="flex:1;">
+              <img src="ava.jpeg" alt="Запись"
+                   onerror="this.outerHTML='&lt;span style=&quot;color:#661111;font-style:italic;letter-spacing:2px;font-size:12px;padding:20px;display:block;text-align:center;&quot;&gt;[ ИЗОБРАЖЕНИЕ НЕДОСТУПНО ]&lt;/span&gt;'">
+            </div>
+          </div>
+        </div>
+
       </div>
 
       <!-- ==================== ДНЕВНИК ==================== -->
@@ -1379,76 +1777,130 @@
 
           <div class="diary-header-block">
             <h2>ЛИЧНЫЙ ДНЕВНИК · С. СИРАКУЗА</h2>
-            <div class="sub">◈ ЕРЕС-М-427 · ЗАПИСИ ВЕДУТСЯ ВРУЧНУЮ ◈</div>
+            <div class="sub">◈ ЕРЕС-М-427 · ЗАПИСИ ВЕДУТСЯ ВРУЧНУЮ ◈ <span id="diaryCount">0 записей</span></div>
           </div>
 
-          <!-- ЗАПИСЬ №1 -->
-          <div class="diary-entry">
-            <div class="diary-entry-meta">
-              <span class="diary-entry-date">▸ ДАТА · ЦИКЛ</span>
-              <span class="diary-entry-tag">ЗАПИСЬ 01</span>
-            </div>
-            <div class="diary-entry-title">◆ ЗАГОЛОВОК ЗАПИСИ</div>
-            <div class="diary-entry-body"><span class="placeholder">[ ТЕКСТ ЗАПИСИ БУДЕТ ЗАПОЛНЕН ПОЗЖЕ ]</span></div>
-            <div class="diary-entry-footer">
-              <span>◈ ADLR / ГЕШТАЛЬТ</span>
-              <span>◆ СТАТУС: ЧЕРНОВИК</span>
-            </div>
+          <div class="diary-filters" id="diaryFilters">
+            <span class="filter-label">ФИЛЬТР:</span>
+            <span class="diary-tag-btn active" data-tag="all">ВСЕ</span>
+            <span class="diary-tag-btn" data-tag="personal">ЛИЧНОЕ</span>
+            <span class="diary-tag-btn" data-tag="work">РАБОТА</span>
+            <span class="diary-tag-btn" data-tag="incident">ИНЦИДЕНТ</span>
+            <span class="diary-tag-btn" data-tag="thought">РАЗМЫШЛЕНИЯ</span>
           </div>
 
-          <!-- ЗАПИСЬ №2 -->
-          <div class="diary-entry">
-            <div class="diary-entry-meta">
-              <span class="diary-entry-date">▸ ДАТА · ЦИКЛ</span>
-              <span class="diary-entry-tag">ЗАПИСЬ 02</span>
+          <!-- Запись 1 -->
+          <div class="diary-entry" data-tags="personal thought">
+            <div class="diary-entry-head" onclick="toggleDiary(this)">
+              <span class="diary-entry-toggle">▶</span>
+              <div class="diary-entry-head-meta">
+                <span class="diary-entry-date">▸ ДАТА · ЦИКЛ</span>
+                <span class="diary-entry-tag">ЛИЧНОЕ / РАЗМЫШЛЕНИЯ</span>
+              </div>
             </div>
-            <div class="diary-entry-title">◆ ЗАГОЛОВОК ЗАПИСИ</div>
-            <div class="diary-entry-body"><span class="placeholder">[ ТЕКСТ ЗАПИСИ БУДЕТ ЗАПОЛНЕН ПОЗЖЕ ]</span></div>
-            <div class="diary-entry-footer">
-              <span>◈ ADLR / ГЕШТАЛЬТ</span>
-              <span>◆ СТАТУС: ЧЕРНОВИК</span>
+            <div class="diary-entry-head-meta" style="padding:0 18px 8px 44px;">
+              <div class="diary-entry-title">◆ ЗАГОЛОВОК ЗАПИСИ 01</div>
             </div>
-          </div>
-
-          <!-- ЗАПИСЬ №3 -->
-          <div class="diary-entry">
-            <div class="diary-entry-meta">
-              <span class="diary-entry-date">▸ ДАТА · ЦИКЛ</span>
-              <span class="diary-entry-tag">ЗАПИСЬ 03</span>
-            </div>
-            <div class="diary-entry-title">◆ ЗАГОЛОВОК ЗАПИСИ</div>
-            <div class="diary-entry-body"><span class="placeholder">[ ТЕКСТ ЗАПИСИ БУДЕТ ЗАПОЛНЕН ПОЗЖЕ ]</span></div>
-            <div class="diary-entry-footer">
-              <span>◈ ADLR / ГЕШТАЛЬТ</span>
-              <span>◆ СТАТУС: ЧЕРНОВИК</span>
+            <div class="diary-entry-body-wrap">
+              <div class="diary-entry-body">
+                <span class="editable" contenteditable="true" data-key="diary-1" data-placeholder="[ ТЕКСТ ЗАПИСИ БУДЕТ ЗАПОЛНЕН ПОЗЖЕ ]"></span>
+                <div class="diary-entry-footer">
+                  <span>◈ ГЕШТАЛЬТ / С. СИРАКУЗА</span>
+                  <span>◆ СТАТУС: ЧЕРНОВИК</span>
+                </div>
+              </div>
             </div>
           </div>
 
-          <!-- ЗАПИСЬ №4 -->
-          <div class="diary-entry">
-            <div class="diary-entry-meta">
-              <span class="diary-entry-date">▸ ДАТА · ЦИКЛ</span>
-              <span class="diary-entry-tag">ЗАПИСЬ 04</span>
+          <!-- Запись 2 -->
+          <div class="diary-entry" data-tags="work">
+            <div class="diary-entry-head" onclick="toggleDiary(this)">
+              <span class="diary-entry-toggle">▶</span>
+              <div class="diary-entry-head-meta">
+                <span class="diary-entry-date">▸ ДАТА · ЦИКЛ</span>
+                <span class="diary-entry-tag">РАБОТА</span>
+              </div>
             </div>
-            <div class="diary-entry-title">◆ ЗАГОЛОВОК ЗАПИСИ</div>
-            <div class="diary-entry-body"><span class="placeholder">[ ТЕКСТ ЗАПИСИ БУДЕТ ЗАПОЛНЕН ПОЗЖЕ ]</span></div>
-            <div class="diary-entry-footer">
-              <span>◈ ADLR / ГЕШТАЛЬТ</span>
-              <span>◆ СТАТУС: ЧЕРНОВИК</span>
+            <div class="diary-entry-head-meta" style="padding:0 18px 8px 44px;">
+              <div class="diary-entry-title">◆ ЗАГОЛОВОК ЗАПИСИ 02</div>
+            </div>
+            <div class="diary-entry-body-wrap">
+              <div class="diary-entry-body">
+                <span class="editable" contenteditable="true" data-key="diary-2" data-placeholder="[ ТЕКСТ ЗАПИСИ БУДЕТ ЗАПОЛНЕН ПОЗЖЕ ]"></span>
+                <div class="diary-entry-footer">
+                  <span>◈ ГЕШТАЛЬТ / С. СИРАКУЗА</span>
+                  <span>◆ СТАТУС: ЧЕРНОВИК</span>
+                </div>
+              </div>
             </div>
           </div>
 
-          <!-- ЗАПИСЬ №5 -->
-          <div class="diary-entry">
-            <div class="diary-entry-meta">
-              <span class="diary-entry-date">▸ ДАТА · ЦИКЛ</span>
-              <span class="diary-entry-tag">ЗАПИСЬ 05</span>
+          <!-- Запись 3 -->
+          <div class="diary-entry" data-tags="incident">
+            <div class="diary-entry-head" onclick="toggleDiary(this)">
+              <span class="diary-entry-toggle">▶</span>
+              <div class="diary-entry-head-meta">
+                <span class="diary-entry-date">▸ ДАТА · ЦИКЛ</span>
+                <span class="diary-entry-tag">ИНЦИДЕНТ</span>
+              </div>
             </div>
-            <div class="diary-entry-title">◆ ЗАГОЛОВОК ЗАПИСИ</div>
-            <div class="diary-entry-body"><span class="placeholder">[ ТЕКСТ ЗАПИСИ БУДЕТ ЗАПОЛНЕН ПОЗЖЕ ]</span></div>
-            <div class="diary-entry-footer">
-              <span>◈ ADLR / ГЕШТАЛЬТ</span>
-              <span>◆ СТАТУС: ЧЕРНОВИК</span>
+            <div class="diary-entry-head-meta" style="padding:0 18px 8px 44px;">
+              <div class="diary-entry-title">◆ ЗАГОЛОВОК ЗАПИСИ 03</div>
+            </div>
+            <div class="diary-entry-body-wrap">
+              <div class="diary-entry-body">
+                <span class="editable" contenteditable="true" data-key="diary-3" data-placeholder="[ ТЕКСТ ЗАПИСИ БУДЕТ ЗАПОЛНЕН ПОЗЖЕ ]"></span>
+                <div class="diary-entry-footer">
+                  <span>◈ ГЕШТАЛЬТ / С. СИРАКУЗА</span>
+                  <span>◆ СТАТУС: ЧЕРНОВИК</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Запись 4 -->
+          <div class="diary-entry" data-tags="personal">
+            <div class="diary-entry-head" onclick="toggleDiary(this)">
+              <span class="diary-entry-toggle">▶</span>
+              <div class="diary-entry-head-meta">
+                <span class="diary-entry-date">▸ ДАТА · ЦИКЛ</span>
+                <span class="diary-entry-tag">ЛИЧНОЕ</span>
+              </div>
+            </div>
+            <div class="diary-entry-head-meta" style="padding:0 18px 8px 44px;">
+              <div class="diary-entry-title">◆ ЗАГОЛОВОК ЗАПИСИ 04</div>
+            </div>
+            <div class="diary-entry-body-wrap">
+              <div class="diary-entry-body">
+                <span class="editable" contenteditable="true" data-key="diary-4" data-placeholder="[ ТЕКСТ ЗАПИСИ БУДЕТ ЗАПОЛНЕН ПОЗЖЕ ]"></span>
+                <div class="diary-entry-footer">
+                  <span>◈ ГЕШТАЛЬТ / С. СИРАКУЗА</span>
+                  <span>◆ СТАТУС: ЧЕРНОВИК</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Запись 5 -->
+          <div class="diary-entry" data-tags="thought">
+            <div class="diary-entry-head" onclick="toggleDiary(this)">
+              <span class="diary-entry-toggle">▶</span>
+              <div class="diary-entry-head-meta">
+                <span class="diary-entry-date">▸ ДАТА · ЦИКЛ</span>
+                <span class="diary-entry-tag">РАЗМЫШЛЕНИЯ</span>
+              </div>
+            </div>
+            <div class="diary-entry-head-meta" style="padding:0 18px 8px 44px;">
+              <div class="diary-entry-title">◆ ЗАГОЛОВОК ЗАПИСИ 05</div>
+            </div>
+            <div class="diary-entry-body-wrap">
+              <div class="diary-entry-body">
+                <span class="editable" contenteditable="true" data-key="diary-5" data-placeholder="[ ТЕКСТ ЗАПИСИ БУДЕТ ЗАПОЛНЕН ПОЗЖЕ ]"></span>
+                <div class="diary-entry-footer">
+                  <span>◈ ГЕШТАЛЬТ / С. СИРАКУЗА</span>
+                  <span>◆ СТАТУС: ЧЕРНОВИК</span>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -1475,58 +1927,134 @@
             <span class="rel-tag c-enemy" data-rel="c-enemy">ВРАЖДА</span>
           </div>
 
+          <div class="search-wrap">
+            <input type="text" class="search-input" id="personnelSearch" placeholder="ПОИСК ПО ИМЕНИ ИЛИ НОМЕРУ...">
+          </div>
+
           <div class="social-lists">
             <div class="social-col">
               <h3>▸ РЕПЛИКИ</h3>
 
               <span class="group-header" data-group="eulr">EULR</span>
               <div class="sub-items" id="group-eulr">
-                <div class="empty-note">— список пуст —</div>
+                <div class="personnel-entry" data-name="EULR.724">
+                  <span class="status-dot unknown"></span>
+                  <span class="personnel-name">EULR.724</span>
+                  <span class="personnel-rel">—</span>
+                </div>
+                <div class="personnel-entry" data-name="EULR.546">
+                  <span class="status-dot unknown"></span>
+                  <span class="personnel-name">EULR.546</span>
+                  <span class="personnel-rel">—</span>
+                </div>
+                <div class="personnel-entry" data-name="EULR.381">
+                  <span class="status-dot unknown"></span>
+                  <span class="personnel-name">EULR.381</span>
+                  <span class="personnel-rel">—</span>
+                </div>
+                <div class="personnel-entry" data-name="EULR.401">
+                  <span class="status-dot unknown"></span>
+                  <span class="personnel-name">EULR.401</span>
+                  <span class="personnel-rel">—</span>
+                </div>
+                <div class="personnel-entry" data-name="EULR.322">
+                  <span class="status-dot unknown"></span>
+                  <span class="personnel-name">EULR.322</span>
+                  <span class="personnel-rel">—</span>
+                </div>
               </div>
 
               <span class="group-header" data-group="arar">ARAR</span>
               <div class="sub-items" id="group-arar">
-                <div class="empty-note">— список пуст —</div>
+                <div class="personnel-entry" data-name="ARAR.841">
+                  <span class="status-dot unknown"></span>
+                  <span class="personnel-name">ARAR.841</span>
+                  <span class="personnel-rel">—</span>
+                </div>
+                <div class="personnel-entry" data-name="ARAR.978">
+                  <span class="status-dot unknown"></span>
+                  <span class="personnel-name">ARAR.978</span>
+                  <span class="personnel-rel">—</span>
+                </div>
+                <div class="personnel-entry" data-name="ARAR.595">
+                  <span class="status-dot unknown"></span>
+                  <span class="personnel-name">ARAR.595</span>
+                  <span class="personnel-rel">—</span>
+                </div>
+                <div class="personnel-entry" data-name="ARAR.102">
+                  <span class="status-dot unknown"></span>
+                  <span class="personnel-name">ARAR.102</span>
+                  <span class="personnel-rel">—</span>
+                </div>
               </div>
 
               <span class="group-header" data-group="mnhr">MNHR</span>
               <div class="sub-items" id="group-mnhr">
-                <div class="empty-note">— список пуст —</div>
+                <div class="personnel-entry" data-name="MNHR.300">
+                  <span class="status-dot unknown"></span>
+                  <span class="personnel-name">MNHR.300</span>
+                  <span class="personnel-rel">—</span>
+                </div>
+                <div class="personnel-entry" data-name="MNHR.063">
+                  <span class="status-dot unknown"></span>
+                  <span class="personnel-name">MNHR.063</span>
+                  <span class="personnel-rel">—</span>
+                </div>
               </div>
 
               <span class="group-header" data-group="star">STAR</span>
               <div class="sub-items" id="group-star">
-                <div class="empty-note">— список пуст —</div>
+                <div class="personnel-entry" data-name="STAR.114">
+                  <span class="status-dot unknown"></span>
+                  <span class="personnel-name">STAR.114</span>
+                  <span class="personnel-rel">—</span>
+                </div>
+                <div class="personnel-entry" data-name="STAR.603">
+                  <span class="status-dot unknown"></span>
+                  <span class="personnel-name">STAR.603</span>
+                  <span class="personnel-rel">—</span>
+                </div>
+                <div class="personnel-entry" data-name="STAR.762">
+                  <span class="status-dot unknown"></span>
+                  <span class="personnel-name">STAR.762</span>
+                  <span class="personnel-rel">—</span>
+                </div>
               </div>
 
               <span class="group-header" data-group="stcr">STCR</span>
               <div class="sub-items" id="group-stcr">
-                <div class="empty-note">— список пуст —</div>
+                <div class="personnel-entry" data-name="STRC.213">
+                  <span class="status-dot unknown"></span>
+                  <span class="personnel-name">STRC.213</span>
+                  <span class="personnel-rel">—</span>
+                </div>
               </div>
 
               <span class="group-header" data-group="klbr">KLBR</span>
               <div class="sub-items" id="group-klbr">
-                <div class="empty-note">— список пуст —</div>
+                <div class="personnel-entry" data-name="KLBR.080">
+                  <span class="status-dot unknown"></span>
+                  <span class="personnel-name">KLBR.080</span>
+                  <span class="personnel-rel">—</span>
+                </div>
               </div>
 
               <span class="group-header" data-group="kahr">KAHR</span>
               <div class="sub-items" id="group-kahr">
-                <div class="empty-note">— список пуст —</div>
+                <div class="personnel-entry" data-name="KAHR">
+                  <span class="status-dot unknown"></span>
+                  <span class="personnel-name">KAHR</span>
+                  <span class="personnel-rel">—</span>
+                </div>
               </div>
 
               <span class="group-header" data-group="fklr">FKLR</span>
               <div class="sub-items" id="group-fklr">
-                <div class="empty-note">— список пуст —</div>
-              </div>
-
-              <span class="group-header" data-group="star-other">STAR · ПРОЧИЕ</span>
-              <div class="sub-items" id="group-star-other">
-                <div class="empty-note">— список пуст —</div>
-              </div>
-
-              <span class="group-header" data-group="other-repl">ПРОЧИЕ РЕПЛИКИ</span>
-              <div class="sub-items" id="group-other-repl">
-                <div class="empty-note">— список пуст —</div>
+                <div class="personnel-entry" data-name="FKLR">
+                  <span class="status-dot unknown"></span>
+                  <span class="personnel-name">FKLR</span>
+                  <span class="personnel-rel">—</span>
+                </div>
               </div>
             </div>
 
@@ -1535,12 +2063,50 @@
 
               <span class="group-header" data-group="gscc">GSCC</span>
               <div class="sub-items" id="group-gscc">
-                <div class="empty-note">— список пуст —</div>
+                <div class="personnel-entry" data-name="GSCC.Артемий Овечкин">
+                  <span class="status-dot unknown"></span>
+                  <span class="personnel-name">GSCC.Артемий Овечкин</span>
+                  <span class="personnel-rel">—</span>
+                </div>
+                <div class="personnel-entry" data-name="GSCC.Кирра Фостер">
+                  <span class="status-dot unknown"></span>
+                  <span class="personnel-name">GSCC.Кирра Фостер</span>
+                  <span class="personnel-rel">—</span>
+                </div>
               </div>
 
               <span class="group-header" data-group="gscp">GSCP</span>
               <div class="sub-items" id="group-gscp">
-                <div class="empty-note">— список пуст —</div>
+                <div class="personnel-entry" data-name="GSCP.Анна Леонхард">
+                  <span class="status-dot unknown"></span>
+                  <span class="personnel-name">GSCP.Анна Леонхард</span>
+                  <span class="personnel-rel">—</span>
+                </div>
+                <div class="personnel-entry" data-name="GSCP.Сэйра Штраусс">
+                  <span class="status-dot unknown"></span>
+                  <span class="personnel-name">GSCP.Сэйра Штраусс</span>
+                  <span class="personnel-rel">—</span>
+                </div>
+                <div class="personnel-entry" data-name="GSCP.Кенто Годжо">
+                  <span class="status-dot unknown"></span>
+                  <span class="personnel-name">GSCP.Кенто Годжо</span>
+                  <span class="personnel-rel">—</span>
+                </div>
+                <div class="personnel-entry" data-name="GSCP.316">
+                  <span class="status-dot unknown"></span>
+                  <span class="personnel-name">GSCP.316</span>
+                  <span class="personnel-rel">—</span>
+                </div>
+                <div class="personnel-entry" data-name="GSCP.168">
+                  <span class="status-dot unknown"></span>
+                  <span class="personnel-name">GSCP.168 — Аделина Краусс</span>
+                  <span class="personnel-rel">—</span>
+                </div>
+                <div class="personnel-entry" data-name="GSCP.999">
+                  <span class="status-dot unknown"></span>
+                  <span class="personnel-name">GSCP.999</span>
+                  <span class="personnel-rel">—</span>
+                </div>
               </div>
 
               <span class="group-header" data-group="gsco">GSCO</span>
@@ -1589,6 +2155,9 @@
               <li><strong>Скорость:</strong> [ОЖИДАНИЕ ДАННЫХ]</li>
               <li><strong>Последствия:</strong> [ОЖИДАНИЕ ДАННЫХ]</li>
             </ul>
+            <div class="glitch-line">> ERROR: SIGNAL LOST AT 0x4F2A</div>
+            <div class="glitch-line">> MEMORY CORRUPTION DETECTED...</div>
+            <div class="glitch-line">> REPLIKA.EXE НЕ ОТВЕЧАЕТ</div>
           </div>
 
           <div class="status-card">
@@ -1692,7 +2261,8 @@
       </div>
 
       <div class="footer-bar">
-        <span>⏻ ЕРЕС-М-427 · v.2.1</span>
+        <span>⏻ ЕРЕС-М-427 · v.3.0</span>
+        <span id="footerDate">◆ CYCLE 0000</span>
         <span>⏾ ГЕШТАЛЬТ · С. СИРАКУЗА</span>
       </div>
     </div>
@@ -1709,13 +2279,17 @@
   const loadingBarFill = document.getElementById('loadingBarFill');
   const loadingPercent = document.getElementById('loadingPercent');
   const loadingLog = document.getElementById('loadingLog');
+  const muteBtn = document.getElementById('muteBtn');
 
-  // === Смех ===
+  // === Звук ===
   const laughAudio = new Audio('Hahaha.mp3');
   laughAudio.preload = 'auto';
   laughAudio.volume = 0.7;
 
+  let soundEnabled = true;
+
   function playBootSound() {
+    if (!soundEnabled) return;
     try {
       const ctx = new (window.AudioContext || window.webkitAudioContext)();
       const osc = ctx.createOscillator();
@@ -1732,6 +2306,7 @@
   }
 
   function playBeep(freq) {
+    if (!soundEnabled) return;
     try {
       const ctx = new (window.AudioContext || window.webkitAudioContext)();
       const osc = ctx.createOscillator();
@@ -1746,6 +2321,7 @@
   }
 
   function playSwitchSound() {
+    if (!soundEnabled) return;
     try {
       const ctx = new (window.AudioContext || window.webkitAudioContext)();
       const bufferSize = ctx.sampleRate * 0.06;
@@ -1774,6 +2350,7 @@
   }
 
   function playAccessDenied() {
+    if (!soundEnabled) return;
     try {
       const ctx = new (window.AudioContext || window.webkitAudioContext)();
       const osc = ctx.createOscillator();
@@ -1790,6 +2367,7 @@
   }
 
   function playAccessGranted() {
+    if (!soundEnabled) return;
     try {
       const ctx = new (window.AudioContext || window.webkitAudioContext)();
       const osc = ctx.createOscillator();
@@ -1804,6 +2382,36 @@
       osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.4);
     } catch (e) {}
   }
+
+  // === Кнопка звука ===
+  muteBtn.addEventListener('click', function() {
+    soundEnabled = !soundEnabled;
+    if (soundEnabled) {
+      muteBtn.textContent = '♪ ЗВУК ВКЛ';
+      muteBtn.classList.remove('muted');
+    } else {
+      muteBtn.textContent = '♪ ЗВУК ВЫКЛ';
+      muteBtn.classList.add('muted');
+      try { laughAudio.pause(); } catch(e) {}
+    }
+  });
+
+  // === Динамическая дата ===
+  function updateDate() {
+    const now = new Date();
+    const start = new Date(2156, 0, 1);
+    const days = Math.floor((now - start) / 86400000);
+    const cycle = 200 + (days % 9999);
+    const hh = String(now.getHours()).padStart(2, '0');
+    const mm = String(now.getMinutes()).padStart(2, '0');
+    const str = `CYCLE ${cycle} · ${hh}:${mm}`;
+    const el = document.getElementById('liveDate');
+    if (el) el.textContent = str;
+    const f = document.getElementById('footerDate');
+    if (f) f.textContent = `◆ CYCLE ${cycle}`;
+  }
+  updateDate();
+  setInterval(updateDate, 30000);
 
   const logMessages = [
     "> INIT SYSTEM...",
@@ -1839,10 +2447,12 @@
         loadingLog.textContent = "> HOLD AT 99%...";
         playBeep(400);
 
-        try {
-          laughAudio.currentTime = 0;
-          laughAudio.play().catch(() => {});
-        } catch (e) {}
+        if (soundEnabled) {
+          try {
+            laughAudio.currentTime = 0;
+            laughAudio.play().catch(() => {});
+          } catch (e) {}
+        }
 
         let finished = false;
         const finishLoading = () => {
@@ -1899,6 +2509,7 @@
     window.scrollTo(0, 0);
   });
 
+  // === Вкладки ===
   const tabs = document.querySelectorAll('.tab-btn');
   const contents = {
     tab1: document.getElementById('tab1'),
@@ -1937,6 +2548,116 @@
     });
   });
 
+  // === Под-вкладки личного дела ===
+  document.querySelectorAll('.sub-tab').forEach(st => {
+    st.addEventListener('click', function() {
+      const target = this.dataset.sub;
+      document.querySelectorAll('.sub-tab').forEach(x => x.classList.remove('active'));
+      document.querySelectorAll('.sub-pane').forEach(x => x.classList.remove('active'));
+      this.classList.add('active');
+      const pane = document.getElementById(target);
+      if (pane) pane.classList.add('active');
+      playSwitchSound();
+    });
+  });
+
+  // === Дневник: раскрытие записей ===
+  window.toggleDiary = function(headEl) {
+    const entry = headEl.closest('.diary-entry');
+    if (entry) entry.classList.toggle('open');
+    playSwitchSound();
+  };
+
+  // === Дневник: фильтр тегов ===
+  document.querySelectorAll('.diary-tag-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const tag = this.dataset.tag;
+      document.querySelectorAll('.diary-tag-btn').forEach(x => x.classList.remove('active'));
+      this.classList.add('active');
+      document.querySelectorAll('.diary-entry').forEach(entry => {
+        if (tag === 'all') {
+          entry.style.display = '';
+        } else {
+          const tags = (entry.dataset.tags || '').split(' ');
+          entry.style.display = tags.includes(tag) ? '' : 'none';
+        }
+      });
+      playSwitchSound();
+    });
+  });
+
+  // === Раскрытие групп персонала ===
+  document.querySelectorAll('.group-header').forEach(header => {
+    header.addEventListener('click', function(e) {
+      const group = this.dataset.group;
+      const items = document.getElementById('group-' + group);
+      if (items) {
+        if (items.classList.contains('open')) {
+          items.classList.remove('open');
+          this.classList.remove('open');
+        } else {
+          items.classList.add('open');
+          this.classList.add('open');
+        }
+        playSwitchSound();
+      }
+    });
+  });
+
+  // === Поиск по персоналу ===
+  const searchInput = document.getElementById('personnelSearch');
+  if (searchInput) {
+    searchInput.addEventListener('input', function() {
+      const q = this.value.trim().toLowerCase();
+      document.querySelectorAll('.personnel-entry').forEach(entry => {
+        const name = (entry.dataset.name || entry.textContent).toLowerCase();
+        entry.classList.toggle('hidden', q.length > 0 && !name.includes(q));
+      });
+      // Раскрываем все группы при поиске
+      if (q.length > 0) {
+        document.querySelectorAll('.sub-items').forEach(s => s.classList.add('open'));
+        document.querySelectorAll('.group-header').forEach(h => h.classList.add('open'));
+      }
+    });
+  }
+
+  // === Клик по персоналу — заглушка в desc-panel ===
+  document.querySelectorAll('.personnel-entry').forEach(entry => {
+    entry.addEventListener('click', function() {
+      const name = this.dataset.name;
+      const panel = document.getElementById('descPanel');
+      if (panel) {
+        panel.innerHTML = `
+          <div style="padding:12px 6px;">
+            <div style="font-family:'VT323',monospace;color:#ff3333;font-size:20px;letter-spacing:3px;margin-bottom:8px;text-shadow:0 0 10px #cc2222;">▸ ${name}</div>
+            <div style="color:#661111;font-size:12px;letter-spacing:2px;margin-bottom:12px;">[ ЗАПИСЬ ПУСТА · ЗАПОЛНИТЕ ПОЗЖЕ ]</div>
+            <div style="color:#441111;font-style:italic;letter-spacing:2px;font-size:12px;">— нет данных —</div>
+          </div>
+        `;
+      }
+      playBeep(600);
+    });
+  });
+
+  // === Редактируемые поля с localStorage ===
+  document.querySelectorAll('.editable').forEach(el => {
+    const key = el.dataset.key;
+    if (!key) return;
+    // Загрузка
+    const saved = localStorage.getItem('dossier_' + key);
+    if (saved) el.textContent = saved;
+    // Сохранение
+    el.addEventListener('input', function() {
+      localStorage.setItem('dossier_' + key, this.textContent);
+    });
+    el.addEventListener('blur', function() {
+      if (!this.textContent.trim()) {
+        localStorage.removeItem('dossier_' + key);
+      }
+    });
+  });
+
+  // === Код доступа ===
   const SECRET_CODE = "Харибта";
   const lockInput = document.getElementById('lockInput');
   const lockBtn = document.getElementById('lockBtn');
@@ -1947,11 +2668,9 @@
 
   function tryUnlock() {
     const value = lockInput.value.trim();
-
     if (value.toLowerCase() === SECRET_CODE.toLowerCase()) {
       lockError.textContent = "";
       lockError.style.color = "#ff3333";
-
       let dots = 0;
       const dotsInterval = setInterval(() => {
         lockError.textContent = "▸ ДОСТУП РАЗРЕШЁН " + ".".repeat((dots % 4) + 1);
@@ -1960,11 +2679,9 @@
           clearInterval(dotsInterval);
           lockError.textContent = "";
           playAccessGranted();
-
           statusUnlocked = true;
           statusTabBtn.classList.remove('locked');
           statusTabBtn.classList.add('unlocked');
-
           lockScreen.style.display = 'none';
           statusUnlockedEl.classList.add('show');
         }
@@ -1974,7 +2691,6 @@
       lockError.textContent = "✕ НЕВЕРНЫЙ КОД. ДОСТУП ЗАПРЕЩЁН.";
       lockInput.value = "";
       lockInput.focus();
-
       lockInput.style.animation = 'none';
       void lockInput.offsetWidth;
       lockInput.style.animation = 'shake 0.3s';
@@ -2000,27 +2716,9 @@
   `;
   document.head.appendChild(styleShake);
 
-  // Раскрытие групп персонала
-  document.querySelectorAll('.group-header').forEach(header => {
-    header.addEventListener('click', function(e) {
-      const group = this.dataset.group;
-      const items = document.getElementById('group-' + group);
-      if (items) {
-        if (items.classList.contains('open')) {
-          items.classList.remove('open');
-          this.classList.remove('open');
-        } else {
-          items.classList.add('open');
-          this.classList.add('open');
-        }
-        playSwitchSound();
-      }
-    });
-  });
-
-  // Звуки на интерактивных элементах
-  document.querySelectorAll('.rel-tag, .med-card, .dossier-card').forEach(el => {
-    el.addEventListener('click', function(e) {
+  // === Звуки на элементах ===
+  document.querySelectorAll('.rel-tag, .med-card, .dossier-card, .sub-tab').forEach(el => {
+    el.addEventListener('click', function() {
       playBeep(600 + Math.random() * 400);
     });
   });
