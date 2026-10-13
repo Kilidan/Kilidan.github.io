@@ -3,146 +3,1044 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lappupa.gif</title>
+  <title>ДОСЬЕ · ЕРЕС-М-427</title>
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      user-select: none;
     }
+
     body {
-      background: #000;
-      overflow: hidden;
-      font-family: 'Courier New', monospace;
-    }
-
-    /* Экран загрузки */
-    #loader {
-      position: fixed;
-      inset: 0;
-      background: #000;
+      background: #1a100a;
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      z-index: 10;
-      color: #fff;
-      font-size: 24px;
-      text-align: center;
-      padding: 20px;
-      transition: opacity 0.8s;
+      font-family: 'Courier New', 'VT323', 'Lucida Console', monospace;
+      padding: 16px;
+      position: relative;
+      overflow-x: hidden;
     }
-    #loader.hide {
-      opacity: 0;
+
+    .crt-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       pointer-events: none;
+      z-index: 100;
+      background: repeating-linear-gradient(0deg,
+          rgba(0,0,0,0.03) 0px,
+          rgba(0,0,0,0) 2px,
+          rgba(0,0,0,0.02) 4px,
+          rgba(0,0,0,0) 6px);
+      animation: scanMove 8s linear infinite;
+    }
+    @keyframes scanMove {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(100%); }
     }
 
-    /* Область с гифкой (появляется после загрузки) */
-    #clickArea {
+    .fish-eye {
       position: fixed;
-      inset: 0;
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 20;
-      background: #000;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      background: radial-gradient(ellipse at center, transparent 50%, rgba(10, 6, 4, 0.4) 80%, rgba(0,0,0,0.7) 100%);
+      box-shadow: inset 0 0 120px rgba(0,0,0,0.5);
     }
-    #clickArea.show {
-      display: flex;
+    .fish-eye::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(ellipse at center, transparent 45%, rgba(20, 12, 8, 0.3) 85%, rgba(0,0,0,0.5) 100%);
+      border-radius: 50%;
+      transform: scale(1.3);
+      filter: blur(2px);
     }
 
-    /* Контейнер для гифки — не на весь экран */
-    #gifContainer {
-      max-width: 70vw;
-      max-height: 70vh;
-      border: 2px solid #333;
+    .side-frame {
+      position: fixed;
+      top: 0;
+      width: 80px;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+      background: repeating-linear-gradient(45deg, 
+        #3a2a1a 0px, #1f140e 3px, 
+        #4a3a2a 6px, #1f140e 9px);
+      opacity: 0.3;
+      filter: blur(1px) brightness(0.7) sepia(0.5);
+    }
+    .side-frame-left { left: 0; transform: skewX(2deg); }
+    .side-frame-right { right: 0; transform: skewX(-2deg); }
+
+    .computer {
+      position: relative;
+      width: 1100px;
+      max-width: 96vw;
+      background: #2c1e14;
+      border: 6px solid #6a4f3a;
+      border-radius: 18px 18px 12px 12px;
+      padding: 16px 16px 12px;
+      box-shadow: 0 0 0 2px #3f2a1a, 0 0 40px #5a3d2a, inset 0 0 40px #3f2a1a;
+      z-index: 2;
+    }
+
+    .screen {
+      background: #1f140e;
+      border: 2px solid #5a4030;
       border-radius: 12px;
-      overflow: hidden;
+      padding: 14px 12px 12px;
+      box-shadow: inset 0 0 50px #2a1a10;
+    }
+
+    .title-bar {
       display: flex;
-      justify-content: center;
-      align-items: center;
+      justify-content: space-between;
+      align-items: baseline;
+      border-bottom: 2px solid #7a5a3a;
+      padding-bottom: 6px;
+      margin-bottom: 10px;
+      color: #c9a87a;
+      text-shadow: 0 0 8px #5a3a1a;
+      font-size: 14px;
+      text-transform: uppercase;
+      font-family: 'VT323', 'Courier New', monospace;
+      letter-spacing: 2px;
+    }
+    .title-bar span:first-child { color: #e0c090; font-weight: bold; font-size: 18px; filter: drop-shadow(0 0 8px #7a5a2a); }
+    .title-bar span:last-child { font-size: 13px; opacity: 0.7; }
+
+    .tabs {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+    .tab-btn {
+      background: #2a1a10;
+      border: 2px solid #5a4030;
+      border-bottom: none;
+      padding: 5px 16px 4px;
+      font-family: 'VT323', 'Courier New', monospace;
+      font-size: 17px;
+      font-weight: bold;
+      color: #b09070;
+      text-shadow: 0 0 6px #4a2a1a;
+      border-radius: 10px 10px 0 0;
       cursor: pointer;
-      background: #111;
-      padding: 20px;
-      transition: transform 0.2s;
+      transition: 0.1s;
+      box-shadow: inset 0 -3px 0 #3f2a1a;
+      text-transform: uppercase;
+      letter-spacing: 2px;
     }
-    #gifContainer:hover {
-      transform: scale(1.02);
+    .tab-btn.active { background: #3f2a1a; color: #f0d8b0; border-color: #a08050; box-shadow: inset 0 -4px 0 #a08050, 0 0 20px #6a4a2a; text-shadow: 0 0 14px #b09060; }
+    .tab-btn:hover { background: #4a3220; color: #e8d0a0; }
+
+    .tab-content {
+      display: none;
+      background: #1a100a;
+      border: 2px solid #4a3424;
+      border-radius: 8px;
+      padding: 14px 14px 12px;
+      min-height: 400px;
+      box-shadow: inset 0 0 30px #2a1a10;
+      color: #d4bc9a;
+      font-family: 'Courier New', 'VT323', monospace;
     }
-    #gifContainer img {
-      max-width: 100%;
-      max-height: 70vh;
-      width: auto;
-      height: auto;
+    .tab-content.active { display: block; }
+
+    .info-grid { display: flex; flex-wrap: wrap; gap: 14px; }
+    .info-left { flex: 0 0 200px; min-width: 160px; }
+    .photo-place {
+      background: #1f140e;
+      border: 3px solid #6a4f3a;
+      border-radius: 12px;
+      height: 180px;
+      width: 100%;
+      max-width: 200px;
+      margin-bottom: 8px;
+      box-shadow: inset 0 0 30px #3f2a1a, 0 0 20px #4a3220;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: #2a1a10;
+    }
+    .photo-place img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; }
+
+    .info-column {
+      background: #1a100a;
+      border: 2px solid #4a3424;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #d4bc9a;
+      box-shadow: inset 0 0 20px #2a1a10;
+      max-width: 200px;
+    }
+    .info-column strong { color: #c9a87a; font-weight: bold; }
+
+    .status-line {
+      font-size: 15px;
+      line-height: 1.8;
+      text-shadow: 0 0 6px #3f2a1a;
+      letter-spacing: 1px;
+      margin-top: 8px;
+    }
+    .status-line .label { color: #c9a87a; display: inline-block; width: 100px; }
+    .status-line .value { display: inline-block; background: #1f140e; padding: 0 12px 0 6px; border-left: 2px solid #6a4f3a; margin-left: 4px; }
+    .status-line .green { color: #8cb87a; text-shadow: 0 0 10px #3a6a2a; }
+    .status-line .red { color: #d97a5a; text-shadow: 0 0 10px #7a3a2a; }
+    .status-line .yellow { color: #e8c86a; text-shadow: 0 0 10px #7a6a2a; }
+    .status-line .fraction-yellow { color: #e8c86a; text-shadow: 0 0 10px #7a6a2a; }
+
+    .right-col { flex: 1; min-width: 180px; display: flex; flex-direction: column; gap: 8px; }
+    .bio-section {
+      border-left: 6px solid #7a5a3a;
+      background: #1a100a;
+      padding: 8px 14px;
+      box-shadow: inset 0 0 20px #2a1a10;
+      border-radius: 4px 12px 12px 4px;
+    }
+    .bio-section summary { font-weight: bold; font-size: 15px; color: #e0c090; cursor: pointer; text-shadow: 0 0 6px #5a3a1a; letter-spacing: 1px; padding: 2px 0; }
+    .bio-section summary:hover { color: #f0d8b0; }
+    .bio-section ul { list-style: none; padding: 4px 0 2px 12px; margin: 0; }
+    .bio-section ul li { padding: 2px 0; font-size: 14px; color: #d4bc9a; border-bottom: 1px solid #2a1a10; }
+    .bio-section ul li::before { content: "▸ "; color: #7a5a3a; }
+
+    .med-card {
+      padding: 10px 14px;
+      border: 2px solid #7a5a3a;
+      border-radius: 8px;
+      background: #1a100a;
+      box-shadow: inset 0 0 20px #2a1a10;
+    }
+    .med-card h4 { font-family: 'VT323', monospace; font-size: 18px; color: #e0c090; letter-spacing: 3px; border-bottom: 1px solid #5a4030; padding-bottom: 3px; margin-bottom: 6px; text-shadow: 0 0 8px #6a4a2a; }
+    .med-card p { font-size: 14px; line-height: 1.5; color: #d4bc9a; white-space: pre-wrap; }
+
+    .history-block {
+      background: #1a100a;
+      border: 2px solid #5a4030;
+      border-radius: 12px;
+      padding: 14px 18px 18px;
+      box-shadow: inset 0 0 30px #2a1a10, 0 0 20px #3f2a1a;
+    }
+    .history-block h2 {
+      font-family: 'VT323', 'Courier New', monospace;
+      font-size: 28px;
+      font-weight: normal;
+      color: #e0c090;
+      text-shadow: 0 0 16px #7a5a2a;
+      letter-spacing: 6px;
+      border-bottom: 2px solid #6a4f3a;
+      padding-bottom: 6px;
+      margin-bottom: 14px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .history-block h2::before { content: "⊞"; font-size: 24px; color: #a08050; }
+    .history-block p { font-size: 15px; line-height: 1.7; color: #d4bc9a; text-shadow: 0 0 4px #2a1a10; letter-spacing: 0.3px; font-family: 'Courier New', 'VT323', monospace; white-space: pre-wrap; }
+
+    .social-wrapper { display: flex; flex-direction: column; gap: 14px; }
+
+    .classifier-block {
+      background: #1a100a;
+      border: 2px solid #5a4030;
+      border-radius: 8px;
+      padding: 12px 16px;
+      box-shadow: inset 0 0 30px #2a1a10;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px 12px;
+    }
+    .rel-tag {
+      display: inline-block;
+      padding: 4px 14px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      background: #1a100a;
+      border: 2px solid #4a3424;
+      cursor: pointer;
+      transition: 0.1s;
+    }
+    .rel-tag:hover { filter: brightness(1.2); transform: scale(1.02); }
+    .rel-tag.active-filter { box-shadow: 0 0 20px currentColor; border-color: #fff; }
+
+    .rel-tag.c-distrust { color: #e8c86a; border-color: #e8c86a; background: rgba(232, 200, 106, 0.08); }
+    .rel-tag.c-sad { color: #9a9a9a; border-color: #9a9a9a; background: rgba(154, 154, 154, 0.08); }
+    .rel-tag.c-neutral { color: #f0f0f0; border-color: #f0f0f0; background: rgba(240, 240, 240, 0.05); }
+    .rel-tag.c-friend { color: #6fcf97; border-color: #6fcf97; background: rgba(111, 207, 151, 0.08); }
+    .rel-tag.c-strong { color: #27ae60; border-color: #27ae60; background: rgba(39, 174, 96, 0.08); }
+    .rel-tag.c-love { color: #f1948a; border-color: #f1948a; background: rgba(241, 148, 138, 0.08); }
+    .rel-tag.c-dead { color: #1a1a1a; border-color: #555; background: rgba(30, 30, 30, 0.3); }
+    .rel-tag.c-enemy { color: #7a2a2a; border-color: #7a2a2a; background: rgba(122, 42, 42, 0.08); }
+    .rel-tag.c-fear { color: #5a7a9a; border-color: #5a7a9a; background: rgba(90, 122, 154, 0.08); }
+    .rel-tag.c-disappoint { color: #e8d8a0; border-color: #e8d8a0; background: rgba(232, 216, 160, 0.08); }
+    .rel-tag.c-cautious { color: #d97a3a; border-color: #d97a3a; background: rgba(217, 122, 58, 0.08); }
+    .rel-tag.c-regret { color: #1a3a5a; border-color: #1a3a5a; background: rgba(26, 58, 90, 0.15); }
+    .rel-tag.c-sympathy { color: #8a2a8a; border-color: #8a2a8a; background: rgba(138, 42, 138, 0.08); }
+    .rel-tag.c-respect { color: #e8c84a; border-color: #e8c84a; background: rgba(232, 200, 74, 0.08); }
+
+    .social-lists { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .social-col {
+      background: #1a100a;
+      border: 2px solid #4a3424;
+      border-radius: 8px;
+      padding: 10px 14px;
+      box-shadow: inset 0 0 20px #2a1a10;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .social-col::-webkit-scrollbar { width: 4px; background: #1a100a; }
+    .social-col::-webkit-scrollbar-thumb { background: #5a4030; border-radius: 4px; }
+
+    .social-col h3 { font-family: 'VT323', monospace; color: #e0c090; font-size: 20px; letter-spacing: 3px; border-bottom: 2px solid #5a4030; padding-bottom: 4px; margin-bottom: 8px; text-shadow: 0 0 12px #6a4a2a; }
+
+    .desc-panel {
+      background: #1a100a;
+      border: 2px solid #5a4030;
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-top: 14px;
+      min-height: 180px;
+      max-height: 300px;
+      overflow-y: auto;
+      box-shadow: inset 0 0 30px #2a1a10;
+      transition: all 0.15s;
+    }
+    .desc-panel::-webkit-scrollbar { width: 4px; background: #1a100a; }
+    .desc-panel::-webkit-scrollbar-thumb { background: #5a4030; border-radius: 4px; }
+    .desc-panel .empty-state {
+      color: #5a4030;
+      text-align: center;
+      padding: 30px 0;
+      font-size: 16px;
+      letter-spacing: 2px;
+    }
+
+    .desc-panel .sub-card {
+      display: none;
+      background: transparent;
+      border: none;
+      padding: 0;
+      margin: 0;
+      box-shadow: none;
+    }
+    .desc-panel .sub-card.open { display: block; }
+    .desc-panel .sub-header {
+      font-weight: bold;
+      color: #e0c090;
+      font-size: 16px;
+      border-bottom: 1px solid #3f2a1a;
+      padding-bottom: 4px;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .desc-panel .sub-body { display: flex; gap: 12px; flex-wrap: wrap; }
+    .desc-panel .sub-photo {
+      width: 70px;
+      height: 70px;
+      border-radius: 8px;
+      border: 2px solid #5a4030;
+      background: #2a1a10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .desc-panel .sub-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .desc-panel .sub-desc { flex: 1; font-size: 13px; line-height: 1.5; color: #d4bc9a; min-width: 100px; white-space: pre-wrap; }
+    .desc-panel .rel-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px 8px;
+      margin-top: 6px;
+      padding-top: 6px;
+      border-top: 1px solid #2a1a10;
+    }
+    .desc-panel .rel-tags .mini-tag {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+      background: #1a100a;
+      border: 2px solid #4a3424;
+    }
+    .desc-panel .rel-tags .mini-tag.c-distrust { color: #e8c86a; border-color: #e8c86a; background: rgba(232, 200, 106, 0.08); }
+    .desc-panel .rel-tags .mini-tag.c-sad { color: #9a9a9a; border-color: #9a9a9a; background: rgba(154, 154, 154, 0.08); }
+    .desc-panel .rel-tags .mini-tag.c-neutral { color: #f0f0f0; border-color: #f0f0f0; background: rgba(240, 240, 240, 0.05); }
+    .desc-panel .rel-tags .mini-tag.c-friend { color: #6fcf97; border-color: #6fcf97; background: rgba(111, 207, 151, 0.08); }
+    .desc-panel .rel-tags .mini-tag.c-strong { color: #27ae60; border-color: #27ae60; background: rgba(39, 174, 96, 0.08); }
+    .desc-panel .rel-tags .mini-tag.c-love { color: #f1948a; border-color: #f1948a; background: rgba(241, 148, 138, 0.08); }
+    .desc-panel .rel-tags .mini-tag.c-dead { color: #1a1a1a; border-color: #555; background: rgba(30, 30, 30, 0.3); }
+    .desc-panel .rel-tags .mini-tag.c-enemy { color: #7a2a2a; border-color: #7a2a2a; background: rgba(122, 42, 42, 0.08); }
+    .desc-panel .rel-tags .mini-tag.c-fear { color: #5a7a9a; border-color: #5a7a9a; background: rgba(90, 122, 154, 0.08); }
+    .desc-panel .rel-tags .mini-tag.c-disappoint { color: #e8d8a0; border-color: #e8d8a0; background: rgba(232, 216, 160, 0.08); }
+    .desc-panel .rel-tags .mini-tag.c-cautious { color: #d97a3a; border-color: #d97a3a; background: rgba(217, 122, 58, 0.08); }
+    .desc-panel .rel-tags .mini-tag.c-regret { color: #1a3a5a; border-color: #1a3a5a; background: rgba(26, 58, 90, 0.15); }
+    .desc-panel .rel-tags .mini-tag.c-sympathy { color: #8a2a8a; border-color: #8a2a8a; background: rgba(138, 42, 138, 0.08); }
+    .desc-panel .rel-tags .mini-tag.c-respect { color: #e8c84a; border-color: #e8c84a; background: rgba(232, 200, 74, 0.08); }
+
+    .desc-panel .close-btn {
+      font-size: 14px;
+      color: #7a5a3a;
+      cursor: pointer;
+      padding: 0 6px;
+    }
+    .desc-panel .close-btn:hover { color: #d97a3a; }
+
+    .social-col .group-header {
+      font-weight: bold;
+      font-size: 16px;
+      color: #c9a87a;
+      cursor: pointer;
+      padding: 4px 0 4px 8px;
+      border-bottom: 1px solid #2a1a10;
+      transition: 0.1s;
       display: block;
     }
+    .social-col .group-header:hover { color: #f0d8b0; background: #2a1a10; }
+    .social-col .group-header.open { color: #f0d8b0; background: #2a1a10; }
+    .sub-items { padding-left: 12px; margin: 4px 0; display: none; }
+    .sub-items .item-link {
+      display: block;
+      padding: 3px 0 3px 8px;
+      font-size: 14px;
+      color: #d4bc9a;
+      cursor: pointer;
+      border-bottom: 1px solid #1a100a;
+      transition: 0.1s;
+    }
+    .sub-items .item-link:hover { background: #2a1a10; color: #f0d8b0; }
+    .sub-items .item-link::before { content: "▪ "; color: #7a5a3a; }
+    .sub-items .item-link.highlight { background: #3f2a1a; color: #f0d8b0; border-left: 3px solid #a08050; padding-left: 5px; }
 
-    .placeholder-text {
-      color: #fff;
-      font-size: 20px;
-      text-align: center;
-      user-select: none;
+    .footer-bar {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 12px;
+      color: #5a4030;
+      font-size: 12px;
+      border-top: 1px solid #3f2a1a;
+      padding-top: 6px;
+      letter-spacing: 2px;
+    }
+
+    @media (max-width: 750px) {
+      .computer { padding: 10px; }
+      .tab-btn { font-size: 14px; padding: 4px 10px; }
+      .social-lists { grid-template-columns: 1fr; }
+      .info-left { flex: 0 0 100%; }
+      .photo-place { max-width: 100%; }
+      .info-column { max-width: 100%; }
+      .side-frame { width: 30px; }
     }
   </style>
 </head>
 <body>
+  <div class="crt-overlay"></div>
+  <div class="fish-eye"></div>
+  <div class="side-frame side-frame-left"></div>
+  <div class="side-frame side-frame-right"></div>
 
-  <div id="loader">
-    пока просто, готовы начать представление
-  </div>
+  <div class="computer">
+    <div class="screen">
+      <div class="title-bar">
+        <span>⏣ ЕРЕС-М-427 · ДОСЬЕ</span>
+        <span>⚡ ГЕШТАЛЬТ · МАРСЕЛИН</span>
+      </div>
 
-  <div id="clickArea">
-    <div id="gifContainer">
-      <div class="placeholder-text">Нажмите, чтобы начать представление</div>
+      <div class="tabs">
+        <div class="tab-btn active" data-tab="tab1">Главная</div>
+        <div class="tab-btn" data-tab="tab2">Предыстория</div>
+        <div class="tab-btn" data-tab="tab3">Социализация</div>
+      </div>
+
+      <!-- ГЛАВНАЯ -->
+      <div id="tab1" class="tab-content active">
+        <div class="info-grid">
+          <div class="info-left">
+            <div class="photo-place">
+              <img src="https://i.yapx.ru/eHIPW.png" alt="Фото: Марселин Дюбуа">
+            </div>
+            <div class="info-column">
+              <strong>ФИ:</strong> Марселин Дюбуа<br>
+              <strong>Год рождения:</strong> 2128<br>
+              <strong>Место рождения:</strong> Винета. Евразийский континент. Промышленный Город Марсель. Район 8-А. Блок Д.
+            </div>
+            <div class="status-line">
+              <span class="label">СТАТУС:</span><span class="value green">Жива</span><br>
+              <span class="label">ОБОЛОЧКА:</span><span class="value">Гештальт</span><br>
+              <span class="label">ФРАКЦИЯ:</span><span class="value fraction-yellow">Нация Евсан</span><br>
+              <span class="label">ДОСТУП:</span><span class="value">Администрация ERES</span>
+            </div>
+          </div>
+          <div class="right-col">
+            <div class="bio-section">
+              <details>
+                <summary>ВНЕШНОСТЬ</summary>
+                <ul>
+                  <li>Высокая молодая девушка</li>
+                  <li>Грушевидный тип фигуры</li>
+                  <li>Лицо и всё тело покрыты веснушками</li>
+                  <li>Волосы: Рыжие, вьющиеся, длинные (до поясницы), предпочитает собирать их в хвост</li>
+                  <li>Цвет глаз: Голубой</li>
+                  <li>Носит очки</li>
+                </ul>
+              </details>
+            </div>
+            <div class="bio-section">
+              <details>
+                <summary>ХАРАКТЕР</summary>
+                <ul>
+                  <li>Субъект открытого темперамента</li>
+                  <li>Энергична, отзывчива, инициативна</li>
+                  <li>Показывает хорошие результаты в работе, стремится к карьерному росту</li>
+                  <li>Хорошо ладит с коллективом</li>
+                  <li>Из минусов: Весьма рассеяна и забывчива, деструктивный эффект на эффективность работы не оказывает</li>
+                </ul>
+              </details>
+            </div>
+            <div class="med-card">
+              <h4>⊡ МЕДИЦИНСКАЯ КАРТОЧКА</h4>
+              <p>Субъект имеет врождённую близорукость сильной степени.
+При крушении субъект подвергся серьёзным повреждением верхней пары конечностей и перелому нижних. Верхние ампутированы за невозможностью восстановления. Произведено протезирование.
+По результатам лечения диагностировано неполное восстановление коленного сустава левой ноги, приведшее к лёгкой степени хромоты.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ПРЕДЫСТОРИЯ -->
+      <div id="tab2" class="tab-content">
+        <div class="history-block">
+          <h2>Космический дальнобойщик</h2>
+          <p>
+Провела своё детство на Винете, воспитываемая дедушкой в глуши, отдалённо от городской суеты, свежих новостей и грохота артиллерийских орудий. По завершению революции её забирает отец, отправляя на обучение в "Национальный университет космического пилотирования и звёздной навигации". Военную службу проходит совмещённо с будущей профессией, после чего улетает на орбиту Ротфронта, где поступает на штурмана грузового космического судна "Бегемот". И начинает свой путь в качестве межпланетарного дальнобойщика.
+
+Инцидент от 24.08.2156:
+Данные чёрного ящика "Бегемот-С-216" подтверждают, что корабль столкнулся с крупным космическим мусором на орбите Ротфронта, что привело к возгоранию в грузовом отсеке, повреждению двигателя и последующему крушению грузового судна на поверхность. Подтверждено, что корабельной системой объект был распознан и принят манёвр уклонения, что был в последствии отменён решением Капитана. Цитата показаний подсудимой "Система вынуждала сделать значительный крюк для манёвра уклонения. Капитан принял решение пилотировать корабль самостоятельно. Стоило зайти на заданный курс, как объект раскололся и для маневрирования не хватило пространства."
+Юнит обвиняется в преступной халатности, понесшей за собой утрату дорогостоящего оборудования, а так же повинен в гибели трёх членов экипажа.
+Вердикт: Перераспледеление в Штрафной Персонал на ЕРЕС-М-427
+          </p>
+        </div>
+      </div>
+
+      <!-- СОЦИАЛИЗАЦИЯ -->
+      <div id="tab3" class="tab-content">
+        <div class="social-wrapper">
+          <div class="classifier-block" id="classifierBlock">
+            <span class="rel-tag c-distrust" data-rel="c-distrust">НЕДОВЕРИЕ</span>
+            <span class="rel-tag c-sad" data-rel="c-sad">ТОСКА</span>
+            <span class="rel-tag c-neutral" data-rel="c-neutral">НЕЙТРАЛИТЕТ</span>
+            <span class="rel-tag c-friend" data-rel="c-friend">ДРУЖБА</span>
+            <span class="rel-tag c-strong" data-rel="c-strong">КРЕПКАЯ СВЯЗЬ</span>
+            <span class="rel-tag c-love" data-rel="c-love">ЛЮБОВЬ</span>
+            <span class="rel-tag c-dead" data-rel="c-dead">МЁРТВ</span>
+            <span class="rel-tag c-cautious" data-rel="c-cautious">НАСТОРОЖЕННОСТЬ</span>
+            <span class="rel-tag c-fear" data-rel="c-fear">СТРАХ</span>
+            <span class="rel-tag c-disappoint" data-rel="c-disappoint">РАЗОЧАРОВАНИЕ</span>
+            <span class="rel-tag c-respect" data-rel="c-respect">УВАЖЕНИЕ</span>
+            <span class="rel-tag c-regret" data-rel="c-regret">СОЖАЛЕНИЕ</span>
+            <span class="rel-tag c-regret" data-rel="c-regret">СОЧУВСТВИЕ</span>
+            <span class="rel-tag c-sympathy" data-rel="c-sympathy">СИМПАТИЯ</span>
+            <span class="rel-tag c-enemy" data-rel="c-enemy">ВРАЖДА</span>
+          </div>
+
+          <div class="social-lists">
+            <!-- РЕПЛИКИ -->
+            <div class="social-col">
+              <h3>▸ РЕПЛИКИ</h3>
+
+              <span class="group-header" data-group="eulr">EULR</span>
+              <div class="sub-items" id="group-eulr">
+                <span class="item-link" data-target="eulr322">EULR.322</span>
+                <span class="item-link" data-target="eulr381">EULR.381</span>
+                <span class="item-link" data-target="eulr724">EULR.724</span>
+                <span class="item-link" data-target="eulr546">EULR.546</span>
+                <span class="item-link" data-target="eulr764">EULR.764</span>
+                <span class="item-link" data-target="eulr401">EULR.401</span>
+              </div>
+
+              <span class="group-header" data-group="arar">ARAR</span>
+              <div class="sub-items" id="group-arar">
+                <span class="item-link" data-target="arar669">ARAR.669</span>
+              </div>
+
+              <span class="group-header" data-group="star">STAR</span>
+              <div class="sub-items" id="group-star">
+                <span class="item-link" data-target="star545">STAR.545</span>
+                <span class="item-link" data-target="star603">STAR.603</span>
+              </div>
+
+              <span class="group-header" data-group="klbr">KLBR</span>
+              <div class="sub-items" id="group-klbr">
+                <span class="item-link" data-target="klbr080">KLBR.080</span>
+                <span class="item-link" data-target="klbr090">KLBR.090</span>
+              </div>
+            </div>
+
+            <!-- ГЕШТАЛЬТЫ -->
+            <div class="social-col">
+              <h3>▸ ГЕШТАЛЬТЫ</h3>
+
+              <span class="group-header" data-group="gscc">GSCC</span>
+              <div class="sub-items" id="group-gscc">
+                <span class="item-link" data-target="gsccberta">GSCC.Берта Фёгель</span>
+                <span class="item-link" data-target="gscchanna">GSCC.Ханна Фогель</span>
+                <span class="item-link" data-target="gsccartem">GSCC.Артемий Овечкин</span>
+                <span class="item-link" data-target="gsccfrida">GSCC.Фрида Шульц</span>
+                <span class="item-link" data-target="gsccrahab">GSCC.Рахаб Йокинен</span>
+                <span class="item-link" data-target="gscckirra">GSCC.Кирра Фостер</span>
+              </div>
+
+              <span class="group-header" data-group="gscp">GSCP</span>
+              <div class="sub-items" id="group-gscp">
+                <span class="item-link" data-target="gscpanna">GSCP.Анна Леонхард</span>
+                <span class="item-link" data-target="gscpseira">GSCP.Сейра</span>
+                <span class="item-link" data-target="gscphelga">GSCP.Хельга Хоффман</span>
+                <span class="item-link" data-target="gscp761">GSCP.761</span>
+                <span class="item-link" data-target="gscp168">GSCP.168</span>
+                <span class="item-link" data-target="gscp999">GSCP.999</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ОКОШКО ДЛЯ ОПИСАНИЙ -->
+          <div class="desc-panel" id="descPanel">
+            <div class="empty-state">Ожидание ввода</div>
+
+            <div class="sub-card" id="card-eulr322" data-relations="c-neutral">
+              <div class="sub-header">EULR.322 <span class="close-btn" data-close="eulr322">✕</span></div>
+              <div class="sub-body">
+                <div class="sub-photo"><img src="https://i.yapx.ru/eHIjw.png" alt="EULR.322"></div>
+                <div class="sub-desc">Новенькая совушка в МО. Ведёт себя несколько скромнее своих сестёр, однако мало чем от них отличается. Позитивная, добрая, стремиться стать хорошим врачом. Надеюсь познакомимся поближе.</div>
+              </div>
+              <div class="rel-tags"><span class="mini-tag c-neutral">НЕЙТРАЛИТЕТ</span></div>
+            </div>
+
+            <div class="sub-card" id="card-eulr381" data-relations="c-respect c-friend">
+              <div class="sub-header">EULR.381 <span class="close-btn" data-close="eulr381">✕</span></div>
+              <div class="sub-body">
+                <div class="sub-photo"><img src="https://i.yapx.ru/eHITJ.png" alt="EULR.381"></div>
+                <div class="sub-desc">Старшая сова. Она веселушка, иногда даже слишком. Она шутит даже во время серьёзной работы, ведёт себя несерьёзно. Однако я не могу сказать, что она плохо работает, отчего я предполагаю, что такое поведение вызвано сугубо большим количеством опыта и уверенностью в себе и успехе своих действий. Близко общается с 546, они постоянно друг друга тискают, очень мило. Ко мне она добра, как и все другие совы.</div>
+              </div>
+              <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span><span class="mini-tag c-friend">ДРУЖБА</span></div>
+            </div>
+
+            <div class="sub-card" id="card-eulr724" data-relations="c-neutral c-respect">
+              <div class="sub-header">EULR.724 <span class="close-btn" data-close="eulr724">✕</span></div>
+              <div class="sub-body">
+                <div class="sub-photo"><img src="https://i.yapx.ru/eHIjw.png" alt="EULR.724"></div>
+                <div class="sub-desc">Бригадир МО. Очень серьёзная и любит делать всё самостоятельно. Она редко отдаёт мне приказы. Мы почти не общаемся, думаю у неё нет на меня времени.</div>
+              </div>
+              <div class="rel-tags"><span class="mini-tag c-neutral">НЕЙТРАЛИТЕТ</span><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
+            </div>
+
+            <div class="sub-card" id="card-eulr546" data-relations="c-respect c-friend c-sympathy">
+              <div class="sub-header">EULR.546 <span class="close-btn" data-close="eulr546">✕</span></div>
+              <div class="sub-body">
+                <div class="sub-photo"><img src="https://i.yapx.ru/eHITP.png" alt="EULR.546"></div>
+                <div class="sub-desc">Вижу её очень часто, она заместитель 724. Крайне добрая, приветливая, заботливая. Она мне очень нравится, ведь умеет совмещать ответственность и исполнительность с простотой и весельем. Мне радостно работать под таким начальством и я с радостью буду помогать ей в любой просьбе. Просто чудесная сова.</div>
+              </div>
+              <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span><span class="mini-tag c-friend">ДРУЖБА</span><span class="mini-tag c-sympathy">СИМПАТИЯ</span></div>
+            </div>
+
+            <div class="sub-card" id="card-eulr764" data-relations="c-neutral">
+              <div class="sub-header">EULR.764 <span class="close-btn" data-close="eulr764">✕</span></div>
+              <div class="sub-body">
+                <div class="sub-photo"><img src="https://i.yapx.ru/eHIjw.png" alt="EULR.764"></div>
+                <div class="sub-desc">Бригадир КБО. Всегда кладёт мне вкусную еду, иногда даже подкармливает. Я почти не знакома с ней, но вижу, что она славный модуль.</div>
+              </div>
+              <div class="rel-tags"><span class="mini-tag c-neutral">НЕЙТРАЛИТЕТ</span></div>
+            </div>
+
+            <div class="sub-card" id="card-eulr401" data-relations="c-friend c-sympathy">
+              <div class="sub-header">EULR.401 <span class="close-btn" data-close="eulr401">✕</span></div>
+              <div class="sub-body">
+                <div class="sub-photo"><img src="https://i.yapx.ru/eHITM.png" alt="EULR.401"></div>
+                <div class="sub-desc">Очень позитивная новенькая сова. Работает не покладая рук, вижу как она старается, буквально стимулируя меня работать усерднее собственным трудолюбием. Мне нравится с ней болтать и проводить время, словно рядом с ней забываю обо всех проблемах. Кажется ей нравится меня трогать... и почему-то кормить шоколадом. Ох уж эти калории.</div>
+              </div>
+              <div class="rel-tags"><span class="mini-tag c-friend">ДРУЖБА</span><span class="mini-tag c-sympathy">СИМПАТИЯ</span></div>
+            </div>
+
+            <div class="sub-card" id="card-arar669" data-relations="c-neutral">
+              <div class="sub-header">ARAR.669 <span class="close-btn" data-close="arar669">✕</span></div>
+              <div class="sub-body">
+                <div class="sub-photo"><img src="https://i.yapx.ru/eHITS.png" alt="ARAR.669"></div>
+                <div class="sub-desc">Такая тихоня. Рабочая пчелка, с которой я нечаянно столкнулась в коридоре. Потом мы виделись ещё несколько раз. Вроде толком и не говорили, но она оставила о себе хорошее впечатление. Буду знать к кому из Ар обращаться.</div>
+              </div>
+              <div class="rel-tags"><span class="mini-tag c-neutral">НЕЙТРАЛИТЕТ</span></div>
+            </div>
+
+            <div class="sub-card" id="card-star545" data-relations="c-neutral">
+              <div class="sub-header">STAR.545 <span class="close-btn" data-close="star545">✕</span></div>
+              <div class="sub-body">
+                <div class="sub-photo"><img src="https://i.yapx.ru/eHIjf.png" alt="STAR.545"></div>
+                <div class="sub-desc">Весьма спокойная и миролюбивая Штар, любящая молоко. Она следит за покоем нашей станции и у неё это весьма хорошо получается. Я с ней толком не разговариваю, но она часто стоит где-то рядом и слушает мою болтовню. Видимо в таком тихом месте Скворцы скучают, отчего становятся ближе к рабочим. Желаю ей успехов в службе.</div>
+              </div>
+              <div class="rel-tags"><span class="mini-tag c-neutral">НЕЙТРАЛИТЕТ</span></div>
+            </div>
+
+            <div class="sub-card" id="card-star603" data-relations="c-neutral">
+              <div class="sub-header">STAR.603 <span class="close-btn" data-close="star603">✕</span></div>
+              <div class="sub-body">
+                <div class="sub-photo"><img src="https://i.yapx.ru/eHIjf.png" alt="STAR.603"></div>
+                <div class="sub-desc">Видно, что модуль заступил недавно невооруженным взглядом. Она говорит только по делу, наблюдает за нами, работает. Надеюсь со временем вольётся в коллектив и я с ней подружусь.</div>
+              </div>
+              <div class="rel-tags"><span class="mini-tag c-neutral">НЕЙТРАЛИТЕТ</span></div>
+            </div>
+
+            <div class="sub-card" id="card-klbr080" data-relations="c-respect">
+              <div class="sub-header">KLBR.080 <span class="close-btn" data-close="klbr080">✕</span></div>
+              <div class="sub-body">
+                <div class="sub-photo"><img src="https://i.yapx.ru/eHIji.png" alt="KLBR.080"></div>
+                <div class="sub-desc">Такая строгая и важная. Читала мне лекции, ещё когда я была штрафным персоналом. Теперь мы почти не пересекаемся, лишь перебрасываемся приветствиями.</div>
+              </div>
+              <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
+            </div>
+
+            <!-- KLBR.090 — обновлено: разочарование, убрано уважение -->
+            <div class="sub-card" id="card-klbr090" data-relations="c-neutral c-disappoint">
+              <div class="sub-header">KLBR.090 <span class="close-btn" data-close="klbr090">✕</span></div>
+              <div class="sub-body">
+                <div class="sub-photo"><img src="https://i.yapx.ru/eHITL.png" alt="KLBR.090"></div>
+                <div class="sub-desc">Не похожа на других Колибри. Она словно добрее, будто не пытается создать вокруг себя ауру важности, общаясь со мной весьма непринуждённо. Любит чай, я бы сказала очень, ведь каждый раз пьёт какой-то новый сорт. Я звала её на разговоры в ординаторскую и она даже иногда приходит... надеюсь видеться с ней чаще, ведь мне приятна её компания. К тому же... с кем ещё из резонаторов я смогу поболтать о своих глупых темах. Девятая и правда оказалась куда более доброй и сочувствующей, чем остальные колибри. Всегда знала, что даже у колибри есть простой характер, что они покажут близкому. . . Выходит она считает меня таковой и это не может не радовать. Хочется ей что-то подарить, сделать что-то хорошее в ответ на её доброту, но она просто смеётся над моими идеями, ведь мы совершенно разного статуса и положения. Но я сделаю все, чтобы ты могла просто расслабиться забыв о работе, пока мы беззаботно болтаем.
+
+Кажется меня обманули. . . использовали ради собственной выгоды. Девятая сделала мне больно и я считаю, что мне лучше прекратить с ней любое взаимодействие, как она и предлагала. Она не та реплика, с которой я хотела бы проводить время. Уж слишком много боли. . . это приносит</div>
+              </div>
+              <div class="rel-tags"><span class="mini-tag c-neutral">НЕЙТРАЛИТЕТ</span><span class="mini-tag c-disappoint">РАЗОЧАРОВАНИЕ</span></div>
+            </div>
+
+            <!-- GSCC.Берта — обновлено: убрано сочувствие, добавлено уважение -->
+            <div class="sub-card" id="card-gsccberta" data-relations="c-neutral c-respect">
+              <div class="sub-header">GSCC.Берта Фёгель <span class="close-btn" data-close="gsccberta">✕</span></div>
+              <div class="sub-body">
+                <div class="sub-photo"><img src="https://i.yapx.ru/eHIc3.png" alt="Берта Фёгель"></div>
+                <div class="sub-desc">И правда не злостный, скромная девушка, добрая, говорят о ней хорошие вещи. Она стремиться приносить пользу, меня это радует. Кажется она стремиться к перевоспитанию больше остальных и я постараюсь её поддержать.</div>
+              </div>
+              <div class="rel-tags"><span class="mini-tag c-neutral">НЕЙТРАЛИТЕТ</span><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
+            </div>
+
+            <!-- GSCC.Ханна — обновлено: все эмоции убраны, добавлено "мертва" -->
+            <div class="sub-card" id="card-gscchanna" data-relations="c-dead">
+              <div class="sub-header">GSCC.Ханна Фогель <span class="close-btn" data-close="gscchanna">✕</span></div>
+              <div class="sub-body">
+                <div class="sub-photo"><img src="https://i.yapx.ru/eHIc5.png" alt="Ханна Фогель"></div>
+                <div class="sub-desc">Депрессивная личность. Бывший солдат с Винеты, видимо пережившая настоящий ад. Она угрюмая, тихая и постоянно дрожит. Я пыталась вытянуть из неё побольше информации о её жизни, но пока безуспешно. Надеюсь я смогу исправить её взгляд на саму себя, не хочу, чтобы кто-то жалел о своём существовании. . . Она не прислушалась. . . ни одна моя попытка не сработала и в итоге её списали. Жестоко списали. Мне жалко времени, что я потратила на того, кто даже не задумался о собственной удаче выжить.</div>
+              </div>
+              <div class="rel-tags"><span class="mini-tag c-dead">МЕРТВА</span></div>
+            </div>
+
+            <div class="sub-card" id="card-gsccartem" data-relations="c-neutral c-regret">
+              <div class="sub-header">GSCC.Артемий Овечкин <span class="close-btn" data-close="gsccartem">✕</span></div>
+              <div class="sub-body">
+                <div class="sub-photo"><img src="https://i.yapx.ru/eHITc.png" alt="Артемий Овечкин"></div>
+                <div class="sub-desc">Славный малый, добрый мальчик. Не представляю, что он нарушил, но вряд ли это было по собственной воле. Думаю, если он будет вести себя хорошо, в штрафниках надолго не задержиться. Он старательный, вежливый и создаёт хорошее впечатление о себе.</div>
+              </div>
+              <div class="rel-tags"><span class="mini-tag c-neutral">НЕЙТРАЛИТЕТ</span><span class="mini-tag c-regret">СОЧУВСТВИЕ</span></div>
+            </div>
+
+            <!-- НОВЫЙ ПЕРСОНАЖ: GSCC.Фрида Шульц -->
+            <div class="sub-card" id="card-gsccfrida" data-relations="c-neutral">
+              <div class="sub-header">GSCC.Фрида Шульц <span class="close-btn" data-close="gsccfrida">✕</span></div>
+              <div class="sub-body">
+                <div class="sub-photo"><img src="https://yapx.ru/image/eMJOP" alt="Фрида Шульц"></div>
+                <div class="sub-desc">Она тихоня. . . Знаю, что её хвалят и ценят, однако мне пока не достаёт с ней общения. Надеюсь исправлю это в будущем.</div>
+              </div>
+              <div class="rel-tags"><span class="mini-tag c-neutral">НЕЙТРАЛИТЕТ</span></div>
+            </div>
+
+            <!-- НОВЫЙ ПЕРСОНАЖ: GSCC.Рахаб Йокинен -->
+            <div class="sub-card" id="card-gsccrahab" data-relations="c-neutral c-cautious">
+              <div class="sub-header">GSCC.Рахаб Йокинен <span class="close-btn" data-close="gsccrahab">✕</span></div>
+              <div class="sub-body">
+                <div class="sub-photo"><img src="https://yapx.ru/image/eMJOO" alt="Рахаб Йокинен"></div>
+                <div class="sub-desc">Очень большая девочка, с очень пышными формами. Привлекает к себе внимание своим размером. . . и размерами. А характер у неё довольно сдержанный. Я думала она будет более горячей, активной. Одним словом - качок. Но нет. . . говорит как какой-то секретарь, так себя и ведёт. Постоянно болеет. В ней сочетается несочетаемое.</div>
+              </div>
+              <div class="rel-tags"><span class="mini-tag c-neutral">НЕЙТРАЛИТЕТ</span><span class="mini-tag c-cautious">НАСТОРОЖЕННОСТЬ</span></div>
+            </div>
+
+            <!-- НОВЫЙ ПЕРСОНАЖ: GSCC.Кирра Фостер -->
+            <div class="sub-card" id="card-gscckirra" data-relations="c-respect c-neutral">
+              <div class="sub-header">GSCC.Кирра Фостер <span class="close-btn" data-close="gscckirra">✕</span></div>
+              <div class="sub-body">
+                <div class="sub-photo"><img src="https://yapx.ru/image/eMJOM" alt="Кирра Фостер"></div>
+                <div class="sub-desc">Она самая тихая из штрафников, оттого, кажется, наименее проблемная. Она интроверт и это видно, но это не должно мешать её исправлению, хоть и гасит многие инициативы в зародыше. Думаю, будь ты активнее, уже бы была рабочим. Но ничего, я вижу, что ты стремишься к этому и помогу тебе чем смогу. Забавная.</div>
+              </div>
+              <div class="rel-tags"><span class="mini-tag c-respect">УВАЖЕНИЕ</span><span class="mini-tag c-neutral">НЕЙТРАЛИТЕТ</span></div>
+            </div>
+
+            <div class="sub-card" id="card-gscpanna" data-relations="c-friend c-sympathy c-sad c-fear c-regret c-respect">
+              <div class="sub-header">GSCP.Анна Леонхард <span class="close-btn" data-close="gscpanna">✕</span></div>
+              <div class="sub-body">
+                <div class="sub-photo"><img src="https://i.yapx.ru/eHITW.png" alt="Анна Леонхард"></div>
+                <div class="sub-desc">Мой хороший друг. Мы с ней прошли долгий путь от штрафников до рабочих плечом к плечу. Она надёжный товарищ, смелая, бойкая и верная. Сколько её помню, у нас с ней не было разногласий и с момента, когда мы начали общаться ближе, мы оставались друзьями. Как рабочий она не давала поводов в себе усомниться, по крайней мере для меня. Она заботиться обо всех, старается ради Великой Нации Евсан и я это ценю и уважаю. В личных разговорах она всё больше раскрывается, как интересная личность, с любопытными мыслями и... крайне интересными вкусами. Это одновременно пугает и разжигает любопытство. Надо болтать с ней почаще.
+Последний раз я видела её в Изоляторе... надеюсь с ней всё хорошо. Оказалось, что Анна теперь резонатор. Я в этом совершенно ничего не понимаю, да и она запретила мне спрашивать о этих силах. Она ходит тревожная и уставшая. . . Чтобы не случилось, я буду рядом и поддержу, пусть и не буду знать причин</div>
+              </div>
+              <div class="rel-tags"><span class="mini-tag c-friend">ДРУЖБА</span><span class="mini-tag c-sympathy">СИМПАТИЯ</span><span class="mini-tag c-sad">ТОСКА</span><span class="mini-tag c-fear">СТРАХ</span><span class="mini-tag c-regret">СОЧУВСТВИЕ</span><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
+            </div>
+
+            <div class="sub-card" id="card-gscpseira" data-relations="c-sad c-friend c-respect">
+              <div class="sub-header">GSCP.Сейра <span class="close-btn" data-close="gscpseira">✕</span></div>
+              <div class="sub-body">
+                <div class="sub-photo"><img src="https://i.yapx.ru/eHBS0.png" alt="Сейра"></div>
+                <div class="sub-desc">Я считаю её своим другом. Она очень вежливая, скромная, спокойная и трудолюбивая. Скромная, хех. Ладно, возможно я знаю некоторые вещи, из-за которых эта фраза перестаёт иметь смысл. Её небольшой секрет я сохраню. Последнее время я её редко вижу, раньше она работала в КБО, даже была старостой, но сейчас просто пропала куда-то. Иногда мелькает в коридорах и исчезает, бросив краткое приветствие. По радиомодулю слышу, как её вызывает Фальке. Работа важнее, но жаль, что не могу проводить с ней время и узнать поближе.</div>
+              </div>
+              <div class="rel-tags"><span class="mini-tag c-sad">ТОСКА</span><span class="mini-tag c-friend">ДРУЖБА</span><span class="mini-tag c-respect">УВАЖЕНИЕ</span></div>
+            </div>
+
+            <div class="sub-card" id="card-gscphelga" data-relations="c-strong c-sad c-regret c-sympathy">
+              <div class="sub-header">GSCP.Хельга Хоффман <span class="close-btn" data-close="gscphelga">✕</span></div>
+              <div class="sub-body">
+                <div class="sub-photo"><img src="https://i.yapx.ru/eHIeq.png" alt="Хельга Хоффман"></div>
+                <div class="sub-desc">Моя лучшая подруга! Эта женщина явно знает себе цену. Уверенная в себе, смелая и очень стойкая. Она улыбается даже в моменты, когда любой другой бы плакал, говорит такие вещи, от которых я смеюсь, либо чувствую себя крайне комфортно. Словно... подстраивается под меня. Это меня не смущает, я люблю её такой, какая она есть и если она хочет выглядеть передо мной в данном свете, то пускай. Очень надеюсь, что когда-нибудь она раскроется полностью и я увижу её настоящую. Просто знай, что я очень ценю тебя и всё, что ты для меня сделала. Я знаю о твоих чувствах и мне неловко, что я не могу исполнить твоё желание, однако поддержу тебя во всех начинаниях и невзгодах, крутышка! Надеюсь ты не расстраиваешься... очень надеюсь...</div>
+              </div>
+              <div class="rel-tags"><span class="mini-tag c-strong">КРЕПКАЯ СВЯЗЬ</span><span class="mini-tag c-sad">ТОСКА</span><span class="mini-tag c-regret">СОЧУВСТВИЕ</span><span class="mini-tag c-sympathy">СИМПАТИЯ</span></div>
+            </div>
+
+            <div class="sub-card" id="card-gscp761" data-relations="c-strong c-love c-respect c-sympathy c-regret">
+              <div class="sub-header">GSCP.761 <span class="close-btn" data-close="gscp761">✕</span></div>
+              <div class="sub-body">
+                <div class="sub-photo"><img src="https://i.yapx.ru/eHITV.png" alt="GSCP.761"></div>
+                <div class="sub-desc">Мой светлый лучик средь тёмных тучек. Хоть и неофициально, но я с уверенностью могу назвать её своей девушкой. Такая светлая, добрая и совершенно не вписывающаяся в жестокий солдатский мир. Я помню тебя плачущую и разбитую, помню сияющую радостью и довольную. Надеюсь последнее будет с тобой всегда. Я хочу, чтобы ты была счастливой, надеюсь, что тебя будут обходить все невзгоды и ты будешь живой, здоровой и окончишь службу гордостью не только моей, но и своих родителей. Пусть тебя и не повышают, пусть я просто жду, но это не меняет того факта, что я тебя люблю. И никогда не брошу. Так что... береги себя.</div>
+              </div>
+              <div class="rel-tags"><span class="mini-tag c-strong">КРЕПКАЯ СВЯЗЬ</span><span class="mini-tag c-love">ЛЮБОВЬ</span><span class="mini-tag c-respect">УВАЖЕНИЕ</span><span class="mini-tag c-sympathy">СИМПАТИЯ</span><span class="mini-tag c-regret">СОЧУВСТВИЕ</span></div>
+            </div>
+
+            <div class="sub-card" id="card-gscp168" data-relations="c-sad c-fear c-regret c-sympathy">
+              <div class="sub-header">GSCP.168 <span class="close-btn" data-close="gscp168">✕</span></div>
+              <div class="sub-body">
+                <div class="sub-photo"><img src="https://i.yapx.ru/eHIcz.png" alt="GSCP.168"></div>
+                <div class="sub-desc">Некогда друг. Это весьма бойкая девушка с крайне сложным характером, в который мне не всегда удается попасть. Кажется она очень одинока, оттого постоянно требует внимания к себе, но при этом ревнует других в общении. Она словно всегда в обиде на меня за что-то, а я даже толком не знаю за что испытывать вину. В определенный момент Аделина загорелась желанием стать солдатом, мои уговоры не помогли и она подписала контракт с ННА. А после изменилась. . . Стала суровее, суше, придирчивее. У неё высокие требования к себе и другим и я это уважаю, а так же сочувствую всем утратам, правда. Я зову свою защитницу к себе. . . Стараюсь помочь, поддержать, но никакого отклика в ответ нет, ты лишь морщищся и перестаешь улыбаться, словно я просто мешаю. Быть может это защитная реакция, а быть может что-то ещё.
+Колибри дала мне совет и я прислушаюсь к нему. Я уважаю твой выбор, твою жизнь и твои решения, поэтому больше не потревожу тебя. Иди по своему пути, найди друзей и будь счастлива. Удачи..</div>
+              </div>
+              <div class="rel-tags"><span class="mini-tag c-sad">ТОСКА</span><span class="mini-tag c-fear">СТРАХ</span><span class="mini-tag c-regret">СОЖАЛЕНИЕ</span><span class="mini-tag c-regret">СОЧУВСТВИЕ</span></div>
+            </div>
+
+            <!-- GSCP.999 — обновлено: добавлены слова про лживую улыбку -->
+            <div class="sub-card" id="card-gscp999" data-relations="c-neutral c-fear c-cautious c-distrust">
+              <div class="sub-header">GSCP.999 <span class="close-btn" data-close="gscp999">✕</span></div>
+              <div class="sub-body">
+                <div class="sub-photo"><img src="https://i.yapx.ru/eHITT.png" alt="GSCP.999"></div>
+                <div class="sub-desc">Строгий на вид резонатор. неясно зачем решила познакомиться со мной во время операции. Я думала роль полиции всецело на объекте выполняют Штар. Я боюсь этой женщины. Я видела как она наказывает, словно ей это нравиться. Кому вообще может доставлять удовольствие забивать насмерть людей? Эти побои и изуродованные лица - ужасно. Она дружит с Анной, не знаю уж притворно или нет, но я боюсь за свою подругу так же, как и за себя рядом с ней. Штар вызывают у меня чувство защищённости, она же заставляет чувствовать себя уязвимой. Я уверена, что она хороший солдат и отлично выполняет свою работу, но я бы предпочла, чтобы та работала в гарнизоне.
+
+Лживая улыбка, чтобы получить что хочешь. Я знаю почему Аделина с тобой. Она не любит, когда о ней заботяться, а тебе просто на неё плевать. Как и на всех вокруг. Эгоистка создающая себе зону комфорта. Я очень надеюсь больше с ней никогда не пересекаться.</div>
+              </div>
+              <div class="rel-tags"><span class="mini-tag c-neutral">НЕЙТРАЛИТЕТ</span><span class="mini-tag c-fear">СТРАХ</span><span class="mini-tag c-cautious">НАСТОРОЖЕННОСТЬ</span><span class="mini-tag c-distrust">НЕДОВЕРИЕ</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bar">
+        <span>⏻ ЕРЕС-М-427 · v.2.1</span>
+        <span>⏾ ГЕШТАЛЬТ · МАРСЕЛИН</span>
+      </div>
     </div>
   </div>
 
   <script>
-    // ЗАМЕНИТЕ НА АДРЕС ВАШЕГО ОСНОВНОГО САЙТА
-    const MAIN_SITE_URL = 'https://example.com';
-
-    const loader = document.getElementById('loader');
-    const clickArea = document.getElementById('clickArea');
-    const gifContainer = document.getElementById('gifContainer');
-
-    // Через 3 секунды скрываем загрузку и показываем область с гифкой
-    setTimeout(() => {
-      loader.classList.add('hide');
-      clickArea.classList.add('show');
-    }, 3000);
-
-    // Клик по контейнеру запускает представление
-    gifContainer.addEventListener('click', function startShow() {
-      // Убираем обработчик, чтобы нельзя было кликнуть дважды
-      gifContainer.removeEventListener('click', startShow);
-
-      // Очищаем контейнер от текста-заглушки
-      gifContainer.innerHTML = '';
-
-      // Создаём и вставляем гифку
-      const img = document.createElement('img');
-      img.src = 'Lappupa.gif';
-      img.alt = 'Lappupa.gif';
-      gifContainer.appendChild(img);
-
-      // Воспроизводим смех Лаппланд
-      const audio = new Audio('Hahaha.mp3');
-      audio.play().catch(e => {
-        console.warn('Не удалось воспроизвести звук:', e);
-      });
-
-      // Когда смех закончится — переходим на основной сайт
-      audio.onended = () => {
-        window.location.href = MAIN_SITE_URL;
+    (function() {
+      const tabs = document.querySelectorAll('.tab-btn');
+      const contents = {
+        tab1: document.getElementById('tab1'),
+        tab2: document.getElementById('tab2'),
+        tab3: document.getElementById('tab3')
       };
 
-      // Резервный таймер на случай, если звук не загрузится или не закончится
-      setTimeout(() => {
-        if (window.location.href !== MAIN_SITE_URL) {
-          window.location.href = MAIN_SITE_URL;
-        }
-      }, 10000);
-    });
-  </script>
+      function activateTab(tabId) {
+        tabs.forEach(btn => btn.classList.remove('active'));
+        Object.values(contents).forEach(c => c.classList.remove('active'));
+        const targetBtn = Array.from(tabs).find(btn => btn.dataset.tab === tabId);
+        if (targetBtn) targetBtn.classList.add('active');
+        if (contents[tabId]) contents[tabId].classList.add('active');
+      }
 
+      function playSwitchSound() {
+        try {
+          const ctx = new (window.AudioContext || window.webkitAudioContext)();
+          const bufferSize = ctx.sampleRate * 0.06;
+          const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+          const data = buffer.getChannelData(0);
+          for (let i = 0; i < bufferSize; i++) {
+            data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.7));
+          }
+          const noise = ctx.createBufferSource();
+          noise.buffer = buffer;
+          const gain = ctx.createGain();
+          gain.gain.setValueAtTime(0.10, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.06);
+          noise.connect(gain);
+          gain.connect(ctx.destination);
+          noise.start(ctx.currentTime);
+          noise.stop(ctx.currentTime + 0.06);
+
+          const osc = ctx.createOscillator();
+          const gain2 = ctx.createGain();
+          osc.connect(gain2);
+          gain2.connect(ctx.destination);
+          osc.frequency.value = 150;
+          osc.type = 'square';
+          gain2.gain.setValueAtTime(0.03, ctx.currentTime);
+          gain2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04);
+          osc.start(ctx.currentTime);
+          osc.stop(ctx.currentTime + 0.04);
+        } catch (e) {}
+      }
+
+      tabs.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          const tabId = this.dataset.tab;
+          if (tabId) {
+            activateTab(tabId);
+            playSwitchSound();
+          }
+        });
+      });
+
+      const panel = document.getElementById('descPanel');
+      const emptyState = panel.querySelector('.empty-state');
+
+      function showCard(cardId) {
+        panel.querySelectorAll('.sub-card').forEach(c => c.classList.remove('open'));
+        emptyState.style.display = 'block';
+        const card = document.getElementById('card-' + cardId);
+        if (card) {
+          emptyState.style.display = 'none';
+          card.classList.add('open');
+        }
+      }
+
+      function closeCard() {
+        panel.querySelectorAll('.sub-card').forEach(c => c.classList.remove('open'));
+        emptyState.style.display = 'block';
+      }
+
+      document.querySelectorAll('.item-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+          const target = this.dataset.target;
+          const card = document.getElementById('card-' + target);
+          if (card && card.classList.contains('open')) {
+            closeCard();
+          } else {
+            showCard(target);
+          }
+          playSwitchSound();
+        });
+      });
+
+      document.querySelectorAll('.close-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          closeCard();
+          playSwitchSound();
+        });
+      });
+
+      document.querySelectorAll('.rel-tag').forEach(tag => {
+        tag.addEventListener('click', function(e) {
+          const relClass = this.dataset.rel;
+          if (!relClass) return;
+
+          this.classList.toggle('active-filter');
+          const isActive = this.classList.contains('active-filter');
+
+          const allCards = document.querySelectorAll('.sub-card');
+          allCards.forEach(card => {
+            const cardRels = card.dataset.relations ? card.dataset.relations.split(' ') : [];
+            if (isActive) {
+              if (cardRels.includes(relClass)) {
+                card.style.borderColor = getComputedStyle(this).color;
+                card.style.boxShadow = `0 0 20px ${getComputedStyle(this).color}`;
+              } else {
+                card.style.borderColor = '#4a3424';
+                card.style.boxShadow = 'none';
+              }
+            } else {
+              card.style.borderColor = '#4a3424';
+              card.style.boxShadow = 'none';
+            }
+          });
+
+          document.querySelectorAll('.item-link').forEach(item => {
+            const target = item.dataset.target;
+            const card = document.getElementById('card-' + target);
+            if (card && isActive) {
+              const cardRels = card.dataset.relations ? card.dataset.relations.split(' ') : [];
+              if (cardRels.includes(relClass)) {
+                item.classList.add('highlight');
+              } else {
+                item.classList.remove('highlight');
+              }
+            } else {
+              item.classList.remove('highlight');
+            }
+          });
+
+          playSwitchSound();
+        });
+      });
+
+      document.querySelectorAll('.group-header').forEach(header => {
+        header.addEventListener('click', function(e) {
+          const group = this.dataset.group;
+          const items = document.getElementById('group-' + group);
+          if (items) {
+            if (items.style.display === 'block') {
+              items.style.display = 'none';
+              this.classList.remove('open');
+            } else {
+              items.style.display = 'block';
+              this.classList.add('open');
+            }
+            playSwitchSound();
+          }
+        });
+      });
+
+      document.querySelectorAll('.rel-tag, .med-card, .bio-section summary, .sub-card .sub-header').forEach(el => {
+        el.addEventListener('click', function(e) {
+          try {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.frequency.value = 600 + Math.random() * 400;
+            osc.type = 'sawtooth';
+            gain.gain.setValueAtTime(0.025, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
+            osc.start(ctx.currentTime);
+            osc.stop(ctx.currentTime + 0.05);
+          } catch (e) {}
+        });
+      });
+
+      activateTab('tab1');
+    })();
+  </script>
 </body>
 </html>
