@@ -5,28 +5,78 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ДОСЬЕ · ЕРЕС-М-427 · С. СИРАКУЗА</title>
 <style>
-  *{margin:0;padding:0;box-sizing:border-box}
+  *{margin:0;padding:0;box-sizing:border-box;user-select:none}
   html,body{width:100%;min-height:100vh;background:#000;overflow-x:hidden}
-  body{font-family:'Courier New','Lucida Console',monospace;color:#cc2222;position:relative;padding:16px 0}
+  body{font-family:'Courier New','VT323','Lucida Console',monospace;color:#cc2222;position:relative}
 
-  /* CRT / VIGNETTE */
-  .crt{position:fixed;inset:0;pointer-events:none;z-index:100;background:repeating-linear-gradient(0deg,rgba(0,0,0,.12) 0,rgba(0,0,0,0) 2px,rgba(0,0,0,.07) 4px,rgba(0,0,0,0) 6px);animation:scanMove 8s linear infinite}
+  /* ===== ЗАСТАВКА ===== */
+  #introScreen{position:fixed;inset:0;background:#000;z-index:9999;display:flex;justify-content:center;align-items:center;transition:opacity .8s ease,visibility .8s ease}
+  #introScreen.hidden{opacity:0;visibility:hidden;pointer-events:none}
+  .intro-crt{position:fixed;inset:0;pointer-events:none;z-index:100;background:repeating-linear-gradient(0deg,rgba(0,0,0,.15) 0,rgba(0,0,0,0) 2px,rgba(0,0,0,.1) 4px,rgba(0,0,0,0) 6px);animation:scanMove 8s linear infinite}
   @keyframes scanMove{0%{transform:translateY(0)}100%{transform:translateY(100%)}}
-  .vignette{position:fixed;inset:0;pointer-events:none;z-index:99;background:radial-gradient(ellipse at center,transparent 45%,rgba(0,0,0,.85) 100%);box-shadow:inset 0 0 180px rgba(0,0,0,.9)}
-  .glow{position:fixed;inset:0;pointer-events:none;z-index:98;background:radial-gradient(ellipse at center,transparent 55%,rgba(80,0,0,.28) 100%)}
-  .noise{position:fixed;inset:0;pointer-events:none;z-index:101;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");mix-blend-mode:overlay}
+  .intro-vignette{position:fixed;inset:0;pointer-events:none;z-index:99;background:radial-gradient(ellipse at center,transparent 40%,rgba(0,0,0,.85) 100%);box-shadow:inset 0 0 200px rgba(0,0,0,.9)}
+  .intro-red-glow{position:fixed;inset:0;pointer-events:none;z-index:98;background:radial-gradient(ellipse at center,transparent 55%,rgba(80,0,0,.25) 100%)}
+  .intro-container{position:relative;z-index:5;width:1100px;max-width:95vw;display:flex;flex-direction:column;align-items:center;gap:30px;animation:introFadeIn 1.2s ease-out}
+  @keyframes introFadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+  .intro-main{display:flex;align-items:flex-start;gap:40px;width:100%;padding:20px}
+  .intro-portrait{flex-shrink:0;width:220px;height:260px;border:2px solid #cc2222;background:#0a0505;position:relative;box-shadow:0 0 25px rgba(200,30,30,.35),inset 0 0 30px rgba(0,0,0,.9);overflow:hidden}
+  .intro-portrait img{width:100%;height:100%;object-fit:cover;object-position:center top;filter:contrast(1.1) saturate(.8) brightness(.95)}
+  .intro-portrait::before,.intro-portrait::after{content:'';position:absolute;width:14px;height:14px}
+  .intro-portrait::before{top:6px;left:6px;border-top:2px solid #cc2222;border-left:2px solid #cc2222}
+  .intro-portrait::after{bottom:6px;right:6px;border-bottom:2px solid #cc2222;border-right:2px solid #cc2222}
+  .portrait-label{position:absolute;bottom:4px;left:8px;font-size:11px;color:#cc2222;letter-spacing:2px;font-weight:bold;text-shadow:0 0 6px #cc2222;z-index:2}
+  .intro-text{flex:1;display:flex;flex-direction:column;gap:14px;padding-top:6px}
+  .intro-title{font-size:52px;font-weight:normal;color:#fff;letter-spacing:2px;line-height:1;text-shadow:0 0 12px rgba(255,255,255,.15)}
+  .intro-subtitle{font-size:17px;color:#cc2222;line-height:1.45;letter-spacing:.5px;text-shadow:0 0 8px rgba(200,30,30,.5)}
+  .intro-info{margin-top:10px;display:flex;flex-direction:column;gap:6px;font-size:16px;color:#cc2222;letter-spacing:.5px;text-shadow:0 0 8px rgba(200,30,30,.5)}
+  .intro-info .highlight{color:#ff4444;font-weight:bold}
+  .intro-button-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;width:100%;max-width:620px}
+  .intro-button{display:inline-block;padding:14px 38px;border:2px solid #cc2222;background:transparent;color:#cc2222;font-family:'Courier New',monospace;font-size:20px;letter-spacing:6px;text-transform:uppercase;cursor:pointer;transition:all .25s ease;text-shadow:0 0 8px rgba(200,30,30,.6);box-shadow:0 0 15px rgba(200,30,30,.15);position:relative;animation:buttonPulse 2.5s ease-in-out infinite;width:100%;max-width:620px}
+  @keyframes buttonPulse{0%,100%{box-shadow:0 0 15px rgba(200,30,30,.15)}50%{box-shadow:0 0 30px rgba(200,30,30,.45)}}
+  .intro-button:hover{background:#cc2222;color:#000;text-shadow:none;box-shadow:0 0 40px rgba(200,30,30,.9);animation:none}
+  .intro-button:active{transform:scale(.98)}
+  .intro-bar{width:100%;max-width:620px;height:2px;background:#1a0000;position:relative;overflow:hidden;box-shadow:0 0 12px rgba(200,30,30,.5)}
+  .intro-bar::before{content:'';position:absolute;top:0;left:0;height:100%;width:0;background:linear-gradient(90deg,#440000 0%,#cc2222 40%,#ff3333 100%);box-shadow:0 0 10px #ff2222,0 0 20px rgba(255,50,50,.8);animation:barLoad 4s ease-in-out infinite}
+  @keyframes barLoad{0%{width:0}60%{width:100%}75%{width:100%}100%{width:100%;opacity:0}}
+  .intro-bar::after{content:'';position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(90deg,transparent 0%,rgba(255,50,50,.15) 50%,transparent 100%);animation:barShine 2.5s linear infinite}
+  @keyframes barShine{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+  .intro-footer{font-size:12px;color:#441111;letter-spacing:3px;margin-top:10px}
 
-  /* COMPUTER */
-  .computer{position:relative;width:1120px;max-width:96vw;margin:0 auto;background:#050000;border:2px solid #cc2222;border-radius:4px;padding:16px;box-shadow:0 0 0 1px #2a0000,0 0 30px rgba(200,30,30,.35),0 0 60px rgba(200,30,30,.15),inset 0 0 40px rgba(80,0,0,.3);z-index:2}
+  /* ===== ЗАГРУЗКА ===== */
+  #loadingScreen{position:fixed;inset:0;z-index:99999;pointer-events:none;opacity:0;background:#000;display:flex;justify-content:center;align-items:center;transition:opacity .4s ease}
+  #loadingScreen.active{opacity:1;pointer-events:all}
+  .loading-kanji{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:1;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:20px;opacity:.08;filter:blur(.3px)}
+  .loading-kanji span{font-size:180px;font-weight:900;color:#cc2222;letter-spacing:60px;text-shadow:0 0 40px #cc2222,0 0 80px rgba(200,30,30,.7);line-height:1;white-space:nowrap}
+  .loading-kanji .kanji-small{font-size:90px;letter-spacing:40px;opacity:.7}
+  .loading-box{position:relative;z-index:5;width:90%;max-width:620px;display:flex;flex-direction:column;gap:18px;color:#cc2222;text-shadow:0 0 10px rgba(200,30,30,.7)}
+  .loading-title{font-size:22px;letter-spacing:6px;text-align:center;text-transform:uppercase;color:#cc2222;animation:loadBlink 1s steps(2) infinite}
+  @keyframes loadBlink{0%,100%{opacity:1}50%{opacity:.55}}
+  .loading-subtitle{font-size:13px;letter-spacing:3px;text-align:center;color:#661111}
+  .loading-bar-track{width:100%;height:14px;border:2px solid #cc2222;background:#0a0000;position:relative;overflow:hidden;box-shadow:0 0 18px rgba(200,30,30,.4),inset 0 0 12px rgba(0,0,0,.8)}
+  .loading-bar-fill{position:absolute;top:0;left:0;height:100%;width:0;background:linear-gradient(90deg,#440000 0%,#cc2222 50%,#ff4444 100%);box-shadow:0 0 14px #ff2222,0 0 28px rgba(255,60,60,.7);transition:width .15s linear}
+  .loading-footer{display:flex;justify-content:space-between;font-size:14px;letter-spacing:2px;color:#cc2222}
+  .loading-percent{font-weight:bold;color:#ff4444;text-shadow:0 0 12px #ff2222}
+  .loading-log{font-size:12px;color:#661111;letter-spacing:1px;min-height:16px;white-space:nowrap;overflow:hidden}
+
+  /* ===== ОСНОВНОЙ ===== */
+  #mainSite{display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:16px;position:relative;opacity:0;transition:opacity 1s ease;background:#000;animation:breathe 10s ease-in-out infinite}
+  #mainSite.visible{opacity:1}
+  @keyframes breathe{0%,100%{filter:brightness(1)}50%{filter:brightness(1.03)}}
+  .noise-overlay{position:fixed;inset:0;pointer-events:none;z-index:101;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");mix-blend-mode:overlay}
+  .crt-overlay{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:100;background:repeating-linear-gradient(0deg,rgba(0,0,0,.10) 0,rgba(0,0,0,0) 2px,rgba(0,0,0,.06) 4px,rgba(0,0,0,0) 6px);animation:scanMove 8s linear infinite}
+  .fish-eye{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;background:radial-gradient(ellipse at center,transparent 50%,rgba(20,0,0,.5) 80%,rgba(0,0,0,.85) 100%);box-shadow:inset 0 0 140px rgba(0,0,0,.6)}
+  .side-frame{position:fixed;top:0;width:80px;height:100%;pointer-events:none;z-index:1;background:repeating-linear-gradient(45deg,#1a0000 0,#0a0000 3px,#2a0000 6px,#0a0000 9px);opacity:.35;filter:blur(1px) brightness(.7)}
+  .side-frame-left{left:0;transform:skewX(2deg)}
+  .side-frame-right{right:0;transform:skewX(-2deg)}
+
+  .computer{position:relative;width:1120px;max-width:96vw;background:#050000;border:2px solid #cc2222;border-radius:4px;padding:16px;box-shadow:0 0 0 1px #2a0000,0 0 30px rgba(200,30,30,.35),0 0 60px rgba(200,30,30,.15),inset 0 0 40px rgba(80,0,0,.3);z-index:2}
   .screen{background:#000;border:1px solid #440000;border-radius:2px;padding:14px 14px 12px;box-shadow:inset 0 0 50px rgba(80,0,0,.4)}
 
-  /* TITLE BAR */
   .title-bar{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid #cc2222;padding-bottom:6px;margin-bottom:12px;color:#cc2222;text-shadow:0 0 8px rgba(200,30,30,.7);font-size:13px;letter-spacing:2px;gap:12px;flex-wrap:wrap;text-transform:uppercase}
   .title-bar .main{color:#ff3333;font-weight:bold;font-size:17px;text-shadow:0 0 12px #cc2222}
   .title-bar .mid{flex:1;text-align:center;font-size:11px;color:#661111;letter-spacing:3px}
   .title-bar .date{color:#cc2222;font-size:12px;letter-spacing:2px}
 
-  /* TABS */
   .tabs{display:flex;gap:4px;margin-bottom:12px;flex-wrap:wrap}
   .tab-btn{background:#0a0000;border:1px solid #661111;border-bottom:none;padding:6px 16px 5px;font-family:'Courier New',monospace;font-size:13px;font-weight:bold;color:#661111;text-shadow:0 0 6px rgba(200,30,30,.3);border-radius:2px 2px 0 0;cursor:pointer;transition:.15s;text-transform:uppercase;letter-spacing:2px}
   .tab-btn:hover{background:#150000;color:#cc2222;text-shadow:0 0 10px #cc2222}
@@ -36,7 +86,7 @@
   .tab-content.active{display:block;animation:paneFade .3s ease-out}
   @keyframes paneFade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
 
-  /* DOSSIER HEADER (photo + base info) */
+  /* DOSSIER HEAD */
   .dossier-head{display:flex;flex-wrap:wrap;gap:18px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px dashed #2a0000}
   .photo-frame{flex:0 0 220px;max-width:220px;height:270px;background:#0a0000;border:1px solid #661111;padding:6px;box-shadow:0 0 0 1px #2a0000,0 0 18px rgba(200,30,30,.35),inset 0 0 30px rgba(80,0,0,.4);position:relative;overflow:hidden}
   .photo-frame::before{content:'';position:absolute;inset:4px;border:1px solid #cc2222;pointer-events:none;z-index:3;box-shadow:0 0 8px rgba(200,30,30,.5)}
@@ -52,16 +102,13 @@
   .info-cell .lbl{font-size:10px;color:#ff3333;letter-spacing:2px;text-transform:uppercase;font-weight:bold;text-shadow:0 0 6px rgba(200,30,30,.6)}
   .info-cell .val{font-size:14px;color:#cc6666;letter-spacing:.5px}
 
-  /* SECTIONS */
   .section{margin-bottom:16px}
   .section-title{font-size:14px;color:#ff3333;letter-spacing:3px;text-transform:uppercase;font-weight:bold;border-bottom:1px solid #440000;padding-bottom:5px;margin-bottom:10px;text-shadow:0 0 8px rgba(200,30,30,.6);display:flex;align-items:center;gap:8px}
   .section-title::before{content:'▸';color:#cc2222;font-size:12px}
 
   .text-block{color:#cc6666;font-size:13px;line-height:1.75;letter-spacing:.3px;white-space:pre-wrap}
   .text-block strong{color:#ff5555;font-weight:normal;letter-spacing:.5px}
-  .text-block em{color:#884444;font-style:italic}
 
-  /* CARDS */
   .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
   .card{background:#0a0000;border:1px solid #440000;border-left:3px solid #cc2222;padding:10px 14px;box-shadow:inset 0 0 20px rgba(80,0,0,.3);position:relative;transition:.15s}
   .card:hover{border-left-color:#ff3333;box-shadow:inset 0 0 20px rgba(80,0,0,.3),0 0 15px rgba(200,30,30,.25)}
@@ -72,418 +119,549 @@
   .card ul li::before{content:'▪';position:absolute;left:0;color:#cc2222;font-size:10px;top:5px}
   .card ul li strong{color:#ff5555;font-weight:normal}
 
-  /* STAT BAR */
-  .stat{display:flex;align-items:center;gap:8px;font-size:11px;margin:5px 0}
-  .stat .stat-lbl{flex:0 0 140px;color:#cc6666;letter-spacing:1px;text-transform:uppercase;font-size:10px}
-  .stat .stat-track{flex:1;height:8px;background:#0a0000;border:1px solid #440000;position:relative;overflow:hidden}
-  .stat .stat-fill{height:100%;background:linear-gradient(90deg,#440000,#cc2222,#ff3333);box-shadow:0 0 8px #cc2222;transition:width .6s ease}
-  .stat .stat-val{flex:0 0 38px;text-align:right;color:#ff3333;font-size:12px;font-weight:bold}
-
-  /* CLASSIFIED */
   .classified{color:#ff2222;background:#1a0000;border-left:2px solid #cc2222;padding:1px 8px;letter-spacing:2px;font-weight:bold;text-shadow:0 0 8px #ff3333;font-size:12px;display:inline-block;animation:pulse 2s ease-in-out infinite}
   @keyframes pulse{0%,100%{box-shadow:0 0 6px rgba(200,30,30,.4)}50%{box-shadow:0 0 14px rgba(255,50,50,.8)}}
 
-  /* FOOTER */
+  /* PERSONNEL */
+  .social-wrapper{display:flex;flex-direction:column;gap:14px}
+  .classifier-block{background:#0a0000;border:1px solid #661111;border-radius:2px;padding:12px 16px;box-shadow:inset 0 0 30px rgba(80,0,0,.3);display:flex;flex-wrap:wrap;justify-content:center;gap:8px 12px}
+  .rel-tag{display:inline-block;padding:4px 14px;border-radius:2px;font-size:13px;font-weight:bold;letter-spacing:1px;background:#0a0000;border:1px solid #661111;cursor:pointer;transition:.1s;color:#cc6666;text-shadow:0 0 6px rgba(200,30,30,.4)}
+  .rel-tag:hover{filter:brightness(1.3);transform:scale(1.02);border-color:#cc2222;box-shadow:0 0 12px rgba(200,30,30,.5)}
+  .rel-tag.c-distrust{color:#e8c86a;border-color:#e8c86a;background:rgba(232,200,106,.08)}
+  .rel-tag.c-sad{color:#9a9a9a;border-color:#9a9a9a;background:rgba(154,154,154,.08)}
+  .rel-tag.c-neutral{color:#f0f0f0;border-color:#f0f0f0;background:rgba(240,240,240,.05)}
+  .rel-tag.c-friend{color:#6fcf97;border-color:#6fcf97;background:rgba(111,207,151,.08)}
+  .rel-tag.c-strong{color:#27ae60;border-color:#27ae60;background:rgba(39,174,96,.08)}
+  .rel-tag.c-love{color:#f1948a;border-color:#f1948a;background:rgba(241,148,138,.08)}
+  .rel-tag.c-dead{color:#1a1a1a;border-color:#555;background:rgba(212,212,212,.3)}
+  .rel-tag.c-enemy{color:#ff3333;border-color:#ff3333;background:rgba(255,50,50,.1)}
+  .rel-tag.c-fear{color:#5a7a9a;border-color:#5a7a9a;background:rgba(90,122,154,.08)}
+  .rel-tag.c-disappoint{color:#e8d8a0;border-color:#e8d8a0;background:rgba(232,216,160,.08)}
+  .rel-tag.c-cautious{color:#d97a3a;border-color:#d97a3a;background:rgba(217,122,58,.08)}
+  .rel-tag.c-regret{color:#4a7a9a;border-color:#4a7a9a;background:rgba(74,122,154,.1)}
+  .rel-tag.c-sympathy{color:#c97ac9;border-color:#c97ac9;background:rgba(201,122,201,.08)}
+  .rel-tag.c-respect{color:#ffcc44;border-color:#ffcc44;background:rgba(255,204,68,.1)}
+
+  .search-wrap{margin-bottom:12px;position:relative}
+  .search-input{width:100%;background:#0a0000;border:1px solid #440000;border-left:3px solid #cc2222;padding:8px 12px 8px 34px;color:#ff3333;font-family:'Courier New',monospace;font-size:13px;letter-spacing:2px;outline:none;transition:.15s}
+  .search-input::placeholder{color:#441111;letter-spacing:2px}
+  .search-input:focus{border-color:#cc2222;box-shadow:0 0 12px rgba(200,30,30,.3)}
+  .search-wrap::before{content:'⌕';position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#cc2222;font-size:18px;pointer-events:none;font-weight:bold}
+
+  .social-lists{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .social-col{background:#0a0000;border:1px solid #440000;border-radius:2px;padding:12px 16px;box-shadow:inset 0 0 20px rgba(80,0,0,.3);min-height:260px;max-height:420px;overflow-y:auto}
+  .social-col::-webkit-scrollbar{width:4px;background:#0a0000}
+  .social-col::-webkit-scrollbar-thumb{background:#661111;border-radius:4px}
+  .social-col h3{font-family:'Courier New',monospace;color:#ff3333;font-size:16px;letter-spacing:3px;border-bottom:1px solid #440000;padding-bottom:4px;margin-bottom:10px;text-shadow:0 0 12px rgba(200,30,30,.6);text-transform:uppercase}
+  .social-col .group-header{font-weight:bold;font-size:14px;color:#cc2222;cursor:pointer;padding:6px 0 6px 10px;border-bottom:1px solid #1a0000;border-left:2px solid transparent;transition:.1s;display:block;text-shadow:0 0 6px rgba(200,30,30,.3);position:relative;letter-spacing:2px}
+  .social-col .group-header::after{content:'◂';position:absolute;right:6px;color:#440000;font-size:12px}
+  .social-col .group-header:hover{color:#ff5555;background:#150000;text-shadow:0 0 10px #ff3333;border-left-color:#cc2222}
+  .social-col .group-header.open{color:#ff3333;background:#1a0000;border-left-color:#ff3333}
+  .social-col .group-header.open::after{content:'▾';color:#cc2222}
+  .sub-items{padding-left:14px;margin:4px 0 8px;display:none;border-left:1px dashed #2a0000}
+  .sub-items.open{display:block}
+  .personnel-entry{display:flex;align-items:center;gap:8px;padding:5px 8px;border-bottom:1px solid #0a0000;cursor:pointer;transition:.15s;font-size:13px;color:#cc6666;position:relative}
+  .personnel-entry:hover{background:#150000;color:#ff5555;border-left:2px solid #cc2222;padding-left:6px}
+  .personnel-entry.hidden{display:none}
+  .personnel-entry .personnel-name{flex:1;letter-spacing:.5px}
+  .personnel-entry .personnel-rel{font-size:10px;color:#661111;letter-spacing:2px;text-transform:uppercase}
+  .status-dot{display:inline-block;width:8px;height:8px;border-radius:50%;flex-shrink:0}
+  .status-dot.alive{background:#6fcf97;box-shadow:0 0 6px #6fcf97}
+  .status-dot.wounded{background:#ffcc44;box-shadow:0 0 6px #ffcc44}
+  .status-dot.dead{background:#ff3333;box-shadow:0 0 6px #ff3333;animation:deadPulse 2s infinite}
+  .status-dot.unknown{background:#661111;box-shadow:0 0 6px #661111}
+  @keyframes deadPulse{0%,100%{opacity:1}50%{opacity:.4}}
+  .sub-items .empty-note{color:#441111;font-style:italic;letter-spacing:2px;font-size:12px;padding:6px 0}
+  .desc-panel{background:#0a0000;border:1px solid #440000;border-radius:2px;padding:14px 16px;margin-top:14px;min-height:200px;max-height:340px;overflow-y:auto;box-shadow:inset 0 0 30px rgba(80,0,0,.3);transition:all .15s}
+  .desc-panel::-webkit-scrollbar{width:4px;background:#0a0000}
+  .desc-panel::-webkit-scrollbar-thumb{background:#440000;border-radius:4px}
+  .desc-panel .empty-state{color:#440000;text-align:center;padding:40px 0;font-size:16px;letter-spacing:3px;text-transform:uppercase}
+
   .footer-bar{display:flex;justify-content:space-between;margin-top:14px;color:#440000;font-size:11px;border-top:1px solid #2a0000;padding-top:6px;letter-spacing:2px;text-transform:uppercase;flex-wrap:wrap;gap:6px}
 
+  @media (max-width:900px){
+    .social-lists{grid-template-columns:1fr}
+  }
   @media (max-width:750px){
-    .head-name{font-size:20px}
-    .photo-frame{flex:0 0 100%;max-width:100%;height:240px}
-    .tab-btn{font-size:11px;padding:5px 10px;letter-spacing:1px}
+    .intro-main{flex-direction:column;align-items:center;gap:20px}
+    .intro-portrait{width:160px;height:190px}
+    .intro-title{font-size:32px;text-align:center}
+    .intro-subtitle,.intro-info{font-size:14px;text-align:center}
+    .intro-button{font-size:16px;letter-spacing:4px;padding:12px 24px}
     .computer{padding:10px}
-    .info-grid{grid-template-columns:1fr}
+    .tab-btn{font-size:11px;padding:5px 10px;letter-spacing:1px}
+    .photo-frame{flex:0 0 100%;max-width:100%;height:240px}
+    .head-name{font-size:20px}
+    .loading-kanji span{font-size:90px;letter-spacing:30px}
+    .loading-kanji .kanji-small{font-size:50px;letter-spacing:20px}
   }
 </style>
 </head>
 <body>
 
-<div class="crt"></div>
-<div class="vignette"></div>
-<div class="glow"></div>
-<div class="noise"></div>
-
-<div class="computer">
-  <div class="screen">
-
-    <!-- TITLE BAR -->
-    <div class="title-bar">
-      <span class="main">◈ AEON · СЛУЖБА БЕЗОПАСНОСТИ · ДОСЬЕ</span>
-      <span class="mid">◆ ERES M-427 · ПОЯС АСТЕР ◆</span>
-      <span class="date">ЦИКЛ 2157 · 24.08</span>
+<!-- ===== ЭКРАН ЗАГРУЗКИ ===== -->
+<div id="loadingScreen">
+  <div class="intro-crt"></div>
+  <div class="intro-vignette"></div>
+  <div class="intro-red-glow"></div>
+  <div class="loading-kanji">
+    <span>現実</span>
+    <span class="kanji-small">記憶 ・ 虚構</span>
+    <span>意識</span>
+  </div>
+  <div class="loading-box">
+    <div class="loading-title">▸ ЗАГРУЗКА ДАННЫХ ◂</div>
+    <div class="loading-subtitle">AEON · СЛУЖБА БЕЗОПАСНОСТИ · ERES M-427</div>
+    <div class="loading-bar-track"><div class="loading-bar-fill" id="loadingBarFill"></div></div>
+    <div class="loading-footer">
+      <span class="loading-log" id="loadingLog">> INIT...</span>
+      <span class="loading-percent" id="loadingPercent">0%</span>
     </div>
+  </div>
+</div>
 
-    <!-- TABS -->
-    <div class="tabs">
-      <div class="tab-btn active" data-tab="t1">ЛИЧНОЕ ДЕЛО</div>
-      <div class="tab-btn" data-tab="t2">ВНЕШНОСТЬ</div>
-      <div class="tab-btn" data-tab="t3">РЕЗОНАНС</div>
-      <div class="tab-btn" data-tab="t4">БОЕВОЙ ПРОФИЛЬ</div>
-      <div class="tab-btn" data-tab="t5">СВЯЗИ</div>
-      <div class="tab-btn" data-tab="t6">ПРИМЕЧАНИЯ</div>
-    </div>
-
-    <!-- ============== TAB 1 : ЛИЧНОЕ ДЕЛО ============== -->
-    <div id="t1" class="tab-content active">
-
-      <div class="dossier-head">
-        <div class="photo-frame">
-          <img src="ava.jpeg" alt="S. Siracuza" onerror="this.style.display='none';this.parentNode.innerHTML+='<div style=&quot;color:#441111;text-align:center;padding:90px 10px;font-size:12px;letter-spacing:2px;&quot;>[ ФОТО НЕДОСТУПНО ]</div>'">
-          <span class="stamp">АРХИВ</span>
-        </div>
-        <div class="head-info">
-          <div class="head-name">Сицилия Сиракуза</div>
-          <div class="head-sub">Боевой гештальт-резонатор · Служба Безопасности AEON</div>
-          <div class="info-grid">
-            <div class="info-cell"><span class="lbl">Дата рождения</span><span class="val">18.12.2132</span></div>
-            <div class="info-cell"><span class="lbl">Место рождения</span><span class="val">Хаймат · Северный Округ</span></div>
-            <div class="info-cell"><span class="lbl">Рост / Вес</span><span class="val">178 см · 68 кг</span></div>
-            <div class="info-cell"><span class="lbl">Группа крови</span><span class="val">0(I) Rh⁻</span></div>
-            <div class="info-cell"><span class="lbl">Оболочка</span><span class="val">Гештальт</span></div>
-            <div class="info-cell"><span class="lbl">Статус</span><span class="val" style="color:#ff4444">ЖИВ · АКТИВЕН</span></div>
-          </div>
+<!-- ===== ЗАСТАВКА ===== -->
+<div id="introScreen">
+  <div class="intro-crt"></div>
+  <div class="intro-vignette"></div>
+  <div class="intro-red-glow"></div>
+  <div class="intro-container">
+    <div class="intro-main">
+      <div class="intro-portrait">
+        <img src="ava.jpeg" alt="SICILIA">
+        <span class="portrait-label">SICILIA</span>
+      </div>
+      <div class="intro-text">
+        <div class="intro-title">Сицилия Сиракуза</div>
+        <div class="intro-subtitle">Боевой гештальт-резонатор · ERES M-427<br>Оболочка: Гештальт · Статус: Активен</div>
+        <div class="intro-info">
+          <div><span class="highlight">Фракция:</span> AEON</div>
+          <div><span class="highlight">Рост / Вес:</span> 178 см · 68 кг</div>
+          <div><span class="highlight">Группа крови:</span> 0(I) Rh⁻</div>
+          <div><span class="highlight">Место рождения:</span> Хаймат · Северный Округ</div>
         </div>
       </div>
+    </div>
+    <div class="intro-button-wrap">
+      <button class="intro-button" id="enterBtn">[ ОТКРЫТЬ ДОСЬЕ ]</button>
+      <div class="intro-bar"></div>
+    </div>
+    <div class="intro-footer">◈ ERES-M-427 · ГЕШТАЛЬТ · С. СИРАКУЗА ◈</div>
+  </div>
+</div>
 
-      <div class="section">
-        <div class="section-title">Общие сведения</div>
-        <div class="text-block">Родилась на Хаймате, в самом его сердце, в семье младшей ветви дворянского рода Сиракуза — того самого, что прославился огромным вкладом в терраформирование Хаймата, а после из скромности отказался от небольшого дворца на Буяне, предпочтя родную планету. Хотя Сицилия принадлежала к младшей ветви, её детство было лучше, чем у 99 процентов жителей Империи: игрушки, няни, воспитатели и учителя, раннее обучение аристократическим манерам и резонансу.
+<!-- ===== ОСНОВНОЙ ===== -->
+<div id="mainSite">
+  <div class="crt-overlay"></div>
+  <div class="fish-eye"></div>
+  <div class="noise-overlay"></div>
+  <div class="side-frame side-frame-left"></div>
+  <div class="side-frame side-frame-right"></div>
+
+  <div class="computer">
+    <div class="screen">
+
+      <div class="title-bar">
+        <span class="main">◈ AEON · СЛУЖБА БЕЗОПАСНОСТИ · ДОСЬЕ</span>
+        <span class="mid">◆ ERES M-427 · ПОЯС АСТЕР ◆</span>
+        <span class="date">ЦИКЛ 2157 · 24.08</span>
+      </div>
+
+      <div class="tabs">
+        <div class="tab-btn active" data-tab="t1">ЛИЧНОЕ ДЕЛО</div>
+        <div class="tab-btn" data-tab="t2">ВНЕШНОСТЬ</div>
+        <div class="tab-btn" data-tab="t3">ОТНОШЕНИЯ</div>
+      </div>
+
+      <!-- ============== TAB 1 : ЛИЧНОЕ ДЕЛО ============== -->
+      <div id="t1" class="tab-content active">
+
+        <div class="dossier-head">
+          <div class="photo-frame">
+            <img src="ava.jpeg" alt="S. Siracuza" onerror="this.style.display='none';this.parentNode.innerHTML+='<div style=&quot;color:#441111;text-align:center;padding:90px 10px;font-size:12px;letter-spacing:2px;&quot;>[ ФОТО НЕДОСТУПНО ]</div>'">
+            <span class="stamp">АРХИВ</span>
+          </div>
+          <div class="head-info">
+            <div class="head-name">Сицилия Сиракуза</div>
+            <div class="head-sub">Боевой гештальт-резонатор · Служба Безопасности AEON</div>
+            <div class="info-grid">
+              <div class="info-cell"><span class="lbl">Дата рождения</span><span class="val">18.12.2132</span></div>
+              <div class="info-cell"><span class="lbl">Место рождения</span><span class="val">Хаймат · Северный Округ</span></div>
+              <div class="info-cell"><span class="lbl">Рост / Вес</span><span class="val">178 см · 68 кг</span></div>
+              <div class="info-cell"><span class="lbl">Группа крови</span><span class="val">0(I) Rh⁻</span></div>
+              <div class="info-cell"><span class="lbl">Оболочка</span><span class="val">Гештальт</span></div>
+              <div class="info-cell"><span class="lbl">Статус</span><span class="val" style="color:#ff4444">ЖИВ · АКТИВЕН</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Общие сведения</div>
+          <div class="text-block">Родилась на Хаймате, в самом его сердце, в семье младшей ветви дворянского рода Сиракуза — того самого, что прославился огромным вкладом в терраформирование Хаймата, а после из скромности отказался от небольшого дворца на Буяне, предпочтя родную планету. Хотя Сицилия принадлежала к младшей ветви, её детство было лучше, чем у 99 процентов жителей Империи: игрушки, няни, воспитатели и учителя, раннее обучение аристократическим манерам и резонансу.
 
 Когда свершилась революция, ей было семь лет. Род Сиракуза распался на несколько семей, выбравших разные стороны. Младшая ветвь поддержала революцию и саботировала подкрепление имперцев к северной стороне Хаймата — этим обеспечила себе высокое положение и блага.
 
 Сицилия поступила в специальную новую школу, возникшую на рассвете Нации Евсан. Школа готовила резонаторов как будущее оружие нации против Империи, но со временем приобретала всё более гражданский вид. Уже в 14 лет она обладала навыками первой помощи, работы с радиопередатчиком и радиотехникой, стрельбы из мелкокалиберного оружия, а также его сборки и разборки.</div>
-      </div>
+        </div>
 
-      <div class="section">
-        <div class="section-title">Служебная история</div>
-        <div class="text-block">По окончании школы документы Сицилии были отклонены историческим институтом — не было военного свидетельства. Вскоре пришла повестка. Она сама явилась в военкомат и вскоре покинула Хаймат, отправившись на Рот-Фронт, где служила на крайне далёкой эфирной станции. Задача — наблюдение за траекторией и полётом гуманитарной помощи.
+        <div class="section">
+          <div class="section-title">Служебная история</div>
+          <div class="text-block">По окончании школы документы Сицилии были отклонены историческим институтом — не было военного свидетельства. Вскоре пришла повестка. Она сама явилась в военкомат и вскоре покинула Хаймат, отправившись на Рот-Фронт, где служила на крайне далёкой эфирной станции. Задача — наблюдение за траекторией и полётом гуманитарной помощи.
 
 Служба шла тяжело: инструктор <strong>Моника Майер</strong> крайне часто физически гоняла Сицилию, заставляя выполнять чуть ли не спецназовскую норму. Именно от неё — пилотка с жетоном Рот-Фронта: знак признания. Спустя два года после завершения армейской службы Сицилия всё же подала документы в институт. Закончив учёбу, работать по специальности не стала — вновь пошла на службу.
 
 Окончив офицерские курсы при институте, подала документы в Службу Безопасности AEON. Из трёх предложенных контрактов выбрала самый короткий и высокооплачиваемый. Он и стал Ересом.</div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Дислокация</div>
+          <div class="cards">
+            <div class="card">
+              <h4>▸ Место службы</h4>
+              <ul>
+                <li><strong>Объект:</strong> ERES M-427</li>
+                <li><strong>Регион:</strong> Пояс Астер</li>
+                <li><strong>Роль:</strong> Полевой командир · Резонатор</li>
+                <li><strong>Статус объекта:</strong> Не прибыла</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h4>▸ Образование</h4>
+              <ul>
+                <li><strong>Уровень:</strong> Высшее</li>
+                <li><strong>Учреждение:</strong> Центральный Хайматский Государственный исторический институт</li>
+                <li><strong>Тема диплома:</strong> Исторические предпосылки революции на Хаймате</li>
+                <li><strong>Доп.:</strong> Офицерские курсы (военная кафедра)</li>
+                <li><strong>Звание:</strong> Лейтенант запаса</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
       </div>
 
-      <div class="section">
-        <div class="section-title">Дислокация</div>
-        <div class="cards">
-          <div class="card">
-            <h4>▸ Место службы</h4>
-            <ul>
-              <li><strong>Объект:</strong> ERES M-427</li>
-              <li><strong>Регион:</strong> Пояс Астер</li>
-              <li><strong>Роль:</strong> Полевой командир · Резонатор</li>
-              <li><strong>Статус объекта:</strong> Не прибыла</li>
-            </ul>
+      <!-- ============== TAB 2 : ВНЕШНОСТЬ ============== -->
+      <div id="t2" class="tab-content">
+
+        <div class="section">
+          <div class="section-title">Внешний облик гештальта</div>
+          <div class="text-block">Волосы — длинные, густые, серебристо-серого оттенка, близкого к белому, с плавным градиентом, уходящим в черноту; чёлка разделена между глаз. Глаза серые, взгляд острый и пронзительный, нередко с опасным или насмешливым блеском. Отличительные особенности: шрам, пересекающий область правого глаза; характерная частая улыбка или оскал. Фигура спортивная, рельефная. Кожа более бледная, чем у прочих гештальтов; иных дефектов не наблюдается. На лбу расположены три красных ромба — клеймо резонатора, официальный знак, ставится при выявлении способностей.</div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Физические данные</div>
+          <div class="cards">
+            <div class="card">
+              <h4>▸ Биометрия</h4>
+              <ul>
+                <li><strong>Рост:</strong> 178 см</li>
+                <li><strong>Вес:</strong> 68 кг</li>
+                <li><strong>Группа крови:</strong> 0(I) Rh⁻</li>
+                <li><strong>Цвет глаз:</strong> Серый</li>
+                <li><strong>Цвет волос:</strong> Серебристо-белый</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h4>▸ Отклонения</h4>
+              <ul>
+                <li><strong>Альбинизм</strong> — врождённый</li>
+                <li><strong>Шрам</strong> — через правый глаз, зрение не задето</li>
+                <li><strong>Клеймо резонатора</strong> — три ромба на лбу</li>
+                <li><strong>Иных дефектов</strong> — не выявлено</li>
+              </ul>
+            </div>
           </div>
-          <div class="card">
-            <h4>▸ Образование</h4>
-            <ul>
-              <li><strong>Уровень:</strong> Высшее</li>
-              <li><strong>Учреждение:</strong> Центральный Хайматский Государственный исторический институт</li>
-              <li><strong>Тема диплома:</strong> Исторические предпосылки революции на Хаймате</li>
-              <li><strong>Доп.:</strong> Офицерские курсы (военная кафедра)</li>
-              <li><strong>Звание:</strong> Лейтенант запаса</li>
-            </ul>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Вне службы</div>
+          <div class="text-block">Предпочитает простую одежду: лёгкие брюки, армейская обувь, белая рубашка. Голос ровный, с лёгкой хрипотцой, манера держаться — раскованная, чуть насмешливая. Пилотку с Рот-Фронта носит при себе как символ — не выставляет, но и не прячет.</div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Личные вещи при себе</div>
+          <div class="cards">
+            <div class="card">
+              <h4>▸ Постоянно с собой</h4>
+              <ul>
+                <li>Базовый набор для гигиены</li>
+                <li>Семейная фотография (ищет глазами дедушку)</li>
+                <li>Армейские высококачественные подсумки</li>
+                <li>Пилотка с жетоном Рот-Фронта</li>
+                <li>Книга по истории (до революции и причины)</li>
+                <li>Блокнот с карандашами</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h4>▸ Привычки и предпочтения</h4>
+              <ul>
+                <li>Ведёт дневник — только истина, лжи не запишет</li>
+                <li>Рисует девушек на пляже и в милых сценах</li>
+                <li>Утренний ритуал — запись в дневнике</li>
+                <li><strong>Еда:</strong> спагетти (и только хорошие)</li>
+                <li><strong>Книги:</strong> романтика, нежные истории, история</li>
+                <li>Бросила курить</li>
+              </ul>
+            </div>
           </div>
+        </div>
+
+      </div>
+
+      <!-- ============== TAB 3 : ОТНОШЕНИЯ ============== -->
+      <div id="t3" class="tab-content">
+        <div class="social-wrapper">
+
+          <div class="classifier-block">
+            <span class="rel-tag c-distrust">НЕДОВЕРИЕ</span>
+            <span class="rel-tag c-sad">ТОСКА</span>
+            <span class="rel-tag c-neutral">НЕЙТРАЛИТЕТ</span>
+            <span class="rel-tag c-friend">ДРУЖБА</span>
+            <span class="rel-tag c-strong">КРЕПКАЯ СВЯЗЬ</span>
+            <span class="rel-tag c-love">ЛЮБОВЬ</span>
+            <span class="rel-tag c-dead">МЁРТВ</span>
+            <span class="rel-tag c-cautious">НАСТОРОЖЕННОСТЬ</span>
+            <span class="rel-tag c-fear">СТРАХ</span>
+            <span class="rel-tag c-disappoint">РАЗОЧАРОВАНИЕ</span>
+            <span class="rel-tag c-respect">УВАЖЕНИЕ</span>
+            <span class="rel-tag c-regret">СОЖАЛЕНИЕ</span>
+            <span class="rel-tag c-sympathy">СИМПАТИЯ</span>
+            <span class="rel-tag c-enemy">ВРАЖДА</span>
+          </div>
+
+          <div class="search-wrap">
+            <input type="text" class="search-input" id="personnelSearch" placeholder="ПОИСК ПО ИМЕНИ ИЛИ НОМЕРУ...">
+          </div>
+
+          <div class="social-lists">
+            <div class="social-col">
+              <h3>▸ РЕПЛИКИ</h3>
+              <span class="group-header" data-group="eulr">EULR</span>
+              <div class="sub-items" id="group-eulr">
+                <div class="personnel-entry" data-name="EULR.724"><span class="status-dot unknown"></span><span class="personnel-name">EULR.724</span><span class="personnel-rel">—</span></div>
+                <div class="personnel-entry" data-name="EULR.546"><span class="status-dot unknown"></span><span class="personnel-name">EULR.546</span><span class="personnel-rel">—</span></div>
+                <div class="personnel-entry" data-name="EULR.381"><span class="status-dot unknown"></span><span class="personnel-name">EULR.381</span><span class="personnel-rel">—</span></div>
+                <div class="personnel-entry" data-name="EULR.401"><span class="status-dot unknown"></span><span class="personnel-name">EULR.401</span><span class="personnel-rel">—</span></div>
+                <div class="personnel-entry" data-name="EULR.322"><span class="status-dot unknown"></span><span class="personnel-name">EULR.322</span><span class="personnel-rel">—</span></div>
+              </div>
+              <span class="group-header" data-group="arar">ARAR</span>
+              <div class="sub-items" id="group-arar">
+                <div class="personnel-entry" data-name="ARAR.841"><span class="status-dot unknown"></span><span class="personnel-name">ARAR.841</span><span class="personnel-rel">—</span></div>
+                <div class="personnel-entry" data-name="ARAR.978"><span class="status-dot unknown"></span><span class="personnel-name">ARAR.978</span><span class="personnel-rel">—</span></div>
+                <div class="personnel-entry" data-name="ARAR.595"><span class="status-dot unknown"></span><span class="personnel-name">ARAR.595</span><span class="personnel-rel">—</span></div>
+                <div class="personnel-entry" data-name="ARAR.102"><span class="status-dot unknown"></span><span class="personnel-name">ARAR.102</span><span class="personnel-rel">—</span></div>
+              </div>
+              <span class="group-header" data-group="mnhr">MNHR</span>
+              <div class="sub-items" id="group-mnhr">
+                <div class="personnel-entry" data-name="MNHR.300"><span class="status-dot unknown"></span><span class="personnel-name">MNHR.300</span><span class="personnel-rel">—</span></div>
+                <div class="personnel-entry" data-name="MNHR.063"><span class="status-dot unknown"></span><span class="personnel-name">MNHR.063</span><span class="personnel-rel">—</span></div>
+              </div>
+              <span class="group-header" data-group="star">STAR</span>
+              <div class="sub-items" id="group-star">
+                <div class="personnel-entry" data-name="STAR.114"><span class="status-dot unknown"></span><span class="personnel-name">STAR.114</span><span class="personnel-rel">—</span></div>
+                <div class="personnel-entry" data-name="STAR.603"><span class="status-dot unknown"></span><span class="personnel-name">STAR.603</span><span class="personnel-rel">—</span></div>
+                <div class="personnel-entry" data-name="STAR.762"><span class="status-dot unknown"></span><span class="personnel-name">STAR.762</span><span class="personnel-rel">—</span></div>
+              </div>
+              <span class="group-header" data-group="stcr">STCR</span>
+              <div class="sub-items" id="group-stcr">
+                <div class="personnel-entry" data-name="STRC.213"><span class="status-dot unknown"></span><span class="personnel-name">STRC.213</span><span class="personnel-rel">—</span></div>
+              </div>
+              <span class="group-header" data-group="klbr">KLBR</span>
+              <div class="sub-items" id="group-klbr">
+                <div class="personnel-entry" data-name="KLBR.080"><span class="status-dot unknown"></span><span class="personnel-name">KLBR.080</span><span class="personnel-rel">—</span></div>
+              </div>
+              <span class="group-header" data-group="kahr">KAHR</span>
+              <div class="sub-items" id="group-kahr">
+                <div class="personnel-entry" data-name="KAHR"><span class="status-dot unknown"></span><span class="personnel-name">KAHR</span><span class="personnel-rel">—</span></div>
+              </div>
+              <span class="group-header" data-group="fklr">FKLR</span>
+              <div class="sub-items" id="group-fklr">
+                <div class="personnel-entry" data-name="FKLR"><span class="status-dot unknown"></span><span class="personnel-name">FKLR</span><span class="personnel-rel">—</span></div>
+              </div>
+            </div>
+
+            <div class="social-col">
+              <h3>▸ ГЕШТАЛЬТЫ</h3>
+              <span class="group-header" data-group="gscc">GSCC</span>
+              <div class="sub-items" id="group-gscc">
+                <div class="personnel-entry" data-name="GSCC.Артемий Овечкин"><span class="status-dot unknown"></span><span class="personnel-name">GSCC.Артемий Овечкин</span><span class="personnel-rel">—</span></div>
+                <div class="personnel-entry" data-name="GSCC.Кирра Фостер"><span class="status-dot unknown"></span><span class="personnel-name">GSCC.Кирра Фостер</span><span class="personnel-rel">—</span></div>
+              </div>
+              <span class="group-header" data-group="gscp">GSCP</span>
+              <div class="sub-items" id="group-gscp">
+                <div class="personnel-entry" data-name="GSCP.Анна Леонхард"><span class="status-dot unknown"></span><span class="personnel-name">GSCP.Анна Леонхард</span><span class="personnel-rel">—</span></div>
+                <div class="personnel-entry" data-name="GSCP.Сэйра Штраусс"><span class="status-dot unknown"></span><span class="personnel-name">GSCP.Сэйра Штраусс</span><span class="personnel-rel">—</span></div>
+                <div class="personnel-entry" data-name="GSCP.Кенто Годжо"><span class="status-dot unknown"></span><span class="personnel-name">GSCP.Кенто Годжо</span><span class="personnel-rel">—</span></div>
+                <div class="personnel-entry" data-name="GSCP.316"><span class="status-dot unknown"></span><span class="personnel-name">GSCP.316</span><span class="personnel-rel">—</span></div>
+                <div class="personnel-entry" data-name="GSCP.168"><span class="status-dot unknown"></span><span class="personnel-name">GSCP.168 — Аделина Краусс</span><span class="personnel-rel">—</span></div>
+                <div class="personnel-entry" data-name="GSCP.999"><span class="status-dot unknown"></span><span class="personnel-name">GSCP.999</span><span class="personnel-rel">—</span></div>
+              </div>
+              <span class="group-header" data-group="gsco">GSCO</span>
+              <div class="sub-items" id="group-gsco"><div class="empty-note">— список пуст —</div></div>
+              <span class="group-header" data-group="command">КОМАНДОВАНИЕ</span>
+              <div class="sub-items" id="group-command"><div class="empty-note">— список пуст —</div></div>
+              <span class="group-header" data-group="other-gest">ПРОЧИЕ ГЕШТАЛЬТЫ</span>
+              <div class="sub-items" id="group-other-gest"><div class="empty-note">— список пуст —</div></div>
+            </div>
+          </div>
+
+          <div class="desc-panel" id="descPanel">
+            <div class="empty-state">◈ ОЖИДАНИЕ ВЫБОРА ПЕРСОНАЛА ◈</div>
+          </div>
+
         </div>
       </div>
 
-    </div>
-
-    <!-- ============== TAB 2 : ВНЕШНОСТЬ ============== -->
-    <div id="t2" class="tab-content">
-      <div class="section">
-        <div class="section-title">Внешний облик гештальта</div>
-        <div class="text-block">Волосы — длинные, густые, серебристо-серого оттенка, близкого к белому, с плавным градиентом, уходящим в черноту; чёлка разделена между глаз. Глаза серые, взгляд острый и пронзительный, нередко с опасным или насмешливым блеском. Отличительные особенности: шрам, пересекающий область правого глаза; характерная частая улыбка или оскал. Фигура спортивная, рельефная. Кожа более бледная, чем у прочих гештальтов; иных дефектов не наблюдается. На лбу расположены три красных ромба — клеймо резонатора, официальный знак, ставится при выявлении способностей.</div>
-      </div>
-
-      <div class="section">
-        <div class="section-title">Физические данные</div>
-        <div class="cards">
-          <div class="card">
-            <h4>▸ Биометрия</h4>
-            <ul>
-              <li><strong>Рост:</strong> 178 см</li>
-              <li><strong>Вес:</strong> 68 кг</li>
-              <li><strong>Группа крови:</strong> 0(I) Rh⁻</li>
-              <li><strong>Цвет глаз:</strong> Серый</li>
-              <li><strong>Цвет волос:</strong> Серебристо-белый</li>
-            </ul>
-          </div>
-          <div class="card">
-            <h4>▸ Отклонения</h4>
-            <ul>
-              <li><strong>Альбинизм</strong> — врождённый</li>
-              <li><strong>Шрам</strong> — через правый глаз, зрение не задето</li>
-              <li><strong>Клеймо резонатора</strong> — три ромба на лбу</li>
-              <li><strong>Иных дефектов</strong> — не выявлено</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <div class="section">
-        <div class="section-title">Вне службы</div>
-        <div class="text-block">Предпочитает простую одежду: лёгкие брюки, армейская обувь, белая рубашка. Голос ровный, с лёгкой хрипотцой, манера держаться — раскованная, чуть насмешливая. Пилотку с Рот-Фронта носит при себе как символ — не выставляет, но и не прячет.</div>
-      </div>
-    </div>
-
-    <!-- ============== TAB 3 : РЕЗОНАНС ============== -->
-    <div id="t3" class="tab-content">
-      <div class="section">
-        <div class="section-title">Классификация</div>
-        <div class="cards">
-          <div class="card">
-            <h4>▸ Тип</h4>
-            <ul>
-              <li><strong>Класс:</strong> Боевой резонатор</li>
-              <li><strong>Специализация:</strong> Гравитационные манипуляции</li>
-              <li><strong>Стиль:</strong> Грубый, «кувалдный»</li>
-              <li><strong>Тонкая работа:</strong> Затруднена</li>
-            </ul>
-          </div>
-          <div class="card">
-            <h4>▸ Пределы</h4>
-            <ul>
-              <li>Резкое повышение тяжести цели</li>
-              <li>Прижатие и раздавливание органов</li>
-              <li>Перемещение, сжатие, ускорение, вращение объектов</li>
-              <li>Удержание чашки — с риском перебора</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <div class="section">
-        <div class="section-title">Телесные проявления</div>
-        <div class="text-block">Гравитация, направленная на себя, ощущается как <strong>холод и давление</strong>. При перегрузе — кровь из носа, слабость, судороги. «Почерк» резонанса индивидуален и опознаётся другими резонаторами по <strong>песне</strong>, которая исходит от неё.</div>
-      </div>
-
-      <div class="section">
-        <div class="section-title">Ограничения</div>
-        <div class="text-block">Сила — грубая. Удержать мелкий предмет без повреждения удаётся редко. В быту резонанс не использует — только при крайней необходимости. Манипуляции разумом — <span class="classified">КРАЙНЕ СЛАБО</span>. Устаёт от чрезмерного использования резонанса. Своей силы не боится; невиновных не калечила.</div>
-      </div>
-
-      <div class="section">
-        <div class="section-title">Отношение к клейму</div>
-        <div class="text-block">Три ромба воспринимает нейтрально, обычно закрывает чёлкой. К другим резонаторам — ровное, «есть о чём поговорить».</div>
-      </div>
-    </div>
-
-    <!-- ============== TAB 4 : БОЕВОЙ ПРОФИЛЬ ============== -->
-    <div id="t4" class="tab-content">
-      <div class="section">
-        <div class="section-title">Тактика</div>
-        <div class="text-block">Держит дистанцию, работает из автомата или ПП. Резонанс применяет точечно: прижать цель к земле, добить. В ближний бой без необходимости не входит. Предпочитает действовать самостоятельно — «тащить в соло». Помощь просить не умеет.</div>
-      </div>
-
-      <div class="section">
-        <div class="section-title">Индикаторы подготовки</div>
-        <div class="stat"><div class="stat-lbl">Стрельба</div><div class="stat-track"><div class="stat-fill" style="width:80%"></div></div><div class="stat-val">80</div></div>
-        <div class="stat"><div class="stat-lbl">Резонанс · атака</div><div class="stat-track"><div class="stat-fill" style="width:85%"></div></div><div class="stat-val">85</div></div>
-        <div class="stat"><div class="stat-lbl">Резонанс · контроль</div><div class="stat-track"><div class="stat-fill" style="width:35%"></div></div><div class="stat-val">35</div></div>
-        <div class="stat"><div class="stat-lbl">Физическая форма</div><div class="stat-track"><div class="stat-fill" style="width:75%"></div></div><div class="stat-val">75</div></div>
-        <div class="stat"><div class="stat-lbl">Дисциплина</div><div class="stat-track"><div class="stat-fill" style="width:80%"></div></div><div class="stat-val">80</div></div>
-        <div class="stat"><div class="stat-lbl">Моральная гибкость</div><div class="stat-track"><div class="stat-fill" style="width:90%"></div></div><div class="stat-val">90</div></div>
-      </div>
-
-      <div class="section">
-        <div class="section-title">Зафиксированные эпизоды</div>
-        <div class="text-block"><strong>Первый приказ на ликвидацию:</strong> два салата из крайне бедных семей, подозреваемые в попытке кражи и продажи данных. Приговор приведён в исполнение через повешение. После — три дня бессонницы, рвота, слёзы. В рапорте — «без замечаний».
-
-<strong>Дальнейшие аналогичные приказы:</strong> не зафиксированы.
-
-<strong>Отказ от приказов:</strong> не зафиксирован. За мелкие дисциплинарные проступки в период обучения на Рот-Фронте — жёсткие санкции со стороны инструктора М. Майер (вплоть до перелома ребра).</div>
-      </div>
-
-      <div class="section">
-        <div class="section-title">Психологическая устойчивость</div>
-        <div class="cards">
-          <div class="card">
-            <h4>▸ Реакции</h4>
-            <ul>
-              <li><strong>К насилию:</strong> инструментально</li>
-              <li><strong>К смерти:</strong> неизбежность</li>
-              <li><strong>К риску:</strong> допустимо</li>
-              <li><strong>К пленным:</strong> нет опыта</li>
-            </ul>
-          </div>
-          <div class="card">
-            <h4>▸ Ключевое</h4>
-            <ul>
-              <li>Себя считает инструментом, не человеком</li>
-              <li>Верность AEON — клеймо и истина</li>
-              <li>Несправедливость AEON — промолчит</li>
-              <li>Долг — перед нацией и дедом</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ============== TAB 5 : СВЯЗИ ============== -->
-    <div id="t5" class="tab-content">
-
-      <div class="section">
-        <div class="section-title">Семья · род Сиракуза · младшая ветвь</div>
-        <div class="text-block">Отец, мать, бабушка, дедушка, 14 братьев и две сестры. Все живы. Большинство на Хаймате, часть — на Рот-Фронте. Решение пойти в армию, а затем в AEON встретили с одобрением. Ближе всех — <strong>дедушка</strong>; дальше всех — <strong>мать</strong>. С родственниками из других ветвей рода, поддержавших Империю, связи не поддерживает и не знакома лично. Фамилию воспринимает нейтрально.</div>
-      </div>
-
-      <div class="section">
-        <div class="section-title">Ключевые лица</div>
-        <div class="cards">
-          <div class="card">
-            <h4>▸ Моника Майер</h4>
-            <ul>
-              <li><strong>Статус:</strong> Жива</li>
-              <li><strong>Роль:</strong> Инструктор, Рот-Фронт</li>
-              <li><strong>Отношение:</strong> Уважение</li>
-              <li><strong>Примечание:</strong> Источник пилотки с жетоном</li>
-            </ul>
-          </div>
-          <div class="card">
-            <h4>▸ София</h4>
-            <ul>
-              <li><strong>Статус:</strong> Неизвестен</li>
-              <li><strong>Роль:</strong> Сослуживица, Рот-Фронт</li>
-              <li><strong>Отношение:</strong> Тёплое, но дистанция</li>
-              <li><strong>Примечание:</strong> После единственного опыта — общение сведено к минимуму</li>
-            </ul>
-          </div>
-          <div class="card">
-            <h4>▸ Мальчик со шрамом</h4>
-            <ul>
-              <li><strong>Статус:</strong> Жив</li>
-              <li><strong>Роль:</strong> Адъютант администратора, Хаймат</li>
-              <li><strong>Отношение:</strong> Дружба</li>
-              <li><strong>Примечание:</strong> Оставил шрам в школе; в ответ получил перелом носа; впоследствии — приятель</li>
-            </ul>
-          </div>
-          <div class="card">
-            <h4>▸ Семья</h4>
-            <ul>
-              <li><strong>Отец, мать, бабушка, дедушка</strong></li>
-              <li><strong>14 братьев, 2 сестры</strong></li>
-              <li><strong>Статус:</strong> Все живы</li>
-              <li><strong>Связь:</strong> Поддерживается</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <div class="section">
-        <div class="section-title">Близость и предпочтения</div>
-        <div class="text-block">Настоящих друзей нет. К подчинённым — уважительно, с редкой руганью. Уважает тех, кто доказал себя делом; презирает бюрократов и тех, кто прикрывается бумагами. Ориентация — <span class="classified">ЛИЧНОЕ ДЕЛО</span>. В AEON не афиширует, чтобы это не «затемняло» послужной список. Детей не хочет.</div>
+      <div class="footer-bar">
+        <span>⏻ AEON · ERES M-427 · v.3.2</span>
+        <span>◆ ДОКУМЕНТ ЗАСЕКРЕЧЕН ◆</span>
+        <span>ГЕШТАЛЬТ · С. СИРАКУЗА</span>
       </div>
 
     </div>
-
-    <!-- ============== TAB 6 : ПРИМЕЧАНИЯ ============== -->
-    <div id="t6" class="tab-content">
-
-      <div class="section">
-        <div class="section-title">Личные вещи</div>
-        <div class="cards">
-          <div class="card">
-            <h4>▸ При себе</h4>
-            <ul>
-              <li>Базовый набор для гигиены</li>
-              <li>Семейная фотография (ищет глазами дедушку)</li>
-              <li>Армейские высококачественные подсумки</li>
-              <li>Пилотка с жетоном Рот-Фронта</li>
-              <li>Книга по истории (до революции и причины)</li>
-              <li>Блокнот с карандашами</li>
-            </ul>
-          </div>
-          <div class="card">
-            <h4>▸ Привычки</h4>
-            <ul>
-              <li>Ведёт дневник — только истина, лжи не запишет</li>
-              <li>Рисует девушек на пляже и в милых сценах</li>
-              <li>Утренний ритуал — запись в дневнике</li>
-              <li>Бросила курить</li>
-              <li>Кошмары редкие — видит себя дома, резко просыпается</li>
-            </ul>
-          </div>
-          <div class="card">
-            <h4>▸ Предпочтения</h4>
-            <ul>
-              <li><strong>Еда:</strong> спагетти (и только хорошие)</li>
-              <li><strong>Книги:</strong> романтика, нежные истории, история</li>
-              <li><strong>Отдых:</strong> общение с персоналом, прогулки, чтение, рисование</li>
-              <li><strong>Деньги:</strong> часть семье, часть транжирит</li>
-              <li><strong>Питомец:</strong> хотела бы, но только как подарок</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <div class="section">
-        <div class="section-title">Психологический профиль</div>
-        <div class="cards">
-          <div class="card">
-            <h4>▸ Характер</h4>
-            <ul>
-              <li><strong>Тип:</strong> Авантюристка</li>
-              <li><strong>Улыбка:</strong> Искренность</li>
-              <li><strong>Ближе к:</strong> Одиночке</li>
-              <li><strong>Себя видит:</strong> Инструментом</li>
-            </ul>
-          </div>
-          <div class="card">
-            <h4>▸ Слабые места</h4>
-            <ul>
-              <li>Страх коллективного унижения</li>
-              <li>Быстро забалтывается, теряя время</li>
-              <li>Не умеет просить помощи</li>
-              <li>Паника при реальной привязанности</li>
-            </ul>
-          </div>
-          <div class="card">
-            <h4>▸ Триггеры</h4>
-            <ul>
-              <li><strong>Злит:</strong> несправедливость и ложь</li>
-              <li><strong>Не даёт спать:</strong> «А могла ли я жить иначе?»</li>
-              <li><strong>Никогда не скажет вслух:</strong> «Я ошиблась в выборе»</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <div class="section">
-        <div class="section-title">Отношение к ERES M-427</div>
-        <div class="text-block">До прибытия знает только брифинг; мрачные детали скрыты. Согласилась на контракт по глупости. Надеется найти приятелей. Инструктаж по БРУ ей не сообщался. С ННА, репликами и другими резонаторами настроена на позитив. Отказаться от контракта не может.</div>
-      </div>
-
-      <div class="section">
-        <div class="section-title">Оценка куратора</div>
-        <div class="text-block">Боец с высокой выдержкой и низкой склонностью к рефлексии. Внешне — маска холодного солдата с ухмылкой; внутри — страх отвержения и потребность в признании. Наиболее вероятная траектория — трагический финал на объекте. <span class="classified">РЕКОМЕНДОВАНО К НАБЛЮДЕНИЮ</span>.</div>
-      </div>
-
-    </div>
-
-    <!-- FOOTER -->
-    <div class="footer-bar">
-      <span>⏻ AEON · ERES M-427 · v.3.2</span>
-      <span>◆ ДОКУМЕНТ ЗАСЕКРЕЧЕН ◆</span>
-      <span>ГЕШТАЛЬТ · С. СИРАКУЗА</span>
-    </div>
-
   </div>
 </div>
 
 <script>
+(function(){
+  const introScreen = document.getElementById('introScreen');
+  const mainSite = document.getElementById('mainSite');
+  const enterBtn = document.getElementById('enterBtn');
+  const loadingScreen = document.getElementById('loadingScreen');
+  const loadingBarFill = document.getElementById('loadingBarFill');
+  const loadingPercent = document.getElementById('loadingPercent');
+  const loadingLog = document.getElementById('loadingLog');
+
+  function playBeep(freq){
+    try{
+      const ctx = new (window.AudioContext||window.webkitAudioContext)();
+      const osc = ctx.createOscillator(), g = ctx.createGain();
+      osc.connect(g); g.connect(ctx.destination);
+      osc.frequency.value = freq || 600; osc.type = 'square';
+      g.gain.setValueAtTime(0.02, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
+      osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.05);
+    }catch(e){}
+  }
+
+  function playBootSound(){
+    try{
+      const ctx = new (window.AudioContext||window.webkitAudioContext)();
+      const osc = ctx.createOscillator(), g = ctx.createGain();
+      osc.connect(g); g.connect(ctx.destination);
+      osc.frequency.setValueAtTime(220, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.4);
+      osc.type = 'sine';
+      g.gain.setValueAtTime(0.05, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.6);
+      osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.6);
+    }catch(e){}
+  }
+
+  const logMessages = ["> INIT SYSTEM...","> CONNECTING TO NODE...","> AUTHENTICATING...","> LOADING CORE DATA...","> DECRYPTING ARCHIVE...","> VERIFYING SIGNATURE...","> LOADING PERSONNEL...","> MAPPING RELATIONS...","> FINALIZING...","> WARNING: SLOW NODE...","> RETRYING...","> ALMOST DONE..."];
+
+  function startLoading(callback){
+    loadingScreen.classList.add('active');
+    let percent = 0, logIndex = 0;
+    const interval = setInterval(()=>{
+      let step;
+      if(percent < 50) step = 1.5 + Math.random()*2;
+      else if(percent < 80) step = 0.8 + Math.random()*1.5;
+      else if(percent < 95) step = 0.3 + Math.random()*0.8;
+      else step = 0.15 + Math.random()*0.4;
+
+      percent += step;
+      if(percent >= 99){
+        percent = 99;
+        clearInterval(interval);
+        loadingLog.textContent = "> HOLD AT 99%...";
+        playBeep(400);
+
+        setTimeout(()=>{
+          loadingLog.textContent = "> COMPLETE.";
+          loadingPercent.textContent = "100%";
+          loadingBarFill.style.width = "100%";
+          playBootSound();
+          setTimeout(()=>{
+            loadingScreen.classList.remove('active');
+            if(typeof callback === 'function') callback();
+          }, 500);
+        }, 1200);
+      }
+
+      loadingBarFill.style.width = percent + '%';
+      loadingPercent.textContent = Math.floor(percent) + '%';
+      const newLogIndex = Math.floor(percent/9);
+      if(newLogIndex !== logIndex && newLogIndex < logMessages.length){
+        logIndex = newLogIndex;
+        loadingLog.textContent = logMessages[logIndex];
+        playBeep(600 + Math.random()*400);
+      }
+    }, 60);
+  }
+
+  enterBtn.addEventListener('click', ()=>{
+    startLoading(()=>{
+      introScreen.classList.add('hidden');
+      setTimeout(()=>mainSite.classList.add('visible'), 300);
+      window.scrollTo(0,0);
+    });
+  });
+
   // Tabs
   document.querySelectorAll('.tab-btn').forEach(btn=>{
-    btn.addEventListener('click',()=>{
+    btn.addEventListener('click', ()=>{
       const id = btn.dataset.tab;
       document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
       btn.classList.add('active');
       const pane = document.getElementById(id);
       if(pane) pane.classList.add('active');
-      window.scrollTo({top:0, behavior:'smooth'});
+      playBeep(600 + Math.random()*400);
     });
   });
+
+  // Group headers
+  document.querySelectorAll('.group-header').forEach(header=>{
+    header.addEventListener('click', function(){
+      const items = document.getElementById('group-' + this.dataset.group);
+      if(items){ items.classList.toggle('open'); this.classList.toggle('open'); playBeep(500); }
+    });
+  });
+
+  // Search
+  const searchInput = document.getElementById('personnelSearch');
+  if(searchInput) searchInput.addEventListener('input', function(){
+    const q = this.value.trim().toLowerCase();
+    document.querySelectorAll('.personnel-entry').forEach(entry=>{
+      const name = (entry.dataset.name || entry.textContent).toLowerCase();
+      entry.classList.toggle('hidden', q.length > 0 && !name.includes(q));
+    });
+    if(q.length > 0){
+      document.querySelectorAll('.sub-items').forEach(s=>s.classList.add('open'));
+      document.querySelectorAll('.group-header').forEach(h=>h.classList.add('open'));
+    }
+  });
+
+  // Personnel click -> desc panel
+  document.querySelectorAll('.personnel-entry').forEach(entry=>{
+    entry.addEventListener('click', function(){
+      const name = this.dataset.name;
+      const panel = document.getElementById('descPanel');
+      if(panel) panel.innerHTML = `<div style="padding:12px 6px;">
+        <div style="font-family:'Courier New',monospace;color:#ff3333;font-size:18px;letter-spacing:3px;margin-bottom:8px;text-shadow:0 0 10px #cc2222;font-weight:bold;">▸ ${name}</div>
+        <div style="color:#661111;font-size:12px;letter-spacing:2px;margin-bottom:12px;">[ ЗАПИСЬ ПУСТА · ЗАПОЛНИТЕ ПОЗЖЕ ]</div>
+        <div style="color:#441111;font-style:italic;letter-spacing:2px;font-size:12px;">— нет данных —</div>
+      </div>`;
+      playBeep(600);
+    });
+  });
+
+  // Generic click beep on cards
+  document.querySelectorAll('.card, .rel-tag, .info-cell').forEach(el=>{
+    el.addEventListener('click', ()=>playBeep(600 + Math.random()*400));
+  });
+})();
 </script>
 </body>
 </html>
