@@ -528,12 +528,12 @@
 
               <span class="group-header" data-group="kahr">KAHR</span>
               <div class="sub-items" id="group-kahr">
-                <div class="personnel-entry" data-name="KAHR"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">KAHR — Командующая Ворона</span><span class="personnel-rel">СТРАХ</span></div>
+                <div class="personnel-entry" data-name="KAHR"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">KAHR — Командующая Ворона</span><span class="personnel-rel">НАСТОРОЖЕННОСТЬ · УВАЖЕНИЕ</span></div>
               </div>
 
               <span class="group-header" data-group="fklr">FKLR</span>
               <div class="sub-items" id="group-fklr">
-                <div class="personnel-entry" data-name="FKLR"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">FKLR — Командующая Сокол</span><span class="personnel-rel">НАСТОРОЖЕННОСТЬ</span></div>
+                <div class="personnel-entry" data-name="FKLR"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">FKLR — Командующая Сокол</span><span class="personnel-rel">УВАЖЕНИЕ</span></div>
               </div>
             </div>
 
@@ -727,7 +727,7 @@
       text: "Сороковое... Товарищ."
     },
     "KAHR": {
-      rel: "СТРАХ",
+      rel: "НАСТОРОЖЕННОСТЬ · УВАЖЕНИЕ",
       text: "Командующая Ворона: серьёзная, прямолинейная, опытная. Сомнений нет: будет приказ — исполню; скажет броситься на гранату — исполню; скажет списать своего — исполню. Но голос её в песне заставляет тело покрыться дрожью, благо она лаконична."
     },
     "HABR.112": {
@@ -775,7 +775,7 @@
       text: "Отличный товарищ. Слегка печально, что из-за высокой её нагрузки у неё почти нет свободного времени. Потому я забрала весь штрафной персонал у неё, чтобы та могла выдохнуть чуть более свободной грудью."
     },
     "FKLR": {
-      rel: "НАСТОРОЖЕННОСТЬ",
+      rel: "УВАЖЕНИЕ",
       text: "Геноссе командующая Сокол, почти во всём схожая с Крахе, но отличается тем, что не прямолинейна и менее грубая. Идеально подбирает слова и крайне дотошная до мелких деталей. Её голос звучит весьма спокойно в песне, но столько уточняющих вопросов... Стараюсь всегда с ней подбирать слова."
     },
     "EULR.322": {
@@ -792,12 +792,14 @@
       const data = personnelData[name];
 
       if(data){
-        const relClass = data.rel === 'ДРУЖБА' ? 'c-friend' :
-                         data.rel === 'КРЕПКАЯ СВЯЗЬ' ? 'c-strong' :
-                         data.rel === 'УВАЖЕНИЕ' ? 'c-respect' :
-                         data.rel === 'СТРАХ' ? 'c-fear' :
-                         data.rel === 'НАСТОРОЖЕННОСТЬ' ? 'c-cautious' :
-                         data.rel === 'НЕЙТРАЛИТЕТ' ? 'c-neutral' : 'c-neutral';
+        // Используем includes, чтобы корректно обрабатывать сдвоенные теги (например, "НАСТОРОЖЕННОСТЬ · УВАЖЕНИЕ")
+        const relClass = data.rel.includes('ДРУЖБА') ? 'c-friend' :
+                         data.rel.includes('КРЕПКАЯ СВЯЗЬ') ? 'c-strong' :
+                         data.rel.includes('УВАЖЕНИЕ') ? 'c-respect' :
+                         data.rel.includes('СТРАХ') ? 'c-fear' :
+                         data.rel.includes('НАСТОРОЖЕННОСТЬ') ? 'c-cautious' :
+                         data.rel.includes('НЕЙТРАЛИТЕТ') ? 'c-neutral' : 'c-neutral';
+                         
         panel.innerHTML = `<div style="padding:12px 6px;">
           <div style="font-family:'Courier New',monospace;color:#ff3333;font-size:18px;letter-spacing:3px;margin-bottom:4px;text-shadow:0 0 10px #cc2222;font-weight:bold;">▸ ${name}</div>
           <div style="margin-bottom:12px;"><span class="rel-tag ${relClass}" style="font-size:11px;padding:2px 10px;">${data.rel}</span></div>
