@@ -149,7 +149,7 @@
   .search-wrap::before{content:'⌕';position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#cc2222;font-size:18px;pointer-events:none;font-weight:bold}
 
   .social-lists{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-  .social-col{background:#0a0000;border:1px solid #440000;border-radius:2px;padding:12px 16px;box-shadow:inset 0 0 20px rgba(80,0,0,.3);min-height:260px;max-height:420px;overflow-y:auto}
+  .social-col{background:#0a0000;border:1px solid #440000;border-radius:2px;padding:12px 16px;box-shadow:inset 0 0 20px rgba(80,0,0,.3);min-height:260px;max-height:520px;overflow-y:auto}
   .social-col::-webkit-scrollbar{width:4px;background:#0a0000}
   .social-col::-webkit-scrollbar-thumb{background:#661111;border-radius:4px}
   .social-col h3{font-family:'Courier New',monospace;color:#ff3333;font-size:16px;letter-spacing:3px;border-bottom:1px solid #440000;padding-bottom:4px;margin-bottom:10px;text-shadow:0 0 12px rgba(200,30,30,.6);text-transform:uppercase}
@@ -165,14 +165,42 @@
   .personnel-entry.hidden{display:none}
   .personnel-entry .personnel-name{flex:1;letter-spacing:.5px}
   .personnel-entry .personnel-rel{font-size:10px;color:#661111;letter-spacing:2px;text-transform:uppercase}
-  .status-dot{display:inline-block;width:8px;height:8px;border-radius:50%;flex-shrink:0}
-  .status-dot.alive{background:#6fcf97;box-shadow:0 0 6px #6fcf97}
-  .status-dot.wounded{background:#ffcc44;box-shadow:0 0 6px #ffcc44}
-  .status-dot.dead{background:#ff3333;box-shadow:0 0 6px #ff3333;animation:deadPulse 2s infinite}
-  .status-dot.unknown{background:#661111;box-shadow:0 0 6px #661111}
-  @keyframes deadPulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+  /* === ИКОНКА NO DATE (квадратик с серым шумом) === */
+  .nodate-icon{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:42px;
+    height:22px;
+    font-size:7px;
+    letter-spacing:1px;
+    color:#aaa;
+    background-color:#1f1f1f;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+    border:1px solid #555;
+    flex-shrink:0;
+    font-family:'Courier New',monospace;
+    font-weight:bold;
+    text-transform:uppercase;
+    box-shadow:inset 0 0 6px rgba(0,0,0,0.9);
+    text-shadow:0 0 4px rgba(0,0,0,0.9);
+    position:relative;
+    overflow:hidden;
+    border-radius:1px;
+  }
+  .nodate-icon::before{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:repeating-linear-gradient(0deg,rgba(0,0,0,0.35) 0px,rgba(0,0,0,0.35) 1px,transparent 1px,transparent 2px);
+    pointer-events:none;
+    z-index:1;
+  }
+  .nodate-icon span{position:relative;z-index:2;}
+
   .sub-items .empty-note{color:#441111;font-style:italic;letter-spacing:2px;font-size:12px;padding:6px 0}
-  .desc-panel{background:#0a0000;border:1px solid #440000;border-radius:2px;padding:14px 16px;margin-top:14px;min-height:200px;max-height:340px;overflow-y:auto;box-shadow:inset 0 0 30px rgba(80,0,0,.3);transition:all .15s}
+  .desc-panel{background:#0a0000;border:1px solid #440000;border-radius:2px;padding:14px 16px;margin-top:14px;min-height:200px;max-height:420px;overflow-y:auto;box-shadow:inset 0 0 30px rgba(80,0,0,.3);transition:all .15s}
   .desc-panel::-webkit-scrollbar{width:4px;background:#0a0000}
   .desc-panel::-webkit-scrollbar-thumb{background:#440000;border-radius:4px}
   .desc-panel .empty-state{color:#440000;text-align:center;padding:40px 0;font-size:16px;letter-spacing:3px;text-transform:uppercase}
@@ -433,72 +461,110 @@
           </div>
 
           <div class="social-lists">
+            <!-- ===== РЕПЛИКИ ===== -->
             <div class="social-col">
               <h3>▸ РЕПЛИКИ</h3>
+
               <span class="group-header" data-group="eulr">EULR</span>
               <div class="sub-items" id="group-eulr">
-                <div class="personnel-entry" data-name="EULR.724"><span class="status-dot unknown"></span><span class="personnel-name">EULR.724</span><span class="personnel-rel">—</span></div>
-                <div class="personnel-entry" data-name="EULR.546"><span class="status-dot unknown"></span><span class="personnel-name">EULR.546</span><span class="personnel-rel">—</span></div>
-                <div class="personnel-entry" data-name="EULR.381"><span class="status-dot unknown"></span><span class="personnel-name">EULR.381</span><span class="personnel-rel">—</span></div>
-                <div class="personnel-entry" data-name="EULR.401"><span class="status-dot unknown"></span><span class="personnel-name">EULR.401</span><span class="personnel-rel">—</span></div>
-                <div class="personnel-entry" data-name="EULR.322"><span class="status-dot unknown"></span><span class="personnel-name">EULR.322</span><span class="personnel-rel">—</span></div>
+                <div class="personnel-entry" data-name="EULR.724"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">EULR.724</span><span class="personnel-rel">—</span></div>
+                <div class="personnel-entry" data-name="EULR.546"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">EULR.546</span><span class="personnel-rel">—</span></div>
+                <div class="personnel-entry" data-name="EULR.381"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">EULR.381</span><span class="personnel-rel">—</span></div>
+                <div class="personnel-entry" data-name="EULR.401"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">EULR.401</span><span class="personnel-rel">—</span></div>
+                <div class="personnel-entry" data-name="EULR.322"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">EULR.322</span><span class="personnel-rel">ДРУЖБА</span></div>
               </div>
+
               <span class="group-header" data-group="arar">ARAR</span>
               <div class="sub-items" id="group-arar">
-                <div class="personnel-entry" data-name="ARAR.841"><span class="status-dot unknown"></span><span class="personnel-name">ARAR.841</span><span class="personnel-rel">—</span></div>
-                <div class="personnel-entry" data-name="ARAR.978"><span class="status-dot unknown"></span><span class="personnel-name">ARAR.978</span><span class="personnel-rel">—</span></div>
-                <div class="personnel-entry" data-name="ARAR.595"><span class="status-dot unknown"></span><span class="personnel-name">ARAR.595</span><span class="personnel-rel">—</span></div>
-                <div class="personnel-entry" data-name="ARAR.102"><span class="status-dot unknown"></span><span class="personnel-name">ARAR.102</span><span class="personnel-rel">—</span></div>
+                <div class="personnel-entry" data-name="ARAR.841"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">ARAR.841</span><span class="personnel-rel">—</span></div>
+                <div class="personnel-entry" data-name="ARAR.978"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">ARAR.978</span><span class="personnel-rel">—</span></div>
+                <div class="personnel-entry" data-name="ARAR.595"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">ARAR.595</span><span class="personnel-rel">—</span></div>
+                <div class="personnel-entry" data-name="ARAR.102"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">ARAR.102</span><span class="personnel-rel">—</span></div>
               </div>
+
               <span class="group-header" data-group="mnhr">MNHR</span>
               <div class="sub-items" id="group-mnhr">
-                <div class="personnel-entry" data-name="MNHR.300"><span class="status-dot unknown"></span><span class="personnel-name">MNHR.300</span><span class="personnel-rel">—</span></div>
-                <div class="personnel-entry" data-name="MNHR.063"><span class="status-dot unknown"></span><span class="personnel-name">MNHR.063</span><span class="personnel-rel">—</span></div>
+                <div class="personnel-entry" data-name="MNHR.300"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">MNHR.300</span><span class="personnel-rel">—</span></div>
+                <div class="personnel-entry" data-name="MNHR.063"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">MNHR.063</span><span class="personnel-rel">—</span></div>
               </div>
+
               <span class="group-header" data-group="star">STAR</span>
               <div class="sub-items" id="group-star">
-                <div class="personnel-entry" data-name="STAR.114"><span class="status-dot unknown"></span><span class="personnel-name">STAR.114</span><span class="personnel-rel">—</span></div>
-                <div class="personnel-entry" data-name="STAR.603"><span class="status-dot unknown"></span><span class="personnel-name">STAR.603</span><span class="personnel-rel">—</span></div>
-                <div class="personnel-entry" data-name="STAR.762"><span class="status-dot unknown"></span><span class="personnel-name">STAR.762</span><span class="personnel-rel">—</span></div>
+                <div class="personnel-entry" data-name="STAR.114"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">STAR.114</span><span class="personnel-rel">—</span></div>
+                <div class="personnel-entry" data-name="STAR.603"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">STAR.603</span><span class="personnel-rel">—</span></div>
+                <div class="personnel-entry" data-name="STAR.731"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">STAR.731</span><span class="personnel-rel">ДРУЖБА</span></div>
+                <div class="personnel-entry" data-name="STAR.762"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">STAR.762</span><span class="personnel-rel">ДРУЖБА</span></div>
               </div>
+
+              <span class="group-header" data-group="lstr">LSTR</span>
+              <div class="sub-items" id="group-lstr">
+                <div class="personnel-entry" data-name="LSTR.217"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">LSTR.217</span><span class="personnel-rel">ДРУЖБА</span></div>
+                <div class="personnel-entry" data-name="LSTR.365"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">LSTR.365</span><span class="personnel-rel">НЕЙТРАЛИТЕТ</span></div>
+              </div>
+
+              <span class="group-header" data-group="habr">HABR</span>
+              <div class="sub-items" id="group-habr">
+                <div class="personnel-entry" data-name="HABR.112"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">HABR.112</span><span class="personnel-rel">ДРУЖБА</span></div>
+                <div class="personnel-entry" data-name="HABR.041"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">HABR.041 — Тильда</span><span class="personnel-rel">ДРУЖБА</span></div>
+                <div class="personnel-entry" data-name="HABR.023"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">HABR.023 — Штрассер</span><span class="personnel-rel">УВАЖЕНИЕ</span></div>
+              </div>
+
+              <span class="group-header" data-group="geir">GEIR</span>
+              <div class="sub-items" id="group-geir">
+                <div class="personnel-entry" data-name="GEIR.RCT.513"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">GEIR.RCT.513 — Ундина</span><span class="personnel-rel">ДРУЖБА</span></div>
+                <div class="personnel-entry" data-name="GEIR.963"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">GEIR.963</span><span class="personnel-rel">ДРУЖБА</span></div>
+              </div>
+
               <span class="group-header" data-group="stcr">STCR</span>
               <div class="sub-items" id="group-stcr">
-                <div class="personnel-entry" data-name="STRC.213"><span class="status-dot unknown"></span><span class="personnel-name">STRC.213</span><span class="personnel-rel">—</span></div>
+                <div class="personnel-entry" data-name="STRC.213"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">STRC.213</span><span class="personnel-rel">—</span></div>
               </div>
+
               <span class="group-header" data-group="klbr">KLBR</span>
               <div class="sub-items" id="group-klbr">
-                <div class="personnel-entry" data-name="KLBR.080"><span class="status-dot unknown"></span><span class="personnel-name">KLBR.080</span><span class="personnel-rel">—</span></div>
+                <div class="personnel-entry" data-name="KLBR.080"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">KLBR.080</span><span class="personnel-rel">—</span></div>
+                <div class="personnel-entry" data-name="KLBR.166"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">KLBR.166</span><span class="personnel-rel">ДРУЖБА</span></div>
               </div>
+
               <span class="group-header" data-group="kahr">KAHR</span>
               <div class="sub-items" id="group-kahr">
-                <div class="personnel-entry" data-name="KAHR"><span class="status-dot unknown"></span><span class="personnel-name">KAHR</span><span class="personnel-rel">—</span></div>
+                <div class="personnel-entry" data-name="KAHR"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">KAHR — Командующая Ворона</span><span class="personnel-rel">СТРАХ</span></div>
               </div>
+
               <span class="group-header" data-group="fklr">FKLR</span>
               <div class="sub-items" id="group-fklr">
-                <div class="personnel-entry" data-name="FKLR"><span class="status-dot unknown"></span><span class="personnel-name">FKLR</span><span class="personnel-rel">—</span></div>
+                <div class="personnel-entry" data-name="FKLR"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">FKLR — Командующая Сокол</span><span class="personnel-rel">НАСТОРОЖЕННОСТЬ</span></div>
               </div>
             </div>
 
+            <!-- ===== ГЕШТАЛЬТЫ ===== -->
             <div class="social-col">
               <h3>▸ ГЕШТАЛЬТЫ</h3>
+
               <span class="group-header" data-group="gscc">GSCC</span>
               <div class="sub-items" id="group-gscc">
-                <div class="personnel-entry" data-name="GSCC.Артемий Овечкин"><span class="status-dot unknown"></span><span class="personnel-name">GSCC.Артемий Овечкин</span><span class="personnel-rel">—</span></div>
-                <div class="personnel-entry" data-name="GSCC.Кирра Фостер"><span class="status-dot unknown"></span><span class="personnel-name">GSCC.Кирра Фостер</span><span class="personnel-rel">—</span></div>
+                <div class="personnel-entry" data-name="GSCC.Артемий Овечкин"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">GSCC.Артемий Овечкин</span><span class="personnel-rel">—</span></div>
+                <div class="personnel-entry" data-name="GSCC.Кирра Фостер"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">GSCC.Кирра Фостер</span><span class="personnel-rel">—</span></div>
               </div>
+
               <span class="group-header" data-group="gscp">GSCP</span>
               <div class="sub-items" id="group-gscp">
-                <div class="personnel-entry" data-name="GSCP.Анна Леонхард"><span class="status-dot unknown"></span><span class="personnel-name">GSCP.Анна Леонхард</span><span class="personnel-rel">—</span></div>
-                <div class="personnel-entry" data-name="GSCP.Сэйра Штраусс"><span class="status-dot unknown"></span><span class="personnel-name">GSCP.Сэйра Штраусс</span><span class="personnel-rel">—</span></div>
-                <div class="personnel-entry" data-name="GSCP.Кенто Годжо"><span class="status-dot unknown"></span><span class="personnel-name">GSCP.Кенто Годжо</span><span class="personnel-rel">—</span></div>
-                <div class="personnel-entry" data-name="GSCP.316"><span class="status-dot unknown"></span><span class="personnel-name">GSCP.316</span><span class="personnel-rel">—</span></div>
-                <div class="personnel-entry" data-name="GSCP.168"><span class="status-dot unknown"></span><span class="personnel-name">GSCP.168 — Аделина Краусс</span><span class="personnel-rel">—</span></div>
-                <div class="personnel-entry" data-name="GSCP.999"><span class="status-dot unknown"></span><span class="personnel-name">GSCP.999</span><span class="personnel-rel">—</span></div>
+                <div class="personnel-entry" data-name="GSCP.Анна Леонхард"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">GSCP.Анна Леонхард</span><span class="personnel-rel">ДРУЖБА</span></div>
+                <div class="personnel-entry" data-name="GSCP.Сэйра Штраусс"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">GSCP.Сэйра Штраусс</span><span class="personnel-rel">—</span></div>
+                <div class="personnel-entry" data-name="GSCP.Кенто Годжо"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">GSCP.Кенто Годжо</span><span class="personnel-rel">УВАЖЕНИЕ</span></div>
+                <div class="personnel-entry" data-name="GSCP.316"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">GSCP.316</span><span class="personnel-rel">—</span></div>
+                <div class="personnel-entry" data-name="GSCP.168 — Штерн"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">GSCP.168 — Штерн</span><span class="personnel-rel">НЕЙТРАЛИТЕТ</span></div>
+                <div class="personnel-entry" data-name="GSCP.Элеонора Кайзер"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">GSCP.Элеонора Кайзер</span><span class="personnel-rel">КРЕПКАЯ СВЯЗЬ</span></div>
+                <div class="personnel-entry" data-name="GSCP.Астрид"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">GSCP.Астрид</span><span class="personnel-rel">ДРУЖБА</span></div>
+                <div class="personnel-entry" data-name="GSCP.999"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">GSCP.999</span><span class="personnel-rel">—</span></div>
               </div>
+
               <span class="group-header" data-group="gsco">GSCO</span>
               <div class="sub-items" id="group-gsco"><div class="empty-note">— список пуст —</div></div>
+
               <span class="group-header" data-group="command">КОМАНДОВАНИЕ</span>
               <div class="sub-items" id="group-command"><div class="empty-note">— список пуст —</div></div>
+
               <span class="group-header" data-group="other-gest">ПРОЧИЕ ГЕШТАЛЬТЫ</span>
               <div class="sub-items" id="group-other-gest"><div class="empty-note">— список пуст —</div></div>
             </div>
@@ -642,16 +708,108 @@
     }
   });
 
+  // ===== ДАННЫЕ ПЕРСОНАЛА =====
+  const personnelData = {
+    "STAR.731": {
+      rel: "ДРУЖБА",
+      text: "Отличный товарищ, выступала арьергардом и прикрывала тыл нашей группы. Поделилась патронами, когда мой запас закончился. Отличается крайне высокой заинтересованностью в общении со мной, в целом, мне только в радость поболтать. В остальном — стандартный модуль Штар, ветеран защиты Винеты."
+    },
+    "STAR.762": {
+      rel: "ДРУЖБА",
+      text: "Отличный товарищ, отличается тем, что имеет более строгий характер по сравнению со своей младшей. Выступает авангардом, беря удар на себя, уважаю. К сожалению, я не узнала, откуда она, думаю, либо Винета, либо Рот-Фронт."
+    },
+    "LSTR.217": {
+      rel: "ДРУЖБА",
+      text: "Отличный товарищ, хорошая подруга. Флейм стала первой сорокой, с которой я в целом общалась. Узнала детали её службы, а также за что она получила такое прозвище. Крайне забавно было наблюдать, как она не понимает весьма элементарные понятия. Во время вылазки проявила себя так же хорошо и эффективно. Но ходили вместе в КЗ лишь единожды. Запомню её историю про зажигалки. Интересно, если ей подарить ещё одну, примет ли та её?"
+    },
+    "LSTR.365": {
+      rel: "НЕЙТРАЛИТЕТ",
+      text: "Сороковое... Товарищ."
+    },
+    "KAHR": {
+      rel: "СТРАХ",
+      text: "Командующая Ворона: серьёзная, прямолинейная, опытная. Сомнений нет: будет приказ — исполню; скажет броситься на гранату — исполню; скажет списать своего — исполню. Но голос её в песне заставляет тело покрыться дрожью, благо она лаконична."
+    },
+    "HABR.112": {
+      rel: "ДРУЖБА",
+      text: "Отличный товарищ, но, к сожалению, мы мало с ней говорили, крайне серьёзная и спокойная."
+    },
+    "HABR.041": {
+      rel: "ДРУЖБА",
+      text: "Отличный товарищ, Тильда — одна из лучших подруг на этом комплексе. Пересекаясь, часто можем говорить и обсуждать простые и приземлённые вещи, в особенности в области чувств реплик. Мне всегда было интересно, могут ли реплики по-настоящему любить, буду ждать ответов, Тильда. Хороший медик, часто штопала наших и спасала в тяжёлые моменты, замечаний нет."
+    },
+    "HABR.023": {
+      rel: "УВАЖЕНИЕ",
+      text: "Штрассер, одна из старших модулей в ГБР, запомнилась тем, что судит не за слова и регалии, а за поступки. Думаю, по ней и буду ориентироваться о своей «репутации» как полевого командира. В случае чего, она первая, кто даст прямой ответ, что про меня думает."
+    },
+    "GSCP.Анна Леонхард": {
+      rel: "ДРУЖБА",
+      text: "Отличный товарищ. Не знаю, почему и при каких обстоятельствах она стала адъютантом, но пройти такой карьерный путь крайне достойно и вызывает лишь уважение. Думаю, я спрошу разрешение у неё для того, чтобы использовать её образ для проведения политзанятий. Часто общаемся в конце смены, она меня прекрасно понимает, из-за чего сдружиться стало легче. Сходили в спортзал, думаю, в будущем будем активно вместе ходить, а то скучно в одиночку... Если бы ещё музыку как-то перенести ещё. Интересно, она промолвится, что такое БРУ 012 и как она получила резонанс? Всё ещё думаю, испугает меня ответ или же напротив."
+    },
+    "GSCP.168 — Штерн": {
+      rel: "НЕЙТРАЛИТЕТ",
+      text: "Отличный товарищ, пока ещё не познакомились в простом разговоре, но вместе были на поверхности и прошли до Аванпоста. Была медиком в группе, хорошо себя показала. Кажется, она весьма отстранённая в общении с новичками или же во мне просто не заинтересована, в целом, как время будет, попробую выдернуть её из зоны комфорта и поговорить."
+    },
+    "GSCP.Кенто Годжо": {
+      rel: "УВАЖЕНИЕ",
+      text: "Уважаемый товарищ. Глава объекта, крайне серьёзен. Его споры с командующей заставляют меня напрячься всем телом и надеяться на лучший исход. Его песнь, фразы, мимика создают образ, что он ничем не уступает командующим, что я крайне не хочу проверять. Главное — исправно работать."
+    },
+    "GSCP.Элеонора Кайзер": {
+      rel: "КРЕПКАЯ СВЯЗЬ",
+      text: "Отличнейший товарищ, выступали инструктором не только для службы безопасности, но и для нас, новоприбывших бойцов группы быстрого реагирования. В особенности проявила внимание ко мне, за что ей отдельное спасибо. Была строга и крайне серьёзна, выступили сразу в КЗ, где было весьма тяжело, но все остались живы. Выступает во всех моих выходах в Конвое и также пока помогает мне в командовании, пока я лишь крепну и привыкаю ко всему. Она часто говорит, что КЗ у неё забрало многое: руки, ноги, голос, глаза, — на что я с улыбкой отвечала: зато она не забрала вашу любовь к той, кого вы после каждого выхода за территорию ЖБ хотите увидеть первой. Может, «человеческого» у вас осталось мало, но оно осталось."
+    },
+    "GSCP.Астрид": {
+      rel: "ДРУЖБА",
+      text: "Отличный товарищ. Взяла под крыло в первый цикл и помогла адаптироваться ко всему. После я уже была сама. Но всё равно, спасибо вам, геноссе."
+    },
+    "GEIR.RCT.513": {
+      rel: "ДРУЖБА",
+      text: "Отличный товарищ. Ходили вместе с ней в КЗ, проявила себя хорошо, хоть также набирается опытом. Часто общаемся вне рабочего времени. Быстро сдружились. Ундина с Винеты, но подробности службы, к сожалению, я так и не узнала. Позже, думаю, расспрошу про это её. Также задаётся вопросами о том, что такое любовь для реплики. Давала ей пару советов, но не смогу помочь, к сожалению, сама не знаю такого секрета. Надеюсь, в будущем она мне сама расскажет."
+    },
+    "GEIR.963": {
+      rel: "ДРУЖБА",
+      text: "Один из самых опытных модулей, обладает приятным характером и при этом крайне противоположна Штрассер. Любит красивые слова и сразу мотивируется ими. Между ними милая химия, в особенности тогда, на складе, как они играли в гляделки. Что же, видимо, все Хабры захватывают Гайр и забирают их себе. Надо будет отметить в своих личных записях. Была на моей стороне, когда я отводила группу... Спасибо, мне было тяжело решиться."
+    },
+    "KLBR.166": {
+      rel: "ДРУЖБА",
+      text: "Отличный товарищ. Слегка печально, что из-за высокой её нагрузки у неё почти нет свободного времени. Потому я забрала весь штрафной персонал у неё, чтобы та могла выдохнуть чуть более свободной грудью."
+    },
+    "FKLR": {
+      rel: "НАСТОРОЖЕННОСТЬ",
+      text: "Геноссе командующая Сокол, почти во всём схожая с Крахе, но отличается тем, что не прямолинейна и менее грубая. Идеально подбирает слова и крайне дотошная до мелких деталей. Её голос звучит весьма спокойно в песне, но столько уточняющих вопросов... Стараюсь всегда с ней подбирать слова."
+    },
+    "EULR.322": {
+      rel: "ДРУЖБА",
+      text: "Отличный товарищ, оказала помощь."
+    }
+  };
+
   // Personnel click -> desc panel
   document.querySelectorAll('.personnel-entry').forEach(entry=>{
     entry.addEventListener('click', function(){
       const name = this.dataset.name;
       const panel = document.getElementById('descPanel');
-      if(panel) panel.innerHTML = `<div style="padding:12px 6px;">
-        <div style="font-family:'Courier New',monospace;color:#ff3333;font-size:18px;letter-spacing:3px;margin-bottom:8px;text-shadow:0 0 10px #cc2222;font-weight:bold;">▸ ${name}</div>
-        <div style="color:#661111;font-size:12px;letter-spacing:2px;margin-bottom:12px;">[ ЗАПИСЬ ПУСТА · ЗАПОЛНИТЕ ПОЗЖЕ ]</div>
-        <div style="color:#441111;font-style:italic;letter-spacing:2px;font-size:12px;">— нет данных —</div>
-      </div>`;
+      const data = personnelData[name];
+
+      if(data){
+        const relClass = data.rel === 'ДРУЖБА' ? 'c-friend' :
+                         data.rel === 'КРЕПКАЯ СВЯЗЬ' ? 'c-strong' :
+                         data.rel === 'УВАЖЕНИЕ' ? 'c-respect' :
+                         data.rel === 'СТРАХ' ? 'c-fear' :
+                         data.rel === 'НАСТОРОЖЕННОСТЬ' ? 'c-cautious' :
+                         data.rel === 'НЕЙТРАЛИТЕТ' ? 'c-neutral' : 'c-neutral';
+        panel.innerHTML = `<div style="padding:12px 6px;">
+          <div style="font-family:'Courier New',monospace;color:#ff3333;font-size:18px;letter-spacing:3px;margin-bottom:4px;text-shadow:0 0 10px #cc2222;font-weight:bold;">▸ ${name}</div>
+          <div style="margin-bottom:12px;"><span class="rel-tag ${relClass}" style="font-size:11px;padding:2px 10px;">${data.rel}</span></div>
+          <div style="color:#cc6666;font-size:13px;line-height:1.7;letter-spacing:.3px;white-space:pre-wrap;">${data.text}</div>
+        </div>`;
+      } else {
+        panel.innerHTML = `<div style="padding:12px 6px;">
+          <div style="font-family:'Courier New',monospace;color:#ff3333;font-size:18px;letter-spacing:3px;margin-bottom:8px;text-shadow:0 0 10px #cc2222;font-weight:bold;">▸ ${name}</div>
+          <div style="color:#661111;font-size:12px;letter-spacing:2px;margin-bottom:12px;">[ ЗАПИСЬ ПУСТА · ЗАПОЛНИТЕ ПОЗЖЕ ]</div>
+          <div style="color:#441111;font-style:italic;letter-spacing:2px;font-size:12px;">— нет данных —</div>
+        </div>`;
+      }
       playBeep(600);
     });
   });
