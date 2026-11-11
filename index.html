@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ДОСЬЕ · АПТЕКАРИОН · ЖЕЛЕЗНЫЕ РУКИ · Ц. ГЕРАКЛИТ</title>
+<title>ДОСЬЕ · ШТРАФБАТ · Ц. ГЕРАКЛИТ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -25,12 +25,28 @@
   html,body{width:100%;min-height:100vh;background:var(--bg-dark);overflow-x:hidden}
   body{font-family:'Roboto Mono', monospace;color:var(--steel-light);position:relative}
 
-  /* ===== ДЕКОРАТИВНЫЕ ПАТТЕРНЫ (ГРЕЧЕСКИЙ МЕАНДР / РИВЕТЫ) ===== */
+  /* ===== АНИМИРОВАННЫЕ ШЕСТЕРЕНКИ ===== */
+  @keyframes spin { 100% { transform: rotate(360deg); } }
+  @keyframes spin-reverse { 100% { transform: rotate(-360deg); } }
+  
+  .gear-bg {
+    position: fixed;
+    font-size: 400px;
+    color: rgba(35, 40, 48, 0.2);
+    z-index: -1;
+    pointer-events: none;
+    line-height: 1;
+  }
+  .gear-1 { top: -100px; left: -100px; animation: spin 60s linear infinite; }
+  .gear-2 { bottom: -150px; right: -50px; animation: spin-reverse 80s linear infinite; font-size: 500px; }
+  .gear-3 { top: 40%; left: 60%; font-size: 200px; animation: spin 40s linear infinite; opacity: 0.1; }
+
+  /* ===== ДЕКОРАТИВНЫЕ ПАТТЕРНЫ (ГРЕЧЕСКИЙ МЕАНДР) ===== */
   .meander-border {
     height: 6px;
     background: repeating-linear-gradient(90deg, transparent, transparent 4px, var(--steel-light) 4px, var(--steel-light) 8px, transparent 8px, transparent 12px, var(--steel-mid) 12px, var(--steel-mid) 16px);
     opacity: 0.3;
-    margin: 10px 0;
+    margin: 15px 0;
   }
 
   /* ===== ЗАСТАВКА ===== */
@@ -39,19 +55,11 @@
   .intro-crt{position:fixed;inset:0;pointer-events:none;z-index:100;background:repeating-linear-gradient(0deg,rgba(0,0,0,.2) 0,rgba(0,0,0,0) 2px,rgba(0,0,0,.15) 4px,rgba(0,0,0,0) 6px);animation:scanMove 10s linear infinite}
   @keyframes scanMove{0%{transform:translateY(0)}100%{transform:translateY(100%)}}
   .intro-vignette{position:fixed;inset:0;pointer-events:none;z-index:99;background:radial-gradient(ellipse at center,transparent 30%,rgba(0,0,0,.9) 100%);box-shadow:inset 0 0 200px rgba(0,0,0,.9)}
-  .intro-iron-glow{position:fixed;inset:0;pointer-events:none;z-index:98;background:radial-gradient(ellipse at center,transparent 50%,rgba(50,55,60,.2) 100%)}
   
   .intro-container{position:relative;z-index:5;width:1100px;max-width:95vw;display:flex;flex-direction:column;align-items:center;gap:30px;animation:introFadeIn 1s ease-out}
   @keyframes introFadeIn{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
   .intro-main{display:flex;align-items:flex-start;gap:40px;width:100%;padding:20px;position:relative}
   
-  /* Греческие колонны по бокам */
-  .intro-main::before, .intro-main::after {
-    content: 'Δ'; position: absolute; font-family: 'PT Serif', serif; font-size: 200px; color: rgba(140,150,163,0.05); z-index: -1; top: 50%; transform: translateY(-50%);
-  }
-  .intro-main::before { left: -80px; }
-  .intro-main::after { content: 'Ω'; right: -80px; }
-
   .intro-portrait{flex-shrink:0;width:220px;height:260px;border:2px solid var(--steel-light);background:var(--steel-dark);position:relative;box-shadow:0 0 30px rgba(140,150,163,.15),inset 0 0 30px rgba(0,0,0,1);overflow:hidden;padding:4px}
   .intro-portrait::before { content: ''; position: absolute; inset: 0; border: 1px solid rgba(140,150,163,0.3); margin: 4px; pointer-events: none; z-index: 5; }
   .intro-portrait img{width:100%;height:100%;object-fit:cover;object-position:center top;filter:grayscale(100%) contrast(1.3) brightness(0.8) sepia(0.2) hue-rotate(180deg)}
@@ -64,22 +72,23 @@
   .intro-info .highlight{color:var(--bone-white);font-weight:bold}
   
   .intro-button-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;width:100%;max-width:620px}
-  .intro-button{display:inline-block;padding:16px 38px;border:1px solid var(--steel-light);background:var(--steel-dark);color:var(--bone-white);font-family:'PT Serif', serif;font-size:20px;letter-spacing:6px;text-transform:uppercase;cursor:pointer;transition:all .3s ease;box-shadow:inset 0 0 0 1px rgba(0,0,0,0.5), 0 5px 15px rgba(0,0,0,0.8);position:relative;width:100%;max-width:620px; clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);}
+  .intro-button{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:16px 38px;border:1px solid var(--steel-light);background:var(--steel-dark);color:var(--bone-white);font-family:'PT Serif', serif;font-size:20px;letter-spacing:4px;text-transform:uppercase;cursor:pointer;transition:all .3s ease;box-shadow:inset 0 0 0 1px rgba(0,0,0,0.5), 0 5px 15px rgba(0,0,0,0.8);position:relative;width:100%;max-width:620px; clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);}
   .intro-button::after { content: ''; position: absolute; inset: 3px; border: 1px solid rgba(140,150,163,0.2); clip-path: inherit; pointer-events: none; }
   .intro-button:hover{background:var(--steel-mid);color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,0.1), 0 0 25px rgba(140,150,163,.3)}
   .intro-button:active{transform:scale(.98)}
+  .intro-button .gear-icon { font-size: 24px; animation: spin 4s linear infinite; }
   
   .intro-footer{font-size:12px;color:var(--steel-mid);letter-spacing:4px;margin-top:10px}
 
   /* ===== ЗАГРУЗКА ===== */
   #loadingScreen{position:fixed;inset:0;z-index:99999;pointer-events:none;opacity:0;background:var(--bg-dark);display:flex;justify-content:center;align-items:center;transition:opacity .4s ease}
   #loadingScreen.active{opacity:1;pointer-events:all}
-  .loading-kanji{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:1;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:20px;opacity:.05;filter:blur(1px)}
-  .loading-kanji span{font-family:'PT Serif', serif; font-size:180px;font-weight:700;color:var(--steel-light);letter-spacing:20px;line-height:1;white-space:nowrap; text-transform:uppercase;}
-  .loading-kanji .kanji-small{font-size:80px;letter-spacing:15px;}
   
+  .loading-gears { position: absolute; inset: 0; display: flex; justify-content: center; align-items: center; overflow: hidden; z-index: 1; opacity: 0.05; }
+  .loading-gears .gear-bg { position: relative; top: auto; left: auto; right: auto; bottom: auto; }
+
   .loading-box{position:relative;z-index:5;width:90%;max-width:620px;display:flex;flex-direction:column;gap:18px;color:var(--bone-white);}
-  .loading-title{font-family:'PT Serif', serif; font-size:22px;letter-spacing:6px;text-align:center;text-transform:uppercase;color:var(--bone-white);animation:loadBlink 1.5s steps(2) infinite}
+  .loading-title{font-family:'PT Serif', serif; font-size:22px;letter-spacing:6px;text-align:center;text-transform:uppercase;color:var(--bone-white);animation:loadBlink 1.5s steps(2) infinite; display: flex; align-items: center; justify-content: center; gap: 10px;}
   @keyframes loadBlink{0%,100%{opacity:1}50%{opacity:.6}}
   .loading-subtitle{font-size:12px;letter-spacing:3px;text-align:center;color:var(--steel-light)}
   .loading-bar-track{width:100%;height:12px;border:1px solid var(--steel-mid);background:var(--bg-dark);position:relative;overflow:hidden;box-shadow:inset 0 0 10px rgba(0,0,0,1)}
@@ -97,15 +106,15 @@
   .fish-eye{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;background:radial-gradient(ellipse at center,transparent 40%,rgba(0,0,0,.7) 100%)}
   
   .computer{position:relative;width:1120px;max-width:96vw;background:var(--steel-dark);border:1px solid var(--steel-mid);border-radius:2px;padding:16px;box-shadow:0 0 50px rgba(0,0,0,0.9), inset 0 0 0 1px rgba(0,0,0,0.5), inset 0 0 30px rgba(0,0,0,0.8);z-index:2}
-  /* Заклепки на корпусе */
-  .computer::before, .computer::after { content: ''; position: absolute; width: 4px; height: 4px; background: var(--steel-mid); border-radius: 50%; box-shadow: inset 0 1px 1px rgba(255,255,255,0.2); }
-  .computer::before { top: 8px; left: 8px; }
-  .computer::after { bottom: 8px; right: 8px; }
+  .computer::before, .computer::after { content: '⚙'; position: absolute; color: var(--steel-mid); font-size: 16px; line-height: 1; }
+  .computer::before { top: 6px; left: 6px; }
+  .computer::after { bottom: 6px; right: 6px; }
   
   .screen{background:var(--bg-dark);border:1px solid var(--steel-mid);padding:20px;box-shadow:inset 0 0 50px rgba(0,0,0,0.8)}
 
   .title-bar{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid var(--steel-mid);padding-bottom:10px;margin-bottom:15px;color:var(--steel-light);font-size:12px;letter-spacing:2px;gap:12px;flex-wrap:wrap;text-transform:uppercase; font-family: 'PT Serif', serif;}
-  .title-bar .main{color:var(--bone-white);font-weight:bold;font-size:18px; text-shadow:0 0 10px rgba(226,230,235,.3)}
+  .title-bar .main{color:var(--bone-white);font-weight:bold;font-size:18px; text-shadow:0 0 10px rgba(226,230,235,.3); display: flex; align-items: center; gap: 8px;}
+  .title-bar .main span { font-size: 22px; color: var(--bronze); }
   .title-bar .mid{flex:1;text-align:center;font-size:11px;color:var(--steel-mid);letter-spacing:4px}
   .title-bar .date{color:var(--steel-light);font-size:12px;letter-spacing:2px}
 
@@ -113,11 +122,10 @@
   .tab-btn{background:var(--steel-dark);border:1px solid var(--steel-mid);border-bottom:none;padding:8px 20px 7px;font-family:'PT Serif', serif;font-size:14px;font-weight:bold;color:var(--steel-light);border-radius:2px 2px 0 0;cursor:pointer;transition:.2s;text-transform:uppercase;letter-spacing:2px; position:relative;}
   .tab-btn::before { content: ''; position: absolute; top: 2px; left: 2px; right: 2px; bottom: 0; border: 1px solid rgba(255,255,255,0.03); pointer-events: none; }
   .tab-btn:hover{background:var(--steel-mid);color:var(--bone-white)}
-  .tab-btn.active{background:var(--bg-dark);color:var(--bone-white);border-color:var(--steel-light);border-top:2px solid var(--blood-red); box-shadow: 0 -4px 10px rgba(139,42,42,0.2);}
+  .tab-btn.active{background:var(--bg-dark);color:var(--bone-white);border-color:var(--steel-light);border-top:2px solid var(--bronze); box-shadow: 0 -4px 10px rgba(163,122,74,0.2);}
 
   .tab-content{display:none;background:var(--bg-dark);border:1px solid var(--steel-mid);padding:20px;min-height:420px;color:#a4adb8;font-size:13px;line-height:1.7; position:relative;}
-  /* Греческий орнамент в углу контента */
-  .tab-content::after { content: 'Ω'; position: absolute; bottom: 10px; right: 15px; font-family: 'PT Serif', serif; font-size: 40px; color: var(--steel-dark); z-index: 0; pointer-events: none; }
+  .tab-content::after { content: '⚙'; position: absolute; bottom: 10px; right: 15px; font-size: 40px; color: var(--steel-dark); z-index: 0; pointer-events: none; animation: spin 10s linear infinite; }
   .tab-content.active{display:block;animation:paneFade .4s ease-out}
   @keyframes paneFade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
 
@@ -125,14 +133,13 @@
   .dossier-head{display:flex;flex-wrap:wrap;gap:24px;margin-bottom:20px;padding-bottom:20px;border-bottom:1px dashed var(--steel-mid); position:relative; z-index:1;}
   .photo-frame{flex:0 0 220px;max-width:220px;height:270px;background:var(--steel-dark);border:2px solid var(--steel-mid);padding:6px;position:relative;overflow:hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.5);}
   .photo-frame::before{content:'';position:absolute;inset:4px;border:1px solid var(--steel-light);pointer-events:none;z-index:3;}
-  /* Уголки */
-  .photo-frame::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, transparent 90%, var(--blood-red) 90%); opacity: 0.8; z-index: 2; pointer-events: none; }
+  .photo-frame::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, transparent 90%, var(--bronze) 90%); opacity: 0.8; z-index: 2; pointer-events: none; }
   .photo-frame img{width:100%;height:100%;object-fit:cover;object-position:center 15%;filter:grayscale(100%) contrast(1.2) brightness(0.9);display:block}
   .photo-frame .stamp{position:absolute;bottom:14px;right:14px;color:var(--bone-white);font-size:12px;letter-spacing:4px;border:2px solid var(--bone-white);padding:3px 10px;transform:rotate(-10deg);opacity:.8;font-weight:bold;z-index:5;background:rgba(0,0,0,.7); font-family:'PT Serif', serif;}
 
   .head-info{flex:1;min-width:280px;display:flex;flex-direction:column;gap:12px; z-index:1;}
   .head-name{font-family: 'PT Serif', serif; font-size:32px;color:var(--bone-white);letter-spacing:2px;font-weight:700;text-transform:uppercase; border-bottom: 1px solid var(--steel-mid); padding-bottom: 5px; display: inline-block;}
-  .head-sub{font-size:13px;color:var(--steel-light);letter-spacing:2px;border-left:3px solid var(--blood-red);padding-left:12px; text-transform: uppercase;}
+  .head-sub{font-size:13px;color:var(--steel-light);letter-spacing:2px;border-left:3px solid var(--bronze);padding-left:12px; text-transform: uppercase;}
 
   .info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:10px}
   .info-cell{background:var(--steel-dark);border:1px solid var(--steel-mid);padding:8px 12px;display:flex;flex-direction:column;gap:4px; box-shadow: inset 0 0 10px rgba(0,0,0,0.5);}
@@ -141,7 +148,7 @@
 
   .section{margin-bottom:20px; z-index:1; position:relative;}
   .section-title{font-family: 'PT Serif', serif; font-size:16px;color:var(--bone-white);letter-spacing:3px;text-transform:uppercase;font-weight:bold;border-bottom:1px solid var(--steel-mid);padding-bottom:6px;margin-bottom:12px;display:flex;align-items:center;gap:10px}
-  .section-title::before{content:'Δ';color:var(--blood-red);font-size:16px; font-family:'PT Serif', serif;}
+  .section-title::before{content:'⚙';color:var(--bronze);font-size:16px; animation: spin 5s linear infinite;}
 
   .text-block{color:#a4adb8;font-size:13.5px;line-height:1.8;letter-spacing:.3px;white-space:pre-wrap}
   .text-block strong{color:var(--bone-white);font-weight:normal;letter-spacing:.5px; background: rgba(255,255,255,0.05); padding: 0 4px;}
@@ -150,8 +157,9 @@
   .card{background:var(--steel-dark);border:1px solid var(--steel-mid);padding:14px 16px;position:relative;transition:.2s; box-shadow: inset 0 0 15px rgba(0,0,0,0.6);}
   .card:hover{border-color:var(--steel-light);}
   .card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: var(--steel-mid); transition: .2s; }
-  .card:hover::before { background: var(--blood-red); }
-  .card h4{font-family:'PT Serif', serif; font-size:14px;color:var(--bone-white);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,0.1);font-weight:bold}
+  .card:hover::before { background: var(--bronze); }
+  .card h4{font-family:'PT Serif', serif; font-size:14px;color:var(--bone-white);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,0.1);font-weight:bold; display: flex; align-items: center; gap: 6px;}
+  .card h4::before { content: '⚙'; font-size: 12px; color: var(--steel-light); }
   .card ul{list-style:none;padding:0}
   .card ul li{padding:4px 0 4px 14px;position:relative;font-size:12.5px;color:#a4adb8;line-height:1.5;border-bottom:1px solid rgba(255,255,255,0.03)}
   .card ul li:last-child{border-bottom:none}
@@ -164,7 +172,7 @@
   
   .rel-tag{display:inline-block;padding:5px 16px;font-size:12px;font-weight:bold;letter-spacing:1px;background:var(--bg-dark);border:1px solid var(--steel-mid);cursor:pointer;transition:.15s;color:var(--steel-light); text-transform: uppercase; font-family: 'Roboto Mono', monospace;}
   .rel-tag:hover{border-color:var(--bone-white);color:var(--bone-white);box-shadow:0 0 10px rgba(255,255,255,.1)}
-  /* Цвета отношений адаптированы под металл/греку */
+  /* Цвета отношений */
   .rel-tag.c-distrust{color:#d4a373;border-color:#d4a373;}
   .rel-tag.c-sad{color:#8c96a3;border-color:#8c96a3;}
   .rel-tag.c-neutral{color:var(--bone-white);border-color:var(--bone-white);}
@@ -184,7 +192,7 @@
   .search-input{width:100%;background:var(--steel-dark);border:1px solid var(--steel-mid);padding:10px 14px 10px 36px;color:var(--bone-white);font-family:'Roboto Mono',monospace;font-size:13px;letter-spacing:2px;outline:none;transition:.15s}
   .search-input::placeholder{color:var(--steel-light);letter-spacing:2px;opacity:0.5}
   .search-input:focus{border-color:var(--steel-light);box-shadow:0 0 10px rgba(140,150,163,.2)}
-  .search-wrap::before{content:'⌕';position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--steel-light);font-size:18px;pointer-events:none;font-weight:bold}
+  .search-wrap::before{content:'⚙';position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--steel-light);font-size:16px;pointer-events:none;font-weight:bold; animation: spin 6s linear infinite;}
 
   .social-lists{display:grid;grid-template-columns:1fr 1fr;gap:16px}
   .social-col{background:var(--steel-dark);border:1px solid var(--steel-mid);padding:14px 18px;min-height:260px;max-height:520px;overflow-y:auto; box-shadow: inset 0 0 20px rgba(0,0,0,0.5);}
@@ -195,7 +203,7 @@
   .social-col .group-header{font-family:'PT Serif', serif; font-weight:bold;font-size:14px;color:var(--steel-light);cursor:pointer;padding:8px 0 8px 10px;border-bottom:1px solid rgba(255,255,255,0.05);border-left:2px solid transparent;transition:.1s;display:block;position:relative;letter-spacing:2px}
   .social-col .group-header::after{content:'◂';position:absolute;right:6px;color:var(--steel-mid);font-size:12px}
   .social-col .group-header:hover{color:var(--bone-white);background:rgba(255,255,255,0.03);border-left-color:var(--steel-light)}
-  .social-col .group-header.open{color:var(--bone-white);border-left-color:var(--blood-red)}
+  .social-col .group-header.open{color:var(--bone-white);border-left-color:var(--bronze)}
   .social-col .group-header.open::after{content:'▾';color:var(--bone-white)}
   
   .sub-items{padding-left:14px;margin:6px 0 10px;display:none;border-left:1px dashed var(--steel-mid)}
@@ -239,29 +247,30 @@
     .tab-btn{font-size:11px;padding:5px 10px;letter-spacing:1px}
     .photo-frame{flex:0 0 100%;max-width:100%;height:240px}
     .head-name{font-size:24px}
-    .loading-kanji span{font-size:90px;letter-spacing:10px}
-    .loading-kanji .kanji-small{font-size:50px;letter-spacing:5px}
   }
 </style>
 </head>
 <body>
 
+<!-- Фоновые шестеренки -->
+<div class="gear-bg gear-1">⚙</div>
+<div class="gear-bg gear-2">⚙</div>
+<div class="gear-bg gear-3">⚙</div>
+
 <!-- ===== ЭКРАН ЗАГРУЗКИ ===== -->
 <div id="loadingScreen">
   <div class="intro-crt"></div>
   <div class="intro-vignette"></div>
-  <div class="intro-iron-glow"></div>
-  <div class="loading-kanji">
-    <span>ΣΙΔΗΡΟΣ</span>
-    <span class="kanji-small">ΣΑΡΞ ・ ΑΣΘΕΝΗΣ</span>
-    <span>ΘΑΝΑΤΟΣ</span>
+  <div class="loading-gears">
+    <div class="gear-bg gear-1">⚙</div>
+    <div class="gear-bg gear-2">⚙</div>
   </div>
   <div class="loading-box">
-    <div class="loading-title">▸ АКТИВАЦИЯ БИОНИКИ ◂</div>
-    <div class="loading-subtitle">ОРДЕН ЖЕЛЕЗНЫХ РУК · АПТЕКАРИОН · ДАННЫЕ ШТРАФНИКА</div>
+    <div class="loading-title"><span>⚙</span> ИНИЦИАЛИЗАЦИЯ СИСТЕМ <span>⚙</span></div>
+    <div class="loading-subtitle">ШТРАФНОЙ БАТАЛЬОН · ДОСЬЕ · Ц. ГЕРАКЛИТ</div>
     <div class="loading-bar-track"><div class="loading-bar-fill" id="loadingBarFill"></div></div>
     <div class="loading-footer">
-      <span class="loading-log" id="loadingLog">> INITIATING LINK...</span>
+      <span class="loading-log" id="loadingLog">> ЗАПУСК ПРОТОКОЛА...</span>
       <span class="loading-percent" id="loadingPercent">0%</span>
     </div>
   </div>
@@ -271,18 +280,17 @@
 <div id="introScreen">
   <div class="intro-crt"></div>
   <div class="intro-vignette"></div>
-  <div class="intro-iron-glow"></div>
   <div class="intro-container">
     <div class="intro-main">
       <div class="intro-portrait">
-        <img src="ava.jpeg" alt="CIRCE" onerror="this.style.display='none'; this.parentNode.innerHTML+='<div style=&quot;color:#8c96a3;text-align:center;padding:90px 10px;font-size:12px;letter-spacing:2px;font-family:serif;&quot;>[ ПИКТ-ЗАПИСЬ УТЕРЯНА ]</div>'">
-        <span class="portrait-label">+ C. HERACLITUS +</span>
+        <img src="ava.jpeg" alt="CIRCE" onerror="this.style.display='none'; this.parentNode.innerHTML+='<div style=&quot;color:#8c96a3;text-align:center;padding:90px 10px;font-size:12px;letter-spacing:2px;font-family:serif;&quot;>[ ФОТО ОТСУТСТВУЕТ ]</div>'">
+        <span class="portrait-label">C. HERACLITUS</span>
       </div>
       <div class="intro-text">
         <div class="intro-title">Цирцея Гераклит</div>
-        <div class="intro-subtitle">ГЕШТАЛЬТ ШТРАФИК · ИНЖЕНЕР-МЕХАНИК<br>ОБОЛОЧКА: ГЕШТАЛЬТ · СТАТУС: PENITENT</div>
+        <div class="intro-subtitle">ГЕШТАЛЬТ ШТРАФИК // РАНЕЕ: ФЕЛЬДФЕБЕЛЬ<br>ИНЖЕНЕР-МЕХАНИК</div>
         <div class="intro-info">
-          <div><span class="highlight">Фракция:</span> ADEPTUS ASTARTES (Iron Hands)</div>
+          <div><span class="highlight">Статус:</span> Осуждена (Штрафной персонал)</div>
           <div><span class="highlight">Рост / Вес:</span> 180 см · 74 кг</div>
           <div><span class="highlight">Группа крови:</span> Первая отрицательная</div>
           <div><span class="highlight">Место рождения:</span> Винета (Греция - Родос)</div>
@@ -290,10 +298,9 @@
       </div>
     </div>
     <div class="intro-button-wrap">
-      <button class="intro-button" id="enterBtn">[ ПОЛУЧИТЬ ДОСТУП ]</button>
-      <div class="intro-bar"></div>
+      <button class="intro-button" id="enterBtn"><span class="gear-icon">⚙</span> ОТКРЫТЬ ДОСЬЕ <span class="gear-icon">⚙</span></button>
     </div>
-    <div class="intro-footer">◈ ПЛОТЬ СЛАБА · ЖЕЛЕЗО ВЕЧНО ◈</div>
+    <div class="intro-footer">◈ СИСТЕМА АРХИВАЦИИ ◈</div>
   </div>
 </div>
 
@@ -307,9 +314,9 @@
     <div class="screen">
 
       <div class="title-bar">
-        <span class="main">◈ АРХИВ ОРДЕНА · ЖЕЛЕЗНЫЕ РУКИ</span>
+        <span class="main"><span>⚙</span> АРХИВ · ДОСЬЕ</span>
         <span class="mid">◆ МЕДИЦИНСКИЙ ПРОТОКОЛ · ШТРАФНИК ◆</span>
-        <span class="date">ЦИКЛ M42 · 018</span>
+        <span class="date">ЦИКЛ 2157 · 24.08</span>
       </div>
 
       <div class="tabs">
@@ -323,7 +330,7 @@
 
         <div class="dossier-head">
           <div class="photo-frame">
-            <img src="ava.jpeg" alt="C. Heraclitus" onerror="this.style.display='none'; this.parentNode.innerHTML+='<div style=&quot;color:#8c96a3;text-align:center;padding:90px 10px;font-size:12px;letter-spacing:2px;font-family:serif;&quot;>[ ПИКТ-ЗАПИСЬ УТЕРЯНА ]</div>'">
+            <img src="ava.jpeg" alt="C. Heraclitus" onerror="this.style.display='none'; this.parentNode.innerHTML+='<div style=&quot;color:#8c96a3;text-align:center;padding:90px 10px;font-size:12px;letter-spacing:2px;font-family:serif;&quot;>[ ФОТО ОТСУТСТВУЕТ ]</div>'">
             <span class="stamp">PENITENT</span>
           </div>
           <div class="head-info">
@@ -335,7 +342,7 @@
               <div class="info-cell"><span class="lbl">Рост / Вес</span><span class="val">180 см · 74 кг</span></div>
               <div class="info-cell"><span class="lbl">Группа крови</span><span class="val">Первая отрицательная</span></div>
               <div class="info-cell"><span class="lbl">Оболочка</span><span class="val">Гештальт</span></div>
-              <div class="info-cell"><span class="lbl">Статус</span><span class="val" style="color:var(--blood-red)">ОСУЖДЕНА · ШТРАФНИК</span></div>
+              <div class="info-cell"><span class="lbl">Статус</span><span class="val" style="color:var(--bronze)">ОСУЖДЕНА · ШТРАФНИК</span></div>
             </div>
           </div>
         </div>
@@ -362,7 +369,7 @@
           <div class="section-title">Дислокация</div>
           <div class="cards">
             <div class="card">
-              <h4>▸ Место службы</h4>
+              <h4>Место службы</h4>
               <ul>
                 <li><strong>Объект:</strong> Штрафной батальон</li>
                 <li><strong>Регион:</strong> Пояс Астер</li>
@@ -371,7 +378,7 @@
               </ul>
             </div>
             <div class="card">
-              <h4>▸ Образование</h4>
+              <h4>Образование</h4>
               <ul>
                 <li><strong>Уровень:</strong> Среднее специальное</li>
                 <li><strong>Учреждение:</strong> Инженерная высшая школа имени Маннергейма</li>
@@ -398,7 +405,7 @@
           <div class="section-title">Физические данные</div>
           <div class="cards">
             <div class="card">
-              <h4>▸ Биометрия</h4>
+              <h4>Биометрия</h4>
               <ul>
                 <li><strong>Рост:</strong> 180 см</li>
                 <li><strong>Вес:</strong> 74 кг</li>
@@ -409,7 +416,7 @@
               </ul>
             </div>
             <div class="card">
-              <h4>▸ Особенности</h4>
+              <h4>Особенности</h4>
               <ul>
                 <li><strong>Здоровье:</strong> Субклинический ОКР</li>
                 <li><strong>Вредные привычки:</strong> Ранее употребление алкоголя</li>
@@ -432,7 +439,7 @@
           <div class="section-title">Навыки и увлечения</div>
           <div class="cards">
             <div class="card">
-              <h4>▸ Способности и навыки</h4>
+              <h4>Способности и навыки</h4>
               <ul>
                 <li>Готовка</li>
                 <li>Механика / Инженерия</li>
@@ -442,7 +449,7 @@
               </ul>
             </div>
             <div class="card">
-              <h4>▸ Хобби и предпочтения</h4>
+              <h4>Хобби и предпочтения</h4>
               <ul>
                 <li>Работа с механизмами</li>
                 <li>Разбор и сборка тяжелого вооружения</li>
@@ -533,9 +540,9 @@
       </div>
 
       <div class="footer-bar">
-        <span>⏻ ORDO MEDICAE · v.3.2</span>
-        <span>◆ FLESH IS WEAK ◆</span>
-        <span>АПТЕКАРИЙ · Ц. ГЕРАКЛИТ</span>
+        <span>⏻ СИСТЕМА АРХИВАЦИИ · v.3.2</span>
+        <span>◆ ДОКУМЕНТ ЗАСЕКРЕЧЕН ◆</span>
+        <span>ИНЖЕНЕР · Ц. ГЕРАКЛИТ</span>
       </div>
 
     </div>
