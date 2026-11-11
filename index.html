@@ -41,7 +41,7 @@
   .gear-2 { bottom: -150px; right: -50px; animation: spin-reverse 80s linear infinite; font-size: 500px; }
   .gear-3 { top: 40%; left: 60%; font-size: 200px; animation: spin 40s linear infinite; opacity: 0.1; }
 
-  /* ===== ДЕКОРАТИВНЫЕ ПАТТЕРНЫ (ГРЕЧЕСКИЙ МЕАНДР) ===== */
+  /* ===== ДЕКОРАТИВНЫЕ ПАТТЕРНЫ ===== */
   .meander-border {
     height: 6px;
     background: repeating-linear-gradient(90deg, transparent, transparent 4px, var(--steel-light) 4px, var(--steel-light) 8px, transparent 8px, transparent 12px, var(--steel-mid) 12px, var(--steel-mid) 16px);
@@ -87,13 +87,27 @@
   .loading-gears { position: absolute; inset: 0; display: flex; justify-content: center; align-items: center; overflow: hidden; z-index: 1; opacity: 0.05; }
   .loading-gears .gear-bg { position: relative; top: auto; left: auto; right: auto; bottom: auto; }
 
-  .loading-box{position:relative;z-index:5;width:90%;max-width:620px;display:flex;flex-direction:column;gap:18px;color:var(--bone-white);}
+  .loading-box{position:relative;z-index:5;width:90%;max-width:620px;display:flex;flex-direction:column;gap:18px;color:var(--bone-white); align-items: center;}
+  
+  /* Добавленное фото на экран загрузки */
+  .loading-img {
+    max-width: 220px;
+    width: 100%;
+    display: block;
+    filter: grayscale(100%) contrast(1.3) brightness(0.7);
+    border: 2px solid var(--steel-mid);
+    box-shadow: 0 0 20px rgba(0,0,0,0.9), inset 0 0 10px rgba(0,0,0,1);
+    margin-bottom: 10px;
+    padding: 4px;
+    background: var(--steel-dark);
+  }
+
   .loading-title{font-family:'PT Serif', serif; font-size:22px;letter-spacing:6px;text-align:center;text-transform:uppercase;color:var(--bone-white);animation:loadBlink 1.5s steps(2) infinite; display: flex; align-items: center; justify-content: center; gap: 10px;}
   @keyframes loadBlink{0%,100%{opacity:1}50%{opacity:.6}}
   .loading-subtitle{font-size:12px;letter-spacing:3px;text-align:center;color:var(--steel-light)}
   .loading-bar-track{width:100%;height:12px;border:1px solid var(--steel-mid);background:var(--bg-dark);position:relative;overflow:hidden;box-shadow:inset 0 0 10px rgba(0,0,0,1)}
   .loading-bar-fill{position:absolute;top:0;left:0;height:100%;width:0;background:var(--steel-light);box-shadow:0 0 10px var(--steel-light);transition:width .15s linear}
-  .loading-footer{display:flex;justify-content:space-between;font-size:13px;letter-spacing:1px;color:var(--steel-light)}
+  .loading-footer{display:flex;justify-content:space-between;font-size:13px;letter-spacing:1px;color:var(--steel-light); width: 100%;}
   .loading-percent{font-weight:bold;color:var(--bone-white)}
   .loading-log{font-size:12px;color:var(--steel-mid);min-height:16px;white-space:nowrap;overflow:hidden}
 
@@ -153,6 +167,45 @@
   .text-block{color:#a4adb8;font-size:13.5px;line-height:1.8;letter-spacing:.3px;white-space:pre-wrap}
   .text-block strong{color:var(--bone-white);font-weight:normal;letter-spacing:.5px; background: rgba(255,255,255,0.05); padding: 0 4px;}
 
+  /* === СТИЛЬ АРХИВНОГО ФОТО (Скотч) === */
+  .archival-photo-container {
+    position: relative;
+    display: inline-block;
+    background: #d4d7da; /* Цвет старой бумаги */
+    padding: 12px 12px 40px 12px;
+    box-shadow: 3px 5px 12px rgba(0,0,0,0.6);
+    transform: rotate(-1deg);
+    margin-bottom: 20px;
+    border: 1px solid #999;
+    z-index: 5;
+  }
+  .archival-photo-container img {
+    max-width: 100%;
+    max-height: 400px;
+    display: block;
+    filter: grayscale(100%) contrast(1.2) sepia(0.3) brightness(0.9);
+    border: 1px solid #333;
+  }
+  .archival-tape {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%) rotate(2deg);
+    width: 140px;
+    height: 35px;
+    background: rgba(200, 200, 200, 0.6);
+    border: 1px solid rgba(255,255,255,0.4);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    z-index: 10;
+    backdrop-filter: blur(1px);
+  }
+  .archival-tape::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(255,255,255,0.2) 4px, rgba(255,255,255,0.2) 8px);
+  }
+
   .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
   .card{background:var(--steel-dark);border:1px solid var(--steel-mid);padding:14px 16px;position:relative;transition:.2s; box-shadow: inset 0 0 15px rgba(0,0,0,0.6);}
   .card:hover{border-color:var(--steel-light);}
@@ -172,7 +225,6 @@
   
   .rel-tag{display:inline-block;padding:5px 16px;font-size:12px;font-weight:bold;letter-spacing:1px;background:var(--bg-dark);border:1px solid var(--steel-mid);cursor:pointer;transition:.15s;color:var(--steel-light); text-transform: uppercase; font-family: 'Roboto Mono', monospace;}
   .rel-tag:hover{border-color:var(--bone-white);color:var(--bone-white);box-shadow:0 0 10px rgba(255,255,255,.1)}
-  /* Цвета отношений */
   .rel-tag.c-distrust{color:#d4a373;border-color:#d4a373;}
   .rel-tag.c-sad{color:#8c96a3;border-color:#8c96a3;}
   .rel-tag.c-neutral{color:var(--bone-white);border-color:var(--bone-white);}
@@ -215,7 +267,6 @@
   .personnel-entry .personnel-name{flex:1;letter-spacing:.5px}
   .personnel-entry .personnel-rel{font-size:10px;color:var(--steel-mid);letter-spacing:1px;text-transform:uppercase}
 
-  /* === ИКОНКА NO DATE === */
   .nodate-icon{
     display:inline-flex; align-items:center; justify-content:center; width:42px; height:22px; font-size:7px; letter-spacing:1px; color:var(--steel-light); background-color:var(--steel-mid);
     border:1px solid #111; flex-shrink:0; font-family:'Roboto Mono',monospace; font-weight:bold; text-transform:uppercase; position:relative; overflow:hidden;
@@ -266,6 +317,10 @@
     <div class="gear-bg gear-2">⚙</div>
   </div>
   <div class="loading-box">
+    
+    <!-- ФОТО НА ЗАГРУЗКЕ (ЧЕРНО-БЕЛОЕ) -->
+    <img src="loading.png" alt="Loading Dossier" class="loading-img" onerror="this.style.display='none'">
+
     <div class="loading-title"><span>⚙</span> ИНИЦИАЛИЗАЦИЯ СИСТЕМ <span>⚙</span></div>
     <div class="loading-subtitle">ШТРАФНОЙ БАТАЛЬОН · ДОСЬЕ · Ц. ГЕРАКЛИТ</div>
     <div class="loading-bar-track"><div class="loading-bar-fill" id="loadingBarFill"></div></div>
@@ -283,7 +338,7 @@
   <div class="intro-container">
     <div class="intro-main">
       <div class="intro-portrait">
-        <img src="ava.jpeg" alt="CIRCE" onerror="this.style.display='none'; this.parentNode.innerHTML+='<div style=&quot;color:#8c96a3;text-align:center;padding:90px 10px;font-size:12px;letter-spacing:2px;font-family:serif;&quot;>[ ФОТО ОТСУТСТВУЕТ ]</div>'">
+        <img src="personal.png" alt="CIRCE" onerror="this.style.display='none'; this.parentNode.innerHTML+='<div style=&quot;color:#8c96a3;text-align:center;padding:90px 10px;font-size:12px;letter-spacing:2px;font-family:serif;&quot;>[ ФОТО ОТСУТСТВУЕТ ]</div>'">
         <span class="portrait-label">C. HERACLITUS</span>
       </div>
       <div class="intro-text">
@@ -330,7 +385,8 @@
 
         <div class="dossier-head">
           <div class="photo-frame">
-            <img src="ava.jpeg" alt="C. Heraclitus" onerror="this.style.display='none'; this.parentNode.innerHTML+='<div style=&quot;color:#8c96a3;text-align:center;padding:90px 10px;font-size:12px;letter-spacing:2px;font-family:serif;&quot;>[ ФОТО ОТСУТСТВУЕТ ]</div>'">
+            <!-- ВСТАВЛЕНО ФОТО ДЛЯ ЛИЧНОГО ДЕЛА -->
+            <img src="personal.png" alt="C. Heraclitus" onerror="this.style.display='none'; this.parentNode.innerHTML+='<div style=&quot;color:#8c96a3;text-align:center;padding:90px 10px;font-size:12px;letter-spacing:2px;font-family:serif;&quot;>[ ФОТО ОТСУТСТВУЕТ ]</div>'">
             <span class="stamp">PENITENT</span>
           </div>
           <div class="head-info">
@@ -398,7 +454,16 @@
 
         <div class="section">
           <div class="section-title">Внешний облик</div>
-          <div class="text-block">Волосы - темно-серые, практически черные, с холодным пепельным отливом; стрижка рваная, асимметричная, с небрежной челкой, закрывающей лоб, и коротким хвостом на затылке, при этом длинные пряди спадают на лицо. Глаза красно-янтарного оттенка, взгляд тяжелый, дерзкий. Фигура спортивная мускулистая с ярко выраженным рельефом (кубический пресс, развитые плечи и сильные руки). Кожа светлая, без изъянов, родинок практически нет, шрамы частые, малые и бледные. Легкий запах кофе (ранее).</div>
+          
+          <!-- АРХИВНОЕ ФОТО С ЭФФЕКТОМ СКОТЧА -->
+          <div style="text-align: center;">
+            <div class="archival-photo-container">
+              <div class="archival-tape"></div>
+              <img src="appearance.png" alt="Appearance Photo" onerror="this.style.display='none';">
+            </div>
+          </div>
+
+          <div class="text-block" style="margin-top: 15px;">Волосы - темно-серые, практически черные, с холодным пепельным отливом; стрижка рваная, асимметричная, с небрежной челкой, закрывающей лоб, и коротким хвостом на затылке, при этом длинные пряди спадают на лицо. Глаза красно-янтарного оттенка, взгляд тяжелый, дерзкий. Фигура спортивная мускулистая с ярко выраженным рельефом (кубический пресс, развитые плечи и сильные руки). Кожа светлая, без изъянов, родинок практически нет, шрамы частые, малые и бледные. Легкий запах кофе (ранее).</div>
         </div>
 
         <div class="section">
@@ -559,30 +624,63 @@
   const loadingPercent = document.getElementById('loadingPercent');
   const loadingLog = document.getElementById('loadingLog');
 
-  function playBeep(freq){
-    try{
-      const ctx = new (window.AudioContext||window.webkitAudioContext)();
-      const osc = ctx.createOscillator(), g = ctx.createGain();
-      osc.connect(g); g.connect(ctx.destination);
-      osc.frequency.value = freq || 600; osc.type = 'square';
-      g.gain.setValueAtTime(0.02, ctx.currentTime);
-      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
-      osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.05);
-    }catch(e){}
+  // ===== МЕХАНИЧЕСКИЙ ЗВУК (ЛЯЗГ И ЩЕЛЧОК) =====
+  function playMechanicalClick(pitch = 1) {
+    try {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      const ctx = new AudioContext();
+      
+      // 1. Короткий шум для "щелчка"
+      const bufferSize = ctx.sampleRate * 0.04; 
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+          data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.1));
+      }
+      
+      const noise = ctx.createBufferSource();
+      noise.buffer = buffer;
+      
+      // Фильтр для металлического оттенка
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'bandpass';
+      filter.frequency.value = 1200 * pitch;
+      filter.Q.value = 1.5;
+      
+      const gain = ctx.createGain();
+      gain.gain.setValueAtTime(0.15, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.04);
+      
+      noise.connect(filter);
+      filter.connect(gain);
+      gain.connect(ctx.destination);
+      
+      noise.start();
+      
+      // 2. Низкий глухой "стук" механизма
+      const osc = ctx.createOscillator();
+      const oscGain = ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(150 * pitch, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(40 * pitch, ctx.currentTime + 0.06);
+      
+      oscGain.gain.setValueAtTime(0.2, ctx.currentTime);
+      oscGain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.06);
+      
+      osc.connect(oscGain);
+      oscGain.connect(ctx.destination);
+      
+      osc.start();
+      osc.stop(ctx.currentTime + 0.08);
+      
+    } catch (e) {}
   }
 
+  // Звук запуска (серия из трех тяжелых щелчков)
   function playBootSound(){
-    try{
-      const ctx = new (window.AudioContext||window.webkitAudioContext)();
-      const osc = ctx.createOscillator(), g = ctx.createGain();
-      osc.connect(g); g.connect(ctx.destination);
-      osc.frequency.setValueAtTime(150, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(600, ctx.currentTime + 0.4);
-      osc.type = 'sawtooth';
-      g.gain.setValueAtTime(0.05, ctx.currentTime);
-      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.6);
-      osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.6);
-    }catch(e){}
+    playMechanicalClick(0.8);
+    setTimeout(() => playMechanicalClick(1), 150);
+    setTimeout(() => playMechanicalClick(1.2), 300);
   }
 
   const logMessages = ["> СВЯЗЬ С МАШИНОЙ...","> ПРОВЕРКА БИОНИКИ...","> АНАЛИЗ КРОВИ...","> ДОСТУП К АРХИВУ...","> ДЕШИФРОВКА...","> ПРОВЕРКА СИГНАТУРЫ...","> ЗАГРУЗКА ЛИЧНОГО СОСТАВА...","> ОБРАБОТКА...","> ВНИМАНИЕ: СЛАБЫЙ СИГНАЛ...","> ПОВТОР...","> ПОЧТИ ГОТОВО..."];
@@ -602,7 +700,7 @@
         percent = 99;
         clearInterval(interval);
         loadingLog.textContent = "> ЗАДЕРЖКА НА 99%...";
-        playBeep(400);
+        playMechanicalClick(0.7);
 
         setTimeout(()=>{
           loadingLog.textContent = "> ЗАВЕРШЕНО.";
@@ -622,7 +720,7 @@
       if(newLogIndex !== logIndex && newLogIndex < logMessages.length){
         logIndex = newLogIndex;
         loadingLog.textContent = logMessages[logIndex];
-        playBeep(600 + Math.random()*400);
+        playMechanicalClick(0.9 + Math.random()*0.4); // Разный тон для логов
       }
     }, 60);
   }
@@ -644,7 +742,7 @@
       btn.classList.add('active');
       const pane = document.getElementById(id);
       if(pane) pane.classList.add('active');
-      playBeep(600 + Math.random()*400);
+      playMechanicalClick(1.1);
     });
   });
 
@@ -652,7 +750,7 @@
   document.querySelectorAll('.group-header').forEach(header=>{
     header.addEventListener('click', function(){
       const items = document.getElementById('group-' + this.dataset.group);
-      if(items){ items.classList.toggle('open'); this.classList.toggle('open'); playBeep(500); }
+      if(items){ items.classList.toggle('open'); this.classList.toggle('open'); playMechanicalClick(0.9); }
     });
   });
 
@@ -741,13 +839,13 @@
           <div style="color:var(--steel-mid);font-style:italic;letter-spacing:2px;font-size:12px;">— нет записей в архиве —</div>
         </div>`;
       }
-      playBeep(600);
+      playMechanicalClick(1);
     });
   });
 
   // Generic click beep on cards
   document.querySelectorAll('.card, .rel-tag, .info-cell').forEach(el=>{
-    el.addEventListener('click', ()=>playBeep(600 + Math.random()*400));
+    el.addEventListener('click', ()=>playMechanicalClick(1.1 + Math.random()*0.2));
   });
 })();
 </script>
