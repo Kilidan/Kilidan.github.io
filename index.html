@@ -578,41 +578,52 @@
   const loadingPercent = document.getElementById('loadingPercent');
   const loadingLog = document.getElementById('loadingLog');
 
+  // ===== МЯГКИЙ ЗВУК КЛИКА =====
   function playMechanicalClick(pitch = 1) {
     try {
       const AudioContext = window.AudioContext || window.webkitAudioContext;
       const ctx = new AudioContext();
-      const bufferSize = ctx.sampleRate * 0.04; 
+      
+      // 1. Мягкий высокочастотный шум для легкого "тик"
+      const bufferSize = ctx.sampleRate * 0.02; 
       const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
       const data = buffer.getChannelData(0);
       for (let i = 0; i < bufferSize; i++) {
           data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.1));
       }
+      
       const noise = ctx.createBufferSource();
       noise.buffer = buffer;
+      
       const filter = ctx.createBiquadFilter();
-      filter.type = 'bandpass';
-      filter.frequency.value = 1200 * pitch;
-      filter.Q.value = 1.5;
+      filter.type = 'highpass'; // Убираем низкие частоты, чтобы не было глухого стука
+      filter.frequency.value = 2000 * pitch;
+      
       const gain = ctx.createGain();
-      gain.gain.setValueAtTime(0.15, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.04);
+      gain.gain.setValueAtTime(0.05, ctx.currentTime); // Сделали тише
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.03);
+      
       noise.connect(filter);
       filter.connect(gain);
       gain.connect(ctx.destination);
       noise.start();
       
+      // 2. Очень тихая мягкая синусоида (приятный слуху "поп")
       const osc = ctx.createOscillator();
       const oscGain = ctx.createGain();
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(150 * pitch, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(40 * pitch, ctx.currentTime + 0.06);
-      oscGain.gain.setValueAtTime(0.2, ctx.currentTime);
-      oscGain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.06);
+      osc.type = 'sine'; // Заменили треугольную волну на мягкую синусоиду
+      osc.frequency.setValueAtTime(800 * pitch, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(400 * pitch, ctx.currentTime + 0.05);
+      
+      oscGain.gain.setValueAtTime(0.03, ctx.currentTime); 
+      oscGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
+      
       osc.connect(oscGain);
       oscGain.connect(ctx.destination);
+      
       osc.start();
-      osc.stop(ctx.currentTime + 0.08);
+      osc.stop(ctx.currentTime + 0.05);
+      
     } catch (e) {}
   }
 
