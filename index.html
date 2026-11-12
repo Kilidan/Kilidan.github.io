@@ -6,7 +6,7 @@
 <title>ДОСЬЕ · ШТРАФБАТ · Ц. ГЕРАКЛИТ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400&family=Roboto+Mono:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
   *{margin:0;padding:0;box-sizing:border-box;user-select:none}
   .text-block, .desc-panel, .card ul li, .info-cell .val { user-select: text; }
@@ -175,8 +175,9 @@
   .head-name{font-family: 'PT Serif', serif; font-size:32px;color:var(--bone-white);letter-spacing:2px;font-weight:700;text-transform:uppercase; border-bottom: 1px solid var(--steel-mid); padding-bottom: 5px; display: inline-block;}
   .head-sub{font-size:13px;color:var(--steel-light);letter-spacing:2px;border-left:3px solid var(--bronze);padding-left:12px; text-transform: uppercase;}
 
+  /* Выравнивание по центру в info-cell */
   .info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:10px}
-  .info-cell{background:var(--steel-dark);border:1px solid var(--steel-mid);padding:8px 12px;display:flex;flex-direction:column;gap:4px; box-shadow: inset 0 0 10px rgba(0,0,0,0.5);}
+  .info-cell{background:var(--steel-dark);border:1px solid var(--steel-mid);padding:8px 12px;display:flex;flex-direction:column;gap:4px; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); align-items: center; text-align: center;}
   .info-cell .lbl{font-size:10px;color:var(--steel-light);letter-spacing:2px;text-transform:uppercase;font-weight:bold;}
   .info-cell .val{font-size:14px;color:var(--bone-white);letter-spacing:.5px;}
 
@@ -358,7 +359,13 @@
               <div class="info-cell"><span class="lbl">Дата рождения</span><span class="val">18.12.2136</span></div>
               <div class="info-cell"><span class="lbl">Место рождения</span><span class="val">Винета (Родос)</span></div>
               <div class="info-cell"><span class="lbl">Рост / Вес</span><span class="val">180 см · 74 кг</span></div>
-              <div class="info-cell" style="grid-column: span 2; border-left-color: var(--blood-red);"><span class="lbl">Обвинение</span><span class="val" style="color: var(--blood-red); font-size:12px;">Халатность при техническом осмотре вооружения</span></div>
+              
+              <!-- Обвинение сделано жирным и выровнено -->
+              <div class="info-cell" style="grid-column: span 2; border-left-color: var(--blood-red);">
+                <span class="lbl">Обвинение</span>
+                <span class="val" style="color: var(--blood-red); font-size: 13px; font-weight: 900; letter-spacing: 1px;">Халатность при техническом осмотре вооружения</span>
+              </div>
+              
               <div class="info-cell"><span class="lbl">Оболочка</span><span class="val">Гештальт</span></div>
               <div class="info-cell"><span class="lbl">Статус</span><span class="val" style="color:var(--bronze)">ОСУЖДЕНА · ШТРАФНИК</span></div>
             </div>
@@ -584,7 +591,6 @@
       const AudioContext = window.AudioContext || window.webkitAudioContext;
       const ctx = new AudioContext();
       
-      // 1. Мягкий высокочастотный шум для легкого "тик"
       const bufferSize = ctx.sampleRate * 0.02; 
       const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
       const data = buffer.getChannelData(0);
@@ -596,11 +602,11 @@
       noise.buffer = buffer;
       
       const filter = ctx.createBiquadFilter();
-      filter.type = 'highpass'; // Убираем низкие частоты, чтобы не было глухого стука
+      filter.type = 'highpass';
       filter.frequency.value = 2000 * pitch;
       
       const gain = ctx.createGain();
-      gain.gain.setValueAtTime(0.05, ctx.currentTime); // Сделали тише
+      gain.gain.setValueAtTime(0.05, ctx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.03);
       
       noise.connect(filter);
@@ -608,10 +614,9 @@
       gain.connect(ctx.destination);
       noise.start();
       
-      // 2. Очень тихая мягкая синусоида (приятный слуху "поп")
       const osc = ctx.createOscillator();
       const oscGain = ctx.createGain();
-      osc.type = 'sine'; // Заменили треугольную волну на мягкую синусоиду
+      osc.type = 'sine'; 
       osc.frequency.setValueAtTime(800 * pitch, ctx.currentTime);
       osc.frequency.exponentialRampToValueAtTime(400 * pitch, ctx.currentTime + 0.05);
       
