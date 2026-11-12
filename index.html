@@ -335,9 +335,7 @@
         <div class="intro-info">
           <div><span class="highlight">Статус:</span> Осуждена (Штрафной персонал)</div>
           <div><span class="highlight">Рост / Вес:</span> 180 см · 74 кг</div>
-          <!-- Исправлено обвинение -->
           <div><span class="highlight">Обвинение:</span> Халатность при исполнении рабочих обязанностей</div>
-          <!-- Убрано Греция - Родос -->
           <div><span class="highlight">Место рождения:</span> Винета</div>
         </div>
       </div>
@@ -360,9 +358,7 @@
 
       <div class="title-bar">
         <span class="main"><span>⚙</span> АРХИВ · ДОСЬЕ</span>
-        <!-- Убрано слово МЕДИЦИНСКИЙ -->
         <span class="mid">◆ ПРОТОКОЛ · ШТРАФНИК ◆</span>
-        <!-- Изменена дата -->
         <span class="date">ЦИКЛ 12.11.2157</span>
       </div>
 
@@ -384,12 +380,11 @@
             <div class="head-name">Цирцея Гераклит</div>
             <div class="head-sub">Гештальт Штрафик</div>
             <div class="info-grid">
-              <div class="info-cell"><span class="lbl">Дата рождения</span><span class="val">18.12.2136</span></div>
-              <!-- Убрано Родос -->
+              <!-- Год рождения изменен на два года раньше (2134) -->
+              <div class="info-cell"><span class="lbl">Дата рождения</span><span class="val">18.12.2134</span></div>
               <div class="info-cell"><span class="lbl">Место рождения</span><span class="val">Винета</span></div>
               <div class="info-cell"><span class="lbl">Рост / Вес</span><span class="val">180 см · 74 кг</span></div>
               
-              <!-- Исправлено обвинение в сетке -->
               <div class="info-cell" style="grid-column: span 2; border-left-color: var(--blood-red);">
                 <span class="lbl">Обвинение</span>
                 <span class="val" style="color: var(--blood-red); font-size: 13px; font-weight: 900; letter-spacing: 1px;">Халатность при исполнении рабочих обязанностей</span>
@@ -469,7 +464,6 @@
         <div class="section">
           <div class="section-title">Внешний облик</div>
           
-          <!-- Изображение слева, текст обтекает -->
           <div style="float: left; margin-right: 25px; margin-bottom: 15px;">
             <div class="photo-frame" style="margin: 0;">
               <img src="akairiot-artist-grace-howard-8536626.png" alt="Appearance Photo" onerror="this.style.display='none'; this.parentNode.innerHTML+='<div style=&quot;color:#8c96a3;text-align:center;padding:90px 10px;font-size:12px;letter-spacing:2px;font-family:serif;&quot;>[ ФОТО ОТСУТСТВУЕТ ]</div>'">
@@ -481,7 +475,7 @@
             Волосы - темно-серые, практически черные, с холодным пепельным отливом; стрижка рваная, асимметричная, с небрежной челкой, закрывающей лоб, и коротким хвостом на затылке, при этом длинные пряди спадают на лицо. Глаза красно-янтарного оттенка, взгляд тяжелый, дерзкий. Фигура спортивная мускулистая с ярко выраженным рельефом (кубический пресс, развитые плечи и сильные руки). Кожа светлая, без изъянов, родинок практически нет, шрамы частые, малые и бледные. Легкий запах кофе (ранее).
           </div>
 
-          <div style="clear: both;"></div> <!-- Очистка обтекания -->
+          <div style="clear: both;"></div>
         </div>
 
         <div class="section">
@@ -494,7 +488,8 @@
                 <li><strong>Вес:</strong> 74 кг</li>
                 <li><strong>Группа крови:</strong> Первая отрицательная</li>
                 <li><strong>Пол:</strong> Женский</li>
-                <li><strong>Возраст:</strong> 21 год</li>
+                <!-- Возраст изменен на 23 года -->
+                <li><strong>Возраст:</strong> 23 года</li>
               </ul>
             </div>
             <div class="card">
@@ -559,7 +554,6 @@
           </div>
 
           <div class="social-lists">
-            <!-- Левая колонка (Реплики) -->
             <div class="social-col">
               <h3>▸ РЕПЛИКИ</h3>
               <span class="group-header" data-group="eulr">EULR</span>
@@ -587,7 +581,6 @@
               <div class="sub-items" id="group-fklr"></div>
             </div>
 
-            <!-- Правая колонка (Гештальты) -->
             <div class="social-col">
               <h3>▸ ГЕШТАЛЬТЫ</h3>
               <span class="group-header" data-group="gscp">GSCP</span>
@@ -626,7 +619,6 @@
   const ytContainer = document.getElementById('youtube-player');
   const ytIframe = document.getElementById('yt-iframe');
 
-  // ===== МЯГКИЙ ЗВУК КЛИКА =====
   function playMechanicalClick(pitch = 1) {
     try {
       const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -726,9 +718,8 @@
       setTimeout(()=>mainSite.classList.add('visible'), 300);
       window.scrollTo(0,0);
 
-      // Активация видеоплеера после загрузки
+      // Активация видеоплеера
       ytContainer.style.display = 'block';
-      // Вставляем ссылку с параметрами автовоспроизведения и зацикливания
       ytIframe.src = "https://www.youtube.com/embed/-PRQWI5C5ps?autoplay=1&mute=0&controls=1&loop=1&playlist=-PRQWI5C5ps";
       
     });
