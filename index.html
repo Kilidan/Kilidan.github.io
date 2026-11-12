@@ -188,9 +188,6 @@
   .text-block{color:#a4adb8;font-size:13.5px;line-height:1.8;letter-spacing:.3px;white-space:pre-wrap}
   .text-block strong{color:var(--bone-white);font-weight:normal;letter-spacing:.5px; background: rgba(255,255,255,0.05); padding: 0 4px;}
 
-  .archival-photo-container { position: relative; display: inline-block; background: #d4d7da; padding: 12px 12px 40px 12px; box-shadow: 3px 5px 12px rgba(0,0,0,0.6); transform: rotate(-1deg); margin-bottom: 20px; border: 1px solid #999; z-index: 5; }
-  .archival-photo-container img { max-width: 100%; max-height: 400px; display: block; filter: grayscale(100%) contrast(1.2) sepia(0.3) brightness(0.9); border: 1px solid #333; }
-
   .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
   .card{background:var(--steel-dark);border:1px solid var(--steel-mid);padding:14px 16px;position:relative;transition:.2s; box-shadow: inset 0 0 15px rgba(0,0,0,0.6);}
   .card:hover{border-color:var(--steel-light);}
@@ -440,9 +437,11 @@
         <div class="section">
           <div class="section-title">Внешний облик</div>
           
-          <div style="text-align: center;">
-            <div class="archival-photo-container">
-              <img src="akairiot-исполнитель-грейс-ховард-8536626.png" alt="Appearance Photo" onerror="this.style.display='none';">
+          <!-- НОВОЕ ОФОРМЛЕНИЕ ФОТО ИЗ ВНЕШНОСТИ -->
+          <div style="display: flex; justify-content: center; margin-bottom: 25px;">
+            <div class="photo-frame">
+              <img src="akairiot-artist-grace-howard-8536626.png" alt="Appearance Photo" onerror="this.style.display='none'; this.parentNode.innerHTML+='<div style=&quot;color:#8c96a3;text-align:center;padding:90px 10px;font-size:12px;letter-spacing:2px;font-family:serif;&quot;>[ ФОТО ОТСУТСТВУЕТ ]</div>'">
+              <span class="stamp">PENITENT</span>
             </div>
           </div>
 
@@ -460,7 +459,7 @@
                 <li><strong>Группа крови:</strong> Первая отрицательная</li>
                 <li><strong>Пол:</strong> Женский</li>
                 <li><strong>Возраст:</strong> 21 год</li>
-                <li><strong>Типаж внешности:</strong> Греческая внешность</li>
+                <!-- Типаж внешности удален -->
               </ul>
             </div>
             <div class="card">
@@ -524,7 +523,6 @@
             <input type="text" class="search-input" id="personnelSearch" placeholder="ПОИСК ПО ИМЕНИ...">
           </div>
 
-          <!-- НОВАЯ СТРУКТУРА КОЛОНОК -->
           <div class="social-lists">
             <!-- Левая колонка (Реплики) -->
             <div class="social-col">
