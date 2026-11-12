@@ -24,6 +24,25 @@
   html,body{width:100%;min-height:100vh;background:var(--bg-dark);overflow-x:hidden}
   body{font-family:'Roboto Mono', monospace;color:var(--steel-light);position:relative}
 
+  /* ===== ВИДЕОПЛЕЕР ===== */
+  #youtube-player {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 220px;
+    height: 160px;
+    z-index: 10000;
+    border: 2px solid var(--steel-mid);
+    box-shadow: 0 0 20px rgba(0,0,0,0.9);
+    display: none; /* Скрыт до загрузки */
+    background: #000;
+  }
+  #youtube-player iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
   /* ===== АНИМИРОВАННЫЕ ШЕСТЕРЕНКИ ===== */
   @keyframes spin { 100% { transform: rotate(360deg); } }
   @keyframes spin-reverse { 100% { transform: rotate(-360deg); } }
@@ -270,6 +289,11 @@
 </head>
 <body>
 
+<!-- Плеер YouTube (скрыт до окончания загрузки) -->
+<div id="youtube-player">
+  <iframe id="yt-iframe" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+</div>
+
 <!-- Фоновые шестеренки -->
 <div class="gear-bg gear-1">⚙</div>
 <div class="gear-bg gear-2">⚙</div>
@@ -311,8 +335,10 @@
         <div class="intro-info">
           <div><span class="highlight">Статус:</span> Осуждена (Штрафной персонал)</div>
           <div><span class="highlight">Рост / Вес:</span> 180 см · 74 кг</div>
-          <div><span class="highlight">Обвинение:</span> Халатность</div>
-          <div><span class="highlight">Место рождения:</span> Винета (Греция - Родос)</div>
+          <!-- Исправлено обвинение -->
+          <div><span class="highlight">Обвинение:</span> Халатность при исполнении рабочих обязанностей</div>
+          <!-- Убрано Греция - Родос -->
+          <div><span class="highlight">Место рождения:</span> Винета</div>
         </div>
       </div>
     </div>
@@ -334,8 +360,10 @@
 
       <div class="title-bar">
         <span class="main"><span>⚙</span> АРХИВ · ДОСЬЕ</span>
-        <span class="mid">◆ МЕДИЦИНСКИЙ ПРОТОКОЛ · ШТРАФНИК ◆</span>
-        <span class="date">ЦИКЛ 2157 · 24.08</span>
+        <!-- Убрано слово МЕДИЦИНСКИЙ -->
+        <span class="mid">◆ ПРОТОКОЛ · ШТРАФНИК ◆</span>
+        <!-- Изменена дата -->
+        <span class="date">ЦИКЛ 12.11.2157</span>
       </div>
 
       <div class="tabs">
@@ -357,12 +385,14 @@
             <div class="head-sub">Гештальт Штрафик</div>
             <div class="info-grid">
               <div class="info-cell"><span class="lbl">Дата рождения</span><span class="val">18.12.2136</span></div>
-              <div class="info-cell"><span class="lbl">Место рождения</span><span class="val">Винета (Родос)</span></div>
+              <!-- Убрано Родос -->
+              <div class="info-cell"><span class="lbl">Место рождения</span><span class="val">Винета</span></div>
               <div class="info-cell"><span class="lbl">Рост / Вес</span><span class="val">180 см · 74 кг</span></div>
               
+              <!-- Исправлено обвинение в сетке -->
               <div class="info-cell" style="grid-column: span 2; border-left-color: var(--blood-red);">
                 <span class="lbl">Обвинение</span>
-                <span class="val" style="color: var(--blood-red); font-size: 13px; font-weight: 900; letter-spacing: 1px;">Халатность при техническом осмотре вооружения</span>
+                <span class="val" style="color: var(--blood-red); font-size: 13px; font-weight: 900; letter-spacing: 1px;">Халатность при исполнении рабочих обязанностей</span>
               </div>
               
               <div class="info-cell"><span class="lbl">Оболочка</span><span class="val">Гештальт</span></div>
@@ -375,7 +405,6 @@
 
         <div class="section">
           <div class="section-title">Общие сведения</div>
-          <!-- Используем bio-text для сохранения переносов абзацев -->
           <div class="text-block bio-text">Цирцея являлась уроженкой Винеты, в закат имперского могущества. Родившись, ее забрали из семьи и хотели использовать в качестве инструмента подношений в храм одного из забытых божеств, что позже было вычеркнуто из истории как Нации, так и Империи. Цирце не помнила ничего из этого храма, не обычай, не молитв, даже Бога которому поклонялись. Его имя ей так же не знакомо, лишь во снах она иногда видит кошмары. Громоздкая гротескная статуя, что держит в оковах человечество, фигура заботливой матери, что гниет и из чьих очей идет черная кровь. Ей молятся прося защиту, но лишь оковами она отвечает. Эти ужасы и кошмары заставляли все больше ненавидеть все, чем она занималась и с той же активной яростью вступиться во время Революции.
 
 Во время Революции, война за Винету шла особенно жестоко и страшно, но полуостров, где стоял храм, почти не затронули ужасы войны. Словно, нечто оберегало его, но Цирцея ненавидела всё, чему служила. Её сердце было закрыто для догматов, однако настоятельницы не проявляли к ней жестокости - будто понимали, что истина откроется всем рано или поздно. Цирцея сбежала из церкви в юном возрасте, перебралась на оккупированную территорию Нации и присоединилась к силам восстания. Будучи еще в малом возрасте, на ее плечи легла черная работа, забота о раненых, а также перенос воды/еды. Со временем основные силы нации смогли достичь полуострова, тогда юная девушка на время покинула товарищей решив увидеть, что будет с ее забытым бывшим "домом". Спустя пару циклов она прибыла лишь к руинам, где уже обосновались силы гарнизона. Засмотревшись Цирцея не заметила, как на нее вышли караульные и спустя час допроса, те отправили ее с небольшим отрядам снабжения к распорядительному центру. Они служили для транспортировки граждан Винеты на иные планеты, так Цирце покинула Винету.
@@ -594,6 +623,8 @@
   const loadingBarFill = document.getElementById('loadingBarFill');
   const loadingPercent = document.getElementById('loadingPercent');
   const loadingLog = document.getElementById('loadingLog');
+  const ytContainer = document.getElementById('youtube-player');
+  const ytIframe = document.getElementById('yt-iframe');
 
   // ===== МЯГКИЙ ЗВУК КЛИКА =====
   function playMechanicalClick(pitch = 1) {
@@ -694,6 +725,12 @@
       introScreen.classList.add('hidden');
       setTimeout(()=>mainSite.classList.add('visible'), 300);
       window.scrollTo(0,0);
+
+      // Активация видеоплеера после загрузки
+      ytContainer.style.display = 'block';
+      // Вставляем ссылку с параметрами автовоспроизведения и зацикливания
+      ytIframe.src = "https://www.youtube.com/embed/-PRQWI5C5ps?autoplay=1&mute=0&controls=1&loop=1&playlist=-PRQWI5C5ps";
+      
     });
   });
 
