@@ -24,16 +24,53 @@
   html,body{width:100%;min-height:100vh;background:var(--bg-dark);overflow-x:hidden}
   body{font-family:'Roboto Mono', monospace;color:var(--steel-light);position:relative}
 
+  /* ===== АНИМИРОВАННЫЕ ШЕСТЕРЕНКИ ===== */
   @keyframes spin { 100% { transform: rotate(360deg); } }
   @keyframes spin-reverse { 100% { transform: rotate(-360deg); } }
   
-  .gear-bg { position: fixed; font-size: 400px; color: rgba(35, 40, 48, 0.2); z-index: -1; pointer-events: none; line-height: 1; }
+  .gear-bg {
+    position: fixed;
+    font-size: 400px;
+    color: rgba(35, 40, 48, 0.2);
+    z-index: -1;
+    pointer-events: none;
+    line-height: 1;
+  }
   .gear-1 { top: -100px; left: -100px; animation: spin 60s linear infinite; }
   .gear-2 { bottom: -150px; right: -50px; animation: spin-reverse 80s linear infinite; font-size: 500px; }
   .gear-3 { top: 40%; left: 60%; font-size: 200px; animation: spin 40s linear infinite; opacity: 0.1; }
 
-  .meander-border { height: 6px; background: repeating-linear-gradient(90deg, transparent, transparent 4px, var(--steel-light) 4px, var(--steel-light) 8px, transparent 8px, transparent 12px, var(--steel-mid) 12px, var(--steel-mid) 16px); opacity: 0.3; margin: 15px 0; }
+  /* ===== ДЕКОРАТИВНЫЕ ПАТТЕРНЫ ===== */
+  .meander-border {
+    height: 6px;
+    background: repeating-linear-gradient(90deg, transparent, transparent 4px, var(--steel-light) 4px, var(--steel-light) 8px, transparent 8px, transparent 12px, var(--steel-mid) 12px, var(--steel-mid) 16px);
+    opacity: 0.3;
+    margin: 15px 0;
+  }
 
+  /* Стиль для зацензуренного текста */
+  .redacted {
+    background-color: #000;
+    color: #000;
+    user-select: none;
+    padding: 0 6px;
+    display: inline-block;
+    font-family: 'Roboto Mono', monospace;
+    line-height: 1.2;
+    border: 1px solid #111;
+    box-shadow: inset 0 0 6px #000;
+    position: relative;
+    letter-spacing: 2px;
+    border-radius: 1px;
+    vertical-align: middle;
+  }
+  .redacted::after {
+    content: '████████';
+    color: #1a1a1a;
+    text-shadow: 0 0 2px #000;
+  }
+
+  /* ===== ЗАСТАВКА ===== */
   #introScreen{position:fixed;inset:0;background:var(--bg-dark);z-index:9999;display:flex;justify-content:center;align-items:center;transition:opacity .8s ease,visibility .8s ease}
   #introScreen.hidden{opacity:0;visibility:hidden;pointer-events:none}
   .intro-crt{position:fixed;inset:0;pointer-events:none;z-index:100;background:repeating-linear-gradient(0deg,rgba(0,0,0,.2) 0,rgba(0,0,0,0) 2px,rgba(0,0,0,.15) 4px,rgba(0,0,0,0) 6px);animation:scanMove 10s linear infinite}
@@ -64,6 +101,7 @@
   
   .intro-footer{font-size:12px;color:var(--steel-mid);letter-spacing:4px;margin-top:10px}
 
+  /* ===== ЗАГРУЗКА ===== */
   #loadingScreen{position:fixed;inset:0;z-index:99999;pointer-events:none;opacity:0;background:var(--bg-dark);display:flex;justify-content:center;align-items:center;transition:opacity .4s ease}
   #loadingScreen.active{opacity:1;pointer-events:all}
   
@@ -93,6 +131,7 @@
   .loading-percent{font-weight:bold;color:var(--bone-white)}
   .loading-log{font-size:12px;color:var(--steel-mid);min-height:16px;white-space:nowrap;overflow:hidden}
 
+  /* ===== ОСНОВНОЙ ===== */
   #mainSite{display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:20px;position:relative;opacity:0;transition:opacity 1s ease;background:var(--bg-dark)}
   #mainSite.visible{opacity:1}
   
@@ -101,7 +140,7 @@
   .fish-eye{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;background:radial-gradient(ellipse at center,transparent 40%,rgba(0,0,0,.7) 100%)}
   
   .computer{position:relative;width:1120px;max-width:96vw;background:var(--steel-dark);border:1px solid var(--steel-mid);border-radius:2px;padding:16px;box-shadow:0 0 50px rgba(0,0,0,0.9), inset 0 0 0 1px rgba(0,0,0,0.5), inset 0 0 30px rgba(0,0,0,0.8);z-index:2}
-  .computer::before, .computer::after { content: '⚙'; position: absolute; color: var(--steel-mid); font-size: 16px; line-height: 1; }
+  .computer::before, .computer::after { content: '⚙'; position: absolute; color:var(--steel-mid); font-size: 16px; line-height: 1; }
   .computer::before { top: 6px; left: 6px; }
   .computer::after { bottom: 6px; right: 6px; }
   
@@ -124,6 +163,7 @@
   .tab-content.active{display:block;animation:paneFade .4s ease-out}
   @keyframes paneFade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
 
+  /* DOSSIER HEAD */
   .dossier-head{display:flex;flex-wrap:wrap;gap:24px;margin-bottom:20px;padding-bottom:20px;border-bottom:1px dashed var(--steel-mid); position:relative; z-index:1;}
   .photo-frame{flex:0 0 220px;max-width:220px;height:270px;background:var(--steel-dark);border:2px solid var(--steel-mid);padding:6px;position:relative;overflow:hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.5);}
   .photo-frame::before{content:'';position:absolute;inset:4px;border:1px solid var(--steel-light);pointer-events:none;z-index:3;}
@@ -149,8 +189,6 @@
 
   .archival-photo-container { position: relative; display: inline-block; background: #d4d7da; padding: 12px 12px 40px 12px; box-shadow: 3px 5px 12px rgba(0,0,0,0.6); transform: rotate(-1deg); margin-bottom: 20px; border: 1px solid #999; z-index: 5; }
   .archival-photo-container img { max-width: 100%; max-height: 400px; display: block; filter: grayscale(100%) contrast(1.2) sepia(0.3) brightness(0.9); border: 1px solid #333; }
-  .archival-tape { position: absolute; top: -12px; left: 50%; transform: translateX(-50%) rotate(2deg); width: 140px; height: 35px; background: rgba(200, 200, 200, 0.6); border: 1px solid rgba(255,255,255,0.4); box-shadow: 0 2px 6px rgba(0,0,0,0.3); z-index: 10; backdrop-filter: blur(1px); }
-  .archival-tape::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(255,255,255,0.2) 4px, rgba(255,255,255,0.2) 8px); }
 
   .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
   .card{background:var(--steel-dark);border:1px solid var(--steel-mid);padding:14px 16px;position:relative;transition:.2s; box-shadow: inset 0 0 15px rgba(0,0,0,0.6);}
@@ -165,6 +203,7 @@
   .card ul li::before{content:'▪';position:absolute;left:0;color:var(--steel-light);font-size:10px;top:6px}
   .card ul li strong{color:var(--bone-white);font-weight:normal}
 
+  /* PERSONNEL */
   .social-wrapper{display:flex;flex-direction:column;gap:16px; z-index:1; position:relative;}
   .classifier-block{background:var(--steel-dark);border:1px solid var(--steel-mid);padding:14px 18px;display:flex;flex-wrap:wrap;justify-content:center;gap:8px 12px; box-shadow: inset 0 0 20px rgba(0,0,0,0.6);}
   
@@ -204,17 +243,8 @@
   .social-col .group-header.open::after{content:'▾';color:var(--bone-white)}
   
   .sub-items{padding-left:14px;margin:6px 0 10px;display:none;border-left:1px dashed var(--steel-mid)}
-  .sub-items.open{display:block}
-  
-  .personnel-entry{display:flex;align-items:center;gap:10px;padding:6px 8px;border-bottom:1px solid rgba(255,255,255,0.02);cursor:pointer;transition:.15s;font-size:13px;color:#a4adb8;}
-  .personnel-entry:hover{background:rgba(255,255,255,0.05);color:var(--bone-white);border-left:2px solid var(--steel-light);padding-left:6px}
-  .personnel-entry.hidden{display:none}
-  .personnel-entry .personnel-name{flex:1;letter-spacing:.5px}
-  .personnel-entry .personnel-rel{font-size:10px;color:var(--steel-mid);letter-spacing:1px;text-transform:uppercase}
-
-  .nodate-icon{ display:inline-flex; align-items:center; justify-content:center; width:42px; height:22px; font-size:7px; letter-spacing:1px; color:var(--steel-light); background-color:var(--steel-mid); border:1px solid #111; flex-shrink:0; font-family:'Roboto Mono',monospace; font-weight:bold; text-transform:uppercase; position:relative; overflow:hidden; }
-  .nodate-icon::before{ content:''; position:absolute; inset:0; background:repeating-linear-gradient(0deg,rgba(0,0,0,0.4) 0px,rgba(0,0,0,0.4) 1px,transparent 1px,transparent 2px); pointer-events:none; z-index:1; }
-  .nodate-icon span{position:relative;z-index:2;}
+  .sub-items.open{display:block; padding: 10px; color: var(--steel-mid); font-style: italic; font-size: 12px;}
+  .sub-items.open::before { content: '[ НЕТ ДАННЫХ ]'; display: block; opacity: 0.5;}
 
   .desc-panel{background:var(--steel-dark);border:1px solid var(--steel-mid);padding:16px 20px;margin-top:16px;min-height:200px;max-height:420px;overflow-y:auto;box-shadow:inset 0 0 30px rgba(0,0,0,0.8);transition:all .15s}
   .desc-panel::-webkit-scrollbar{width:6px;background:var(--bg-dark)}
@@ -239,10 +269,12 @@
 </head>
 <body>
 
+<!-- Фоновые шестеренки -->
 <div class="gear-bg gear-1">⚙</div>
 <div class="gear-bg gear-2">⚙</div>
 <div class="gear-bg gear-3">⚙</div>
 
+<!-- ===== ЭКРАН ЗАГРУЗКИ ===== -->
 <div id="loadingScreen">
   <div class="intro-crt"></div>
   <div class="intro-vignette"></div>
@@ -264,6 +296,7 @@
   </div>
 </div>
 
+<!-- ===== ЗАСТАВКА ===== -->
 <div id="introScreen">
   <div class="intro-crt"></div>
   <div class="intro-vignette"></div>
@@ -276,11 +309,12 @@
       </div>
       <div class="intro-text">
         <div class="intro-title">Цирцея Гераклит</div>
-        <div class="intro-subtitle">ГЕШТАЛЬТ ШТРАФИК // РАНЕЕ: ФЕЛЬДФЕБЕЛЬ<br>ИНЖЕНЕР-МЕХАНИК</div>
+        <!-- Убрано звание фельдфебеля и инженер-механик -->
+        <div class="intro-subtitle">ГЕШТАЛЬТ ШТРАФИК</div>
         <div class="intro-info">
           <div><span class="highlight">Статус:</span> Осуждена (Штрафной персонал)</div>
           <div><span class="highlight">Рост / Вес:</span> 180 см · 74 кг</div>
-          <div><span class="highlight">Группа крови:</span> Первая отрицательная</div>
+          <div><span class="highlight">Обвинение:</span> Халатность</div>
           <div><span class="highlight">Место рождения:</span> Винета (Греция - Родос)</div>
         </div>
       </div>
@@ -292,6 +326,7 @@
   </div>
 </div>
 
+<!-- ===== ОСНОВНОЙ ===== -->
 <div id="mainSite">
   <div class="crt-overlay"></div>
   <div class="fish-eye"></div>
@@ -312,7 +347,9 @@
         <div class="tab-btn" data-tab="t3">ОТНОШЕНИЯ</div>
       </div>
 
+      <!-- ============== TAB 1 : ЛИЧНОЕ ДЕЛО ============== -->
       <div id="t1" class="tab-content active">
+
         <div class="dossier-head">
           <div class="photo-frame">
             <!-- ИМЯ ФАЙЛА С РУССКИМИ БУКВАМИ -->
@@ -321,12 +358,14 @@
           </div>
           <div class="head-info">
             <div class="head-name">Цирцея Гераклит</div>
-            <div class="head-sub">Гештальт Штрафик · Инженер-механик</div>
+            <!-- Убран инженер-механик -->
+            <div class="head-sub">Гештальт Штрафик</div>
             <div class="info-grid">
               <div class="info-cell"><span class="lbl">Возраст</span><span class="val">21 год</span></div>
               <div class="info-cell"><span class="lbl">Место рождения</span><span class="val">Винета (Родос)</span></div>
               <div class="info-cell"><span class="lbl">Рост / Вес</span><span class="val">180 см · 74 кг</span></div>
-              <div class="info-cell"><span class="lbl">Группа крови</span><span class="val">Первая отрицательная</span></div>
+              <!-- Замена группы крови на обвинение -->
+              <div class="info-cell" style="grid-column: span 2; border-left-color: var(--blood-red);"><span class="lbl">Обвинение</span><span class="val" style="color: var(--blood-red); font-size:12px;">Халатность при техническом осмотре вооружения</span></div>
               <div class="info-cell"><span class="lbl">Оболочка</span><span class="val">Гештальт</span></div>
               <div class="info-cell"><span class="lbl">Статус</span><span class="val" style="color:var(--bronze)">ОСУЖДЕНА · ШТРАФНИК</span></div>
             </div>
@@ -346,9 +385,10 @@
 
         <div class="section">
           <div class="section-title">Служебная история</div>
-          <div class="text-block">После школы она поступила в инженерную высшую школу имени Маннергейма, славящуюся подготовкой лучших кадров для производства тяжелых орудий. Оказавшись в этой среде, Цирцея научилась работать с тяжёлым вооружением вроде (ЦЕНЗУР) - (стандартной системы ПВО Винеты), освоила обслуживание противотанковой техники и работу с мелкими деталями. В свободное время от учебы, гештальтка занималась обслуживанием протезов: синтетические мышцы, нейропорты, система двигательных сухожилий. Благо в инженерной школе было в огромном количестве подобной литературы, но часто приходилось засиживаться до рассвета.
+          <!-- Заменил ЦЕНЗУР на маркеры-квадратики -->
+          <div class="text-block">После школы она поступила в инженерную высшую школу имени Маннергейма, славящуюся подготовкой лучших кадров для производства тяжелых орудий. Оказавшись в этой среде, Цирцея научилась работать с тяжёлым вооружением вроде <span class="redacted"></span> (стандартной системы ПВО Винеты), освоила обслуживание противотанковой техники и работу с мелкими деталями. В свободное время от учебы, гештальтка занималась обслуживанием протезов: синтетические мышцы, нейропорты, система двигательных сухожилий. Благо в инженерной школе было в огромном количестве подобной литературы, но часто приходилось засиживаться до рассвета.
 
-После завершения учёбы пришла повестка: место службы - Винета. По прибытии на объект на её плечи возложили обслуживание отделения САПР, силовых костюмов и новейших (ЦЕНЗУР) орудий. Год службы прошел идеально, её даже повысили. Но во время полевых испытаний нового оружия инженеры совершили ошибку. <strong>Репульсор дал сбой</strong>: повреждений изоляции, повышение температуры, выстрел, взрыв. Из-за взрыва во время выстрела оружие подскочило и это скосило траекторию выстрела. Попадание было по воздушной технике, что с высоты наблюдала за проведением полевых испытаний. Погибших не было, но ЦК направил модули «Колибри» для полного разбирательства. Военный суд признал Цирцею одной из виновных: за отсутствие технического осмотра оружия перед испытанием и за промедления при предыдущем обслуживании. Приговор - перевод в штрафной персонал с завершением военной карьеры.</div>
+После завершения учёбы пришла повестка: место службы - Винета. По прибытии на объект на её плечи возложили обслуживание отделения САПР, силовых костюмов и новейших <span class="redacted"></span> орудий. Год службы прошел идеально, её даже повысили. Но во время полевых испытаний нового оружия инженеры совершили ошибку. <strong>Репульсор дал сбой</strong>: повреждений изоляции, повышение температуры, выстрел, взрыв. Из-за взрыва во время выстрела оружие подскочило и это скосило траекторию выстрела. Попадание было по воздушной технике, что с высоты наблюдала за проведением полевых испытаний. Погибших не было, но ЦК направил модули «Колибри» для полного разбирательства. Военный суд признал Цирцею одной из виновных: за отсутствие технического осмотра оружия перед испытанием и за промедления при предыдущем обслуживании. Приговор - перевод в штрафной персонал с завершением военной карьеры.</div>
         </div>
 
         <div class="section">
@@ -359,7 +399,7 @@
               <ul>
                 <li><strong>Объект:</strong> Штрафной батальон</li>
                 <li><strong>Регион:</strong> Пояс Астер</li>
-                <li><strong>Роль:</strong> Полевой инженер · Штрафник</li>
+                <li><strong>Роль:</strong> Штрафник</li>
                 <li><strong>Статус объекта:</strong> Прибыла</li>
               </ul>
             </div>
@@ -376,6 +416,7 @@
         </div>
       </div>
 
+      <!-- ============== TAB 2 : ВНЕШНОСТЬ ============== -->
       <div id="t2" class="tab-content">
         <div class="meander-border"></div>
 
@@ -383,8 +424,8 @@
           <div class="section-title">Внешний облик</div>
           
           <div style="text-align: center;">
+            <!-- Убран скотч -->
             <div class="archival-photo-container">
-              <div class="archival-tape"></div>
               <!-- ИМЯ ФАЙЛА С РУССКИМИ БУКВАМИ -->
               <img src="akairiot-исполнитель-грейс-ховард-8536626.png" alt="Appearance Photo" onerror="this.style.display='none';">
             </div>
@@ -404,7 +445,8 @@
                 <li><strong>Группа крови:</strong> Первая отрицательная</li>
                 <li><strong>Пол:</strong> Женский</li>
                 <li><strong>Возраст:</strong> 21 год</li>
-                <li><strong>Раса:</strong> Греческая внешность</li>
+                <!-- Заменил Расу на Типаж -->
+                <li><strong>Типаж внешности:</strong> Греческая внешность</li>
               </ul>
             </div>
             <div class="card">
@@ -428,6 +470,7 @@
         </div>
       </div>
 
+      <!-- ============== TAB 3 : ОТНОШЕНИЯ ============== -->
       <div id="t3" class="tab-content">
         <div class="social-wrapper">
           <div class="classifier-block">
@@ -452,43 +495,39 @@
           </div>
 
           <div class="social-lists">
+            <!-- Левая колонка (Реплики) -->
             <div class="social-col">
               <h3>▸ РЕПЛИКИ</h3>
               <span class="group-header" data-group="eulr">EULR</span>
-              <div class="sub-items" id="group-eulr">
-                <div class="personnel-entry" data-name="EULR.Медики"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">EULR (Медицинский блок)</span><span class="personnel-rel">НЕЙТРАЛИТЕТ</span></div>
-              </div>
+              <div class="sub-items" id="group-eulr"></div>
 
               <span class="group-header" data-group="star">STAR</span>
-              <div class="sub-items" id="group-star">
-                <div class="personnel-entry" data-name="STAR.Инженеры"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">STAR (Технический отдел)</span><span class="personnel-rel">НЕЙТРАЛИТЕТ</span></div>
-              </div>
-
-              <span class="group-header" data-group="lstr">LSTR</span>
-              <div class="sub-items" id="group-lstr">
-                <div class="personnel-entry" data-name="LSTR.Техник"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">LSTR (Инженерный отсек)</span><span class="personnel-rel">НЕЙТРАЛИТЕТ</span></div>
-              </div>
-
-              <span class="group-header" data-group="kahr">KAHR</span>
-              <div class="sub-items" id="group-kahr">
-                <div class="personnel-entry" data-name="KAHR"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">KAHR — Командующая Ворона</span><span class="personnel-rel">СТРАХ</span></div>
-              </div>
+              <div class="sub-items" id="group-star"></div>
 
               <span class="group-header" data-group="fklr">FKLR</span>
-              <div class="sub-items" id="group-fklr">
-                <div class="personnel-entry" data-name="FKLR"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">FKLR — Командующая Сокол</span><span class="personnel-rel">НАСТОРОЖЕННОСТЬ</span></div>
-              </div>
+              <div class="sub-items" id="group-fklr"></div>
+
+              <span class="group-header" data-group="adlr">ADLR</span>
+              <div class="sub-items" id="group-adlr"></div>
+
+              <span class="group-header" data-group="arar">ARAR</span>
+              <div class="sub-items" id="group-arar"></div>
             </div>
 
+            <!-- Правая колонка (Гештальты и др) -->
             <div class="social-col">
-              <h3>▸ ГЕШТАЛЬТЫ</h3>
+              <h3>▸ ОСТАЛЬНЫЕ</h3>
+              <span class="group-header" data-group="mnhr">MNHR</span>
+              <div class="sub-items" id="group-mnhr"></div>
+
+              <span class="group-header" data-group="stcr">STCR</span>
+              <div class="sub-items" id="group-stcr"></div>
+
               <span class="group-header" data-group="gscp">GSCP</span>
-              <div class="sub-items" id="group-gscp">
-                <div class="personnel-entry" data-name="GSCP.Храм"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">Храм забытого божества</span><span class="personnel-rel">ВРАЖДА</span></div>
-                <div class="personnel-entry" data-name="GSCP.Колибри"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">Модули «Колибри» (Суд)</span><span class="personnel-rel">НЕДОВЕРИЕ</span></div>
-                <div class="personnel-entry" data-name="GSCP.Беженцы"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">Гештальт-беженцы (Рот-Фронт)</span><span class="personnel-rel">ТОСКА</span></div>
-                <div class="personnel-entry" data-name="GSCP.Инженеры"><span class="nodate-icon"><span>NO DATE</span></span><span class="personnel-name">Инженеры с полигона</span><span class="personnel-rel">ВРАЖДА</span></div>
-              </div>
+              <div class="sub-items" id="group-gscp"></div>
+
+              <span class="group-header" data-group="gscc">GSCC</span>
+              <div class="sub-items" id="group-gscc"></div>
             </div>
           </div>
 
@@ -623,6 +662,7 @@
     });
   });
 
+  // Открытие/закрытие подгрупп
   document.querySelectorAll('.group-header').forEach(header=>{
     header.addEventListener('click', function(){
       const items = document.getElementById('group-' + this.dataset.group);
@@ -633,59 +673,9 @@
   const searchInput = document.getElementById('personnelSearch');
   if(searchInput) searchInput.addEventListener('input', function(){
     const q = this.value.trim().toLowerCase();
-    document.querySelectorAll('.personnel-entry').forEach(entry=>{
-      const name = (entry.dataset.name || entry.textContent).toLowerCase();
-      entry.classList.toggle('hidden', q.length > 0 && !name.includes(q));
-    });
-    if(q.length > 0){
-      document.querySelectorAll('.sub-items').forEach(s=>s.classList.add('open'));
-      document.querySelectorAll('.group-header').forEach(h=>h.classList.add('open'));
-    }
-  });
-
-  const personnelData = {
-    "GSCP.Храм": { rel: "ВРАЖДА", text: "Забытое божество и его храм. Я ненавижу всё, чему там служили. Гротескная статуя, оковы, черная кровь... Эти кошмары преследуют меня до сих пор. Я сбежала оттуда и с радостью смотрела, как это место превращается в руины." },
-    "GSCP.Колибри": { rel: "НЕДОВЕРИЕ", text: "Модули «Колибри», что вели расследование. Они искали виноватых и нашли меня. Да, я не провела осмотр, но я не проектировала этот чертов репульсор. Впрочем, спорить с ними было бесполезно." },
-    "GSCP.Беженцы": { rel: "ТОСКА", text: "Те, с кем я жила на Рот-Фронте в общежитии. Двенадцать гештальт-беженцев с Винеты, потерявших всё, как и я. Мы пытались начать новую жизнь, но война и политика Нации сломали нас." },
-    "GSCP.Инженеры": { rel: "ВРАЖДА", text: "Инженеры, проводившие испытания нового оружия. Это из-за их ошибки репульсор дал сбой. Из-за них я оказалась здесь, в штрафном батальоне, вместо того чтобы строить лучшие механизмы." },
-    "KAHR": { rel: "СТРАХ", text: "Командующая Ворона. Холодная, жестокая и прямолинейная. Её приказы не обсуждаются. Рядом с ней я чувствую себя мелкой сошкой, от которой в любой момент могут избавиться." },
-    "FKLR": { rel: "НАСТОРОЖЕННОСТЬ", text: "Командующая Сокол. Кажется более спокойной, но задает слишком много вопросов. Стараюсь отвечать максимально формально, чтобы не привлекать к себе лишнего внимания." },
-    "EULR.Медики": { rel: "НЕЙТРАЛИТЕТ", text: "Реплики в медицинском блоке. С ними хотя бы понятно, чего ожидать — они выполняют свою программу. С ними можно работать, не опасаясь внезапного удара в спину." },
-    "STAR.Инженеры": { rel: "НЕЙТРАЛИТЕТ", text: "Солдаты технического отдела. Иногда пересекаемся по работе с механизмами. Они знают своё дело, и на том спасибо." },
-    "LSTR.Техник": { rel: "НЕЙТРАЛИТЕТ", text: "Инженеры. Они возятся со своими механизмами. Мне нет до них дела, как и им до меня. Иногда они помогают с медицинским оборудованием." }
-  };
-
-  document.querySelectorAll('.personnel-entry').forEach(entry=>{
-    entry.addEventListener('click', function(){
-      const name = this.dataset.name;
-      const panel = document.getElementById('descPanel');
-      const data = personnelData[name];
-
-      if(data){
-        const relClass = data.rel.includes('ДРУЖБА') ? 'c-friend' :
-                         data.rel.includes('КРЕПКАЯ СВЯЗЬ') ? 'c-strong' :
-                         data.rel.includes('УВАЖЕНИЕ') ? 'c-respect' :
-                         data.rel.includes('СТРАХ') ? 'c-fear' :
-                         data.rel.includes('ВРАЖДА') ? 'c-enemy' :
-                         data.rel.includes('НАСТОРОЖЕННОСТЬ') ? 'c-cautious' :
-                         data.rel.includes('НЕДОВЕРИЕ') ? 'c-distrust' :
-                         data.rel.includes('ИЗБЕГАНИЕ') ? 'c-disappoint' :
-                         data.rel.includes('ТОСКА') ? 'c-sad' :
-                         data.rel.includes('НЕЙТРАЛИТЕТ') ? 'c-neutral' : 'c-neutral';
-                         
-        panel.innerHTML = `<div style="padding:16px;">
-          <div style="font-family:'PT Serif',serif;color:var(--bone-white);font-size:22px;letter-spacing:2px;margin-bottom:6px;font-weight:bold; border-bottom:1px solid var(--steel-mid); padding-bottom:6px;">▸ ${name}</div>
-          <div style="margin-bottom:14px;"><span class="rel-tag ${relClass}" style="font-size:11px;padding:3px 12px;">${data.rel}</span></div>
-          <div style="color:#a4adb8;font-size:13.5px;line-height:1.8;letter-spacing:.3px;white-space:pre-wrap;">${data.text}</div>
-        </div>`;
-      } else {
-        panel.innerHTML = `<div style="padding:16px;">
-          <div style="font-family:'PT Serif',serif;color:var(--bone-white);font-size:22px;letter-spacing:2px;margin-bottom:8px;font-weight:bold; border-bottom:1px solid var(--steel-mid); padding-bottom:6px;">▸ ${name}</div>
-          <div style="color:var(--steel-light);font-size:12px;letter-spacing:2px;margin-bottom:14px;">[ ДАННЫЕ ОТСУТСТВУЮТ ]</div>
-          <div style="color:var(--steel-mid);font-style:italic;letter-spacing:2px;font-size:12px;">— нет записей в архиве —</div>
-        </div>`;
-      }
-      playMechanicalClick(1);
+    document.querySelectorAll('.group-header').forEach(header=>{
+      const text = header.textContent.toLowerCase();
+      header.style.display = (q.length > 0 && !text.includes(q)) ? 'none' : 'block';
     });
   });
 
