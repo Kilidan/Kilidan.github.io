@@ -360,7 +360,7 @@
               <div class="info-cell"><span class="lbl">Место рождения</span><span class="val">Винета (Родос)</span></div>
               <div class="info-cell"><span class="lbl">Рост / Вес</span><span class="val">180 см · 74 кг</span></div>
               
-              <!-- Обвинение сделано жирным и выровнено -->
+              <!-- Обвинение -->
               <div class="info-cell" style="grid-column: span 2; border-left-color: var(--blood-red);">
                 <span class="lbl">Обвинение</span>
                 <span class="val" style="color: var(--blood-red); font-size: 13px; font-weight: 900; letter-spacing: 1px;">Халатность при техническом осмотре вооружения</span>
@@ -524,33 +524,39 @@
             <input type="text" class="search-input" id="personnelSearch" placeholder="ПОИСК ПО ИМЕНИ...">
           </div>
 
+          <!-- НОВАЯ СТРУКТУРА КОЛОНОК -->
           <div class="social-lists">
+            <!-- Левая колонка (Реплики) -->
             <div class="social-col">
               <h3>▸ РЕПЛИКИ</h3>
               <span class="group-header" data-group="eulr">EULR</span>
               <div class="sub-items" id="group-eulr"></div>
 
-              <span class="group-header" data-group="star">STAR</span>
-              <div class="sub-items" id="group-star"></div>
-
-              <span class="group-header" data-group="fklr">FKLR</span>
-              <div class="sub-items" id="group-fklr"></div>
-
-              <span class="group-header" data-group="adlr">ADLR</span>
-              <div class="sub-items" id="group-adlr"></div>
-
               <span class="group-header" data-group="arar">ARAR</span>
               <div class="sub-items" id="group-arar"></div>
-            </div>
 
-            <div class="social-col">
-              <h3>▸ ОСТАЛЬНЫЕ</h3>
               <span class="group-header" data-group="mnhr">MNHR</span>
               <div class="sub-items" id="group-mnhr"></div>
+
+              <span class="group-header" data-group="star">STAR</span>
+              <div class="sub-items" id="group-star"></div>
 
               <span class="group-header" data-group="stcr">STCR</span>
               <div class="sub-items" id="group-stcr"></div>
 
+              <span class="group-header" data-group="adlr">ADLR</span>
+              <div class="sub-items" id="group-adlr"></div>
+
+              <span class="group-header" data-group="klbr">KLBR</span>
+              <div class="sub-items" id="group-klbr"></div>
+
+              <span class="group-header" data-group="fklr">FKLR</span>
+              <div class="sub-items" id="group-fklr"></div>
+            </div>
+
+            <!-- Правая колонка (Гештальты) -->
+            <div class="social-col">
+              <h3>▸ ГЕШТАЛЬТЫ</h3>
               <span class="group-header" data-group="gscp">GSCP</span>
               <div class="sub-items" id="group-gscp"></div>
 
