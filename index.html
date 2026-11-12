@@ -3,344 +3,439 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>БАЗА ДАННЫХ · Ц. ГЕРАКЛИТ</title>
+<title>ДОСЬЕ · ШТРАФБАТ · Ц. ГЕРАКЛИТ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=VT323&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   *{margin:0;padding:0;box-sizing:border-box;user-select:none}
   .text-block, .desc-panel, .card ul li, .info-cell .val { user-select: text; }
   
   :root {
-    --bg: #0a0403;
-    --main: #a33b24;
-    --dim: #5a1c10;
-    --bright: #e86a4a;
-    --panel-bg: rgba(20, 8, 5, 0.8);
-    --border: rgba(163, 59, 36, 0.4);
+    --bg-dark: #0a0b0d;
+    --steel-dark: #14171a;
+    --steel-mid: #232830;
+    --steel-light: #8c96a3;
+    --bone-white: #e2e6eb;
+    --blood-red: #8b2a2a;
+    --bronze: #a37a4a;
   }
 
-  html,body{width:100%;min-height:100vh;background:var(--bg);overflow:hidden; font-family: 'VT323', monospace;}
-  body{color:var(--main);position:relative; font-size: 18px;}
+  html,body{width:100%;min-height:100vh;background:var(--bg-dark);overflow-x:hidden}
+  body{font-family:'Roboto Mono', monospace;color:var(--steel-light);position:relative}
 
-  /* CRT и Виньетка */
-  .crt-overlay{position:fixed;inset:0;pointer-events:none;z-index:100;background:repeating-linear-gradient(0deg,rgba(0,0,0,.25) 0,rgba(0,0,0,0) 2px,rgba(0,0,0,.15) 4px,rgba(0,0,0,0) 6px);animation:scanMove 10s linear infinite}
-  @keyframes scanMove{0%{transform:translateY(0)}100%{transform:translateY(100%)}}
-  .vignette{position:fixed;inset:0;pointer-events:none;z-index:101;background:radial-gradient(ellipse at center,transparent 40%,rgba(10,2,0,.9) 100%);box-shadow:inset 0 0 150px rgba(10,2,0,1)}
-  .flicker { animation: flicker 0.15s infinite; }
-  @keyframes flicker { 0% { opacity: 0.95; } 50% { opacity: 1; } 100% { opacity: 0.95; } }
-
-  /* Свечение текста */
-  .glow { text-shadow: 0 0 5px rgba(163, 59, 36, 0.6); }
-
-  /* ОБЩИЙ КАРКАС ОС */
-  #os-container {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    border: 2px solid var(--dim);
-    padding: 15px;
-    box-sizing: border-box;
-  }
-
-  /* ВЕРХНЯЯ ПАНЕЛЬ */
-  .os-top-bar {
-    height: 30px;
-    border-bottom: 1px dashed var(--border);
-    display: flex;
-    align-items: center;
-    padding-left: 10px;
-    font-size: 20px;
-    letter-spacing: 2px;
-    color: var(--dim);
-    margin-bottom: 15px;
-  }
-
-  /* ОСНОВНАЯ ЗОНА */
-  .os-main {
-    display: flex;
-    flex: 1;
-    overflow: hidden;
-    gap: 20px;
-  }
-
-  /* ЛЕВЫЙ САЙДБАР (МЕНЮ) */
-  .os-sidebar {
-    width: 150px;
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-    padding-top: 20px;
-  }
-  .os-icon {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-    cursor: pointer;
-    transition: all 0.2s;
-    color: var(--main);
-    opacity: 0.6;
-  }
-  .os-icon:hover, .os-icon.active {
-    opacity: 1;
-    text-shadow: 0 0 8px var(--bright);
-    color: var(--bright);
-  }
-  .os-icon .icon-graphic {
-    font-size: 28px;
+  /* ===== АНИМИРОВАННЫЕ ШЕСТЕРЕНКИ ===== */
+  @keyframes spin { 100% { transform: rotate(360deg); } }
+  @keyframes spin-reverse { 100% { transform: rotate(-360deg); } }
+  
+  .gear-bg {
+    position: fixed;
+    font-size: 400px;
+    color: rgba(35, 40, 48, 0.2);
+    z-index: -1;
+    pointer-events: none;
     line-height: 1;
-    /* Чтобы эмодзи стали монохромными, применим фильтр */
-    filter: sepia(1) hue-rotate(-30deg) saturate(3) contrast(1.5) brightness(0.8);
   }
-  .os-icon.active .icon-graphic {
-    filter: sepia(1) hue-rotate(-30deg) saturate(3) contrast(1.5) brightness(1.2);
-  }
-  .os-icon .icon-text {
-    font-size: 16px;
-    text-align: center;
-    letter-spacing: 1px;
-  }
+  .gear-1 { top: -100px; left: -100px; animation: spin 60s linear infinite; }
+  .gear-2 { bottom: -150px; right: -50px; animation: spin-reverse 80s linear infinite; font-size: 500px; }
+  .gear-3 { top: 40%; left: 60%; font-size: 200px; animation: spin 40s linear infinite; opacity: 0.1; }
 
-  /* ПРАВАЯ ЗОНА (КОНТЕНТ) */
-  .os-content-area {
-    flex: 1;
-    border: 1px solid var(--border);
-    background: var(--panel-bg);
-    padding: 20px 30px;
-    overflow-y: auto;
-    position: relative;
-  }
-  /* Скрываем стандартный скроллбар, делаем свой ржавый */
-  .os-content-area::-webkit-scrollbar { width: 6px; }
-  .os-content-area::-webkit-scrollbar-track { background: var(--bg); }
-  .os-content-area::-webkit-scrollbar-thumb { background: var(--dim); }
-
-  /* НИЖНЯЯ ПАНЕЛЬ */
-  .os-bottom-bar {
-    height: 30px;
-    border-top: 1px dashed var(--border);
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    padding: 0 10px;
-    font-size: 18px;
-    color: var(--dim);
-    margin-top: 15px;
-  }
-  .os-bottom-bar span { cursor: default; }
-  .os-bottom-bar .key { color: var(--main); }
-
-  /* ===== КОНТЕНТ ДОСЬЕ (Стилизация под старый документ) ===== */
-  .tab-content { display: none; animation: fadeIn 0.3s ease-out; }
-  .tab-content.active { display: block; }
-  @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
-
-  .dossier-head { display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 20px; border-bottom: 1px dashed var(--border); padding-bottom: 20px; }
-  
-  .photo-frame { 
-    width: 200px; height: 250px; 
-    border: 1px solid var(--main); 
-    padding: 5px; 
-    background: #000;
-  }
-  .photo-frame img { 
-    width: 100%; height: 100%; object-fit: cover; 
-    filter: sepia(1) hue-rotate(-30deg) saturate(2) contrast(1.5) brightness(0.7);
+  /* ===== ДЕКОРАТИВНЫЕ ПАТТЕРНЫ ===== */
+  .meander-border {
+    height: 6px;
+    background: repeating-linear-gradient(90deg, transparent, transparent 4px, var(--steel-light) 4px, var(--steel-light) 8px, transparent 8px, transparent 12px, var(--steel-mid) 12px, var(--steel-mid) 16px);
+    opacity: 0.3;
+    margin: 15px 0;
   }
 
-  .head-info { flex: 1; min-width: 280px; }
-  .head-name { font-size: 36px; color: var(--bright); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; text-shadow: 0 0 5px var(--bright); }
-  .head-sub { font-size: 18px; color: var(--main); margin-bottom: 15px; border-left: 2px solid var(--main); padding-left: 10px; }
-
-  .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
-  .info-cell { border: 1px solid var(--border); padding: 8px; background: rgba(0,0,0,0.3); }
-  .info-cell .lbl { font-size: 14px; color: var(--dim); text-transform: uppercase; display: block; margin-bottom: 2px; }
-  .info-cell .val { font-size: 18px; color: var(--main); }
-  .info-cell .val.warning { color: var(--bright); }
-
-  .section { margin-bottom: 25px; }
-  .section-title { font-size: 22px; color: var(--bright); letter-spacing: 2px; margin-bottom: 10px; border-bottom: 1px dotted var(--dim); padding-bottom: 5px; }
-  
-  /* Основной текст делаем чуть более читаемым, но в стиле терминала */
-  .text-block { font-family: 'Roboto Mono', monospace; font-size: 13px; line-height: 1.6; color: #b87a6b; margin-bottom: 15px; white-space: pre-wrap; }
-  .text-block strong { color: var(--bright); font-weight: normal; }
-
-  /* Черные квадраты для цензуры */
+  /* Стиль для зацензуренного текста */
   .redacted {
-    background-color: #000; color: #000; user-select: none; padding: 0 5px;
-    display: inline-block; border: 1px solid var(--dim); vertical-align: middle;
+    background-color: #000;
+    color: #000;
+    user-select: none;
+    padding: 0 6px;
+    display: inline-block;
+    font-family: 'Roboto Mono', monospace;
+    line-height: 1.2;
+    border: 1px solid #111;
+    box-shadow: inset 0 0 6px #000;
+    position: relative;
+    letter-spacing: 2px;
+    border-radius: 1px;
+    vertical-align: middle;
   }
-  .redacted::after { content: '████████'; color: #111; text-shadow: 0 0 2px #000; }
-
-  /* Архивное фото */
-  .archival-photo-container { display: inline-block; border: 1px solid var(--main); padding: 10px; background: #000; margin-bottom: 15px; transform: rotate(-1deg); }
-  .archival-photo-container img { max-width: 100%; max-height: 400px; display: block; filter: sepia(1) hue-rotate(-30deg) saturate(2) contrast(1.5) brightness(0.7); }
-
-  /* Карточки */
-  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-  .card { border: 1px solid var(--border); padding: 15px; background: rgba(0,0,0,0.4); }
-  .card h4 { color: var(--bright); font-size: 20px; margin-bottom: 10px; border-bottom: 1px solid var(--dim); padding-bottom: 5px; }
-  .card ul { list-style: none; }
-  .card ul li { font-size: 18px; margin-bottom: 5px; }
-  .card ul li strong { color: var(--dim); font-weight: normal; }
-
-  /* ОТНОШЕНИЯ */
-  .social-lists { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px; }
-  .social-col { border: 1px solid var(--border); padding: 15px; background: rgba(0,0,0,0.3); }
-  .social-col h3 { font-size: 22px; color: var(--bright); border-bottom: 1px dashed var(--border); padding-bottom: 5px; margin-bottom: 15px; }
-  
-  .group-header { display: block; font-size: 18px; color: var(--main); cursor: pointer; padding: 8px; border-bottom: 1px dotted var(--dim); margin-bottom: 5px; }
-  .group-header:hover { color: var(--bright); background: rgba(163, 59, 36, 0.1); }
-  .group-header::after { content: ' [+]'; float: right; }
-  .group-header.open::after { content: ' [-]'; }
-  
-  .sub-items { display: none; padding-left: 15px; margin-bottom: 10px; border-left: 1px solid var(--dim); color: var(--dim); font-style: italic; font-size: 16px; }
-  .sub-items.open { display: block; }
-  .sub-items.open::before { content: '> НЕТ ДАННЫХ'; }
-
-  /* Экран загрузки / Заставка */
-  #introScreen {
-    position: fixed; inset: 0; z-index: 9999; background: var(--bg);
-    display: flex; flex-direction: column; justify-content: center; align-items: center;
-    transition: opacity 0.5s ease;
+  .redacted::after {
+    content: '████████';
+    color: #1a1a1a;
+    text-shadow: 0 0 2px #000;
   }
-  .boot-logo { font-size: 80px; color: var(--main); text-shadow: 0 0 20px var(--main); letter-spacing: 10px; margin-bottom: 40px; }
-  .boot-text { font-size: 20px; color: var(--dim); animation: blink 1s step-end infinite; }
-  @keyframes blink { 50% { opacity: 0; } }
 
-  /* Скрываем старые элементы заставки */
-  .gear-bg, .meander-border, .noise-overlay { display: none !important; }
+  /* ===== ЗАСТАВКА ===== */
+  #introScreen{position:fixed;inset:0;background:var(--bg-dark);z-index:9999;display:flex;justify-content:center;align-items:center;transition:opacity .8s ease,visibility .8s ease}
+  #introScreen.hidden{opacity:0;visibility:hidden;pointer-events:none}
+  .intro-crt{position:fixed;inset:0;pointer-events:none;z-index:100;background:repeating-linear-gradient(0deg,rgba(0,0,0,.2) 0,rgba(0,0,0,0) 2px,rgba(0,0,0,.15) 4px,rgba(0,0,0,0) 6px);animation:scanMove 10s linear infinite}
+  @keyframes scanMove{0%{transform:translateY(0)}100%{transform:translateY(100%)}}
+  .intro-vignette{position:fixed;inset:0;pointer-events:none;z-index:99;background:radial-gradient(ellipse at center,transparent 30%,rgba(0,0,0,.9) 100%);box-shadow:inset 0 0 200px rgba(0,0,0,.9)}
+  
+  .intro-container{position:relative;z-index:5;width:1100px;max-width:95vw;display:flex;flex-direction:column;align-items:center;gap:30px;animation:introFadeIn 1s ease-out}
+  @keyframes introFadeIn{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+  .intro-main{display:flex;align-items:flex-start;gap:40px;width:100%;padding:20px;position:relative}
+  
+  .intro-portrait{flex-shrink:0;width:220px;height:260px;border:2px solid var(--steel-light);background:var(--steel-dark);position:relative;box-shadow:0 0 30px rgba(140,150,163,.15),inset 0 0 30px rgba(0,0,0,1);overflow:hidden;padding:4px}
+  .intro-portrait::before { content: ''; position: absolute; inset: 0; border: 1px solid rgba(140,150,163,0.3); margin: 4px; pointer-events: none; z-index: 5; }
+  .intro-portrait img{width:100%;height:100%;object-fit:cover;object-position:center top;filter:grayscale(100%) contrast(1.3) brightness(0.8) sepia(0.2) hue-rotate(180deg)}
+  .portrait-label{position:absolute;bottom:8px;left:8px;font-size:11px;color:var(--bone-white);letter-spacing:2px;font-weight:bold;text-shadow:0 0 5px #000;z-index:10;background:rgba(0,0,0,0.8);padding:2px 6px;border-left:2px solid var(--blood-red)}
+  
+  .intro-text{flex:1;display:flex;flex-direction:column;gap:14px;padding-top:6px}
+  .intro-title{font-family: 'PT Serif', serif; font-size:52px; font-weight:700; color:var(--bone-white);letter-spacing:2px;line-height:1;text-shadow:0 0 15px rgba(226,230,235,.2)}
+  .intro-subtitle{font-size:16px;color:var(--steel-light);line-height:1.5;letter-spacing:1px;text-transform:uppercase}
+  .intro-info{margin-top:10px;display:flex;flex-direction:column;gap:8px;font-size:15px;color:var(--steel-light);letter-spacing:.5px}
+  .intro-info .highlight{color:var(--bone-white);font-weight:bold}
+  
+  .intro-button-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;width:100%;max-width:620px}
+  .intro-button{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:16px 38px;border:1px solid var(--steel-light);background:var(--steel-dark);color:var(--bone-white);font-family:'PT Serif', serif;font-size:20px;letter-spacing:4px;text-transform:uppercase;cursor:pointer;transition:all .3s ease;box-shadow:inset 0 0 0 1px rgba(0,0,0,0.5), 0 5px 15px rgba(0,0,0,0.8);position:relative;width:100%;max-width:620px; clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);}
+  .intro-button::after { content: ''; position: absolute; inset: 3px; border: 1px solid rgba(140,150,163,0.2); clip-path: inherit; pointer-events: none; }
+  .intro-button:hover{background:var(--steel-mid);color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,0.1), 0 0 25px rgba(140,150,163,.3)}
+  .intro-button:active{transform:scale(.98)}
+  .intro-button .gear-icon { font-size: 24px; animation: spin 4s linear infinite; }
+  
+  .intro-footer{font-size:12px;color:var(--steel-mid);letter-spacing:4px;margin-top:10px}
 
-  @media (max-width: 768px) {
-    .os-main { flex-direction: column; }
-    .os-sidebar { width: 100%; flex-direction: row; overflow-x: auto; padding-bottom: 10px; }
-    .os-icon { min-width: 80px; }
-    .social-lists { grid-template-columns: 1fr; }
+  /* ===== ЗАГРУЗКА ===== */
+  #loadingScreen{position:fixed;inset:0;z-index:99999;pointer-events:none;opacity:0;background:var(--bg-dark);display:flex;justify-content:center;align-items:center;transition:opacity .4s ease}
+  #loadingScreen.active{opacity:1;pointer-events:all}
+  
+  .loading-gears { position: absolute; inset: 0; display: flex; justify-content: center; align-items: center; overflow: hidden; z-index: 1; opacity: 0.05; }
+  .loading-gears .gear-bg { position: relative; top: auto; left: auto; right: auto; bottom: auto; }
+
+  .loading-box{position:relative;z-index:5;width:90%;max-width:620px;display:flex;flex-direction:column;gap:18px;color:var(--bone-white); align-items: center;}
+  
+  .loading-img {
+    max-width: 220px;
+    width: 100%;
+    display: block;
+    filter: grayscale(100%) contrast(1.3) brightness(0.7);
+    border: 2px solid var(--steel-mid);
+    box-shadow: 0 0 20px rgba(0,0,0,0.9), inset 0 0 10px rgba(0,0,0,1);
+    margin-bottom: 10px;
+    padding: 4px;
+    background: var(--steel-dark);
+  }
+
+  .loading-title{font-family:'PT Serif', serif; font-size:22px;letter-spacing:6px;text-align:center;text-transform:uppercase;color:var(--bone-white);animation:loadBlink 1.5s steps(2) infinite; display: flex; align-items: center; justify-content: center; gap: 10px;}
+  @keyframes loadBlink{0%,100%{opacity:1}50%{opacity:.6}}
+  .loading-subtitle{font-size:12px;letter-spacing:3px;text-align:center;color:var(--steel-light)}
+  .loading-bar-track{width:100%;height:12px;border:1px solid var(--steel-mid);background:var(--bg-dark);position:relative;overflow:hidden;box-shadow:inset 0 0 10px rgba(0,0,0,1)}
+  .loading-bar-fill{position:absolute;top:0;left:0;height:100%;width:0;background:var(--steel-light);box-shadow:0 0 10px var(--steel-light);transition:width .15s linear}
+  .loading-footer{display:flex;justify-content:space-between;font-size:13px;letter-spacing:1px;color:var(--steel-light); width: 100%;}
+  .loading-percent{font-weight:bold;color:var(--bone-white)}
+  .loading-log{font-size:12px;color:var(--steel-mid);min-height:16px;white-space:nowrap;overflow:hidden}
+
+  /* ===== ОСНОВНОЙ ===== */
+  #mainSite{display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:20px;position:relative;opacity:0;transition:opacity 1s ease;background:var(--bg-dark)}
+  #mainSite.visible{opacity:1}
+  
+  .noise-overlay{position:fixed;inset:0;pointer-events:none;z-index:101;opacity:.06;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");mix-blend-mode:overlay}
+  .crt-overlay{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:100;background:repeating-linear-gradient(0deg,rgba(0,0,0,.15) 0,rgba(0,0,0,0) 1px,rgba(0,0,0,.1) 2px,rgba(0,0,0,0) 3px);animation:scanMove 8s linear infinite}
+  .fish-eye{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;background:radial-gradient(ellipse at center,transparent 40%,rgba(0,0,0,.7) 100%)}
+  
+  .computer{position:relative;width:1120px;max-width:96vw;background:var(--steel-dark);border:1px solid var(--steel-mid);border-radius:2px;padding:16px;box-shadow:0 0 50px rgba(0,0,0,0.9), inset 0 0 0 1px rgba(0,0,0,0.5), inset 0 0 30px rgba(0,0,0,0.8);z-index:2}
+  .computer::before, .computer::after { content: '⚙'; position: absolute; color:var(--steel-mid); font-size: 16px; line-height: 1; }
+  .computer::before { top: 6px; left: 6px; }
+  .computer::after { bottom: 6px; right: 6px; }
+  
+  .screen{background:var(--bg-dark);border:1px solid var(--steel-mid);padding:20px;box-shadow:inset 0 0 50px rgba(0,0,0,0.8)}
+
+  .title-bar{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid var(--steel-mid);padding-bottom:10px;margin-bottom:15px;color:var(--steel-light);font-size:12px;letter-spacing:2px;gap:12px;flex-wrap:wrap;text-transform:uppercase; font-family: 'PT Serif', serif;}
+  .title-bar .main{color:var(--bone-white);font-weight:bold;font-size:18px; text-shadow:0 0 10px rgba(226,230,235,.3); display: flex; align-items: center; gap: 8px;}
+  .title-bar .main span { font-size: 22px; color: var(--bronze); }
+  .title-bar .mid{flex:1;text-align:center;font-size:11px;color:var(--steel-mid);letter-spacing:4px}
+  .title-bar .date{color:var(--steel-light);font-size:12px;letter-spacing:2px}
+
+  .tabs{display:flex;gap:6px;margin-bottom:15px;flex-wrap:wrap}
+  .tab-btn{background:var(--steel-dark);border:1px solid var(--steel-mid);border-bottom:none;padding:8px 20px 7px;font-family:'PT Serif', serif;font-size:14px;font-weight:bold;color:var(--steel-light);border-radius:2px 2px 0 0;cursor:pointer;transition:.2s;text-transform:uppercase;letter-spacing:2px; position:relative;}
+  .tab-btn::before { content: ''; position: absolute; top: 2px; left: 2px; right: 2px; bottom: 0; border: 1px solid rgba(255,255,255,0.03); pointer-events: none; }
+  .tab-btn:hover{background:var(--steel-mid);color:var(--bone-white)}
+  .tab-btn.active{background:var(--bg-dark);color:var(--bone-white);border-color:var(--steel-light);border-top:2px solid var(--bronze); box-shadow: 0 -4px 10px rgba(163,122,74,0.2);}
+
+  .tab-content{display:none;background:var(--bg-dark);border:1px solid var(--steel-mid);padding:20px;min-height:420px;color:#a4adb8;font-size:13px;line-height:1.7; position:relative;}
+  .tab-content::after { content: '⚙'; position: absolute; bottom: 10px; right: 15px; font-size: 40px; color: var(--steel-dark); z-index: 0; pointer-events: none; animation: spin 10s linear infinite; }
+  .tab-content.active{display:block;animation:paneFade .4s ease-out}
+  @keyframes paneFade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+
+  /* DOSSIER HEAD */
+  .dossier-head{display:flex;flex-wrap:wrap;gap:24px;margin-bottom:20px;padding-bottom:20px;border-bottom:1px dashed var(--steel-mid); position:relative; z-index:1;}
+  .photo-frame{flex:0 0 220px;max-width:220px;height:270px;background:var(--steel-dark);border:2px solid var(--steel-mid);padding:6px;position:relative;overflow:hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.5);}
+  .photo-frame::before{content:'';position:absolute;inset:4px;border:1px solid var(--steel-light);pointer-events:none;z-index:3;}
+  .photo-frame::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, transparent 90%, var(--bronze) 90%); opacity: 0.8; z-index: 2; pointer-events: none; }
+  .photo-frame img{width:100%;height:100%;object-fit:cover;object-position:center 15%;filter:grayscale(100%) contrast(1.2) brightness(0.9);display:block}
+  .photo-frame .stamp{position:absolute;bottom:14px;right:14px;color:var(--bone-white);font-size:12px;letter-spacing:4px;border:2px solid var(--bone-white);padding:3px 10px;transform:rotate(-10deg);opacity:.8;font-weight:bold;z-index:5;background:rgba(0,0,0,.7); font-family:'PT Serif', serif;}
+
+  .head-info{flex:1;min-width:280px;display:flex;flex-direction:column;gap:12px; z-index:1;}
+  .head-name{font-family: 'PT Serif', serif; font-size:32px;color:var(--bone-white);letter-spacing:2px;font-weight:700;text-transform:uppercase; border-bottom: 1px solid var(--steel-mid); padding-bottom: 5px; display: inline-block;}
+  .head-sub{font-size:13px;color:var(--steel-light);letter-spacing:2px;border-left:3px solid var(--bronze);padding-left:12px; text-transform: uppercase;}
+
+  .info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:10px}
+  .info-cell{background:var(--steel-dark);border:1px solid var(--steel-mid);padding:8px 12px;display:flex;flex-direction:column;gap:4px; box-shadow: inset 0 0 10px rgba(0,0,0,0.5);}
+  .info-cell .lbl{font-size:10px;color:var(--steel-light);letter-spacing:2px;text-transform:uppercase;font-weight:bold;}
+  .info-cell .val{font-size:14px;color:var(--bone-white);letter-spacing:.5px;}
+
+  .section{margin-bottom:20px; z-index:1; position:relative;}
+  .section-title{font-family: 'PT Serif', serif; font-size:16px;color:var(--bone-white);letter-spacing:3px;text-transform:uppercase;font-weight:bold;border-bottom:1px solid var(--steel-mid);padding-bottom:6px;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+  .section-title::before{content:'⚙';color:var(--bronze);font-size:16px; animation: spin 5s linear infinite;}
+
+  .text-block{color:#a4adb8;font-size:13.5px;line-height:1.8;letter-spacing:.3px;white-space:pre-wrap}
+  .text-block strong{color:var(--bone-white);font-weight:normal;letter-spacing:.5px; background: rgba(255,255,255,0.05); padding: 0 4px;}
+
+  .archival-photo-container { position: relative; display: inline-block; background: #d4d7da; padding: 12px 12px 40px 12px; box-shadow: 3px 5px 12px rgba(0,0,0,0.6); transform: rotate(-1deg); margin-bottom: 20px; border: 1px solid #999; z-index: 5; }
+  .archival-photo-container img { max-width: 100%; max-height: 400px; display: block; filter: grayscale(100%) contrast(1.2) sepia(0.3) brightness(0.9); border: 1px solid #333; }
+
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+  .card{background:var(--steel-dark);border:1px solid var(--steel-mid);padding:14px 16px;position:relative;transition:.2s; box-shadow: inset 0 0 15px rgba(0,0,0,0.6);}
+  .card:hover{border-color:var(--steel-light);}
+  .card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: var(--steel-mid); transition: .2s; }
+  .card:hover::before { background: var(--bronze); }
+  .card h4{font-family:'PT Serif', serif; font-size:14px;color:var(--bone-white);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,0.1);font-weight:bold; display: flex; align-items: center; gap: 6px;}
+  .card h4::before { content: '⚙'; font-size: 12px; color: var(--steel-light); }
+  .card ul{list-style:none;padding:0}
+  .card ul li{padding:4px 0 4px 14px;position:relative;font-size:12.5px;color:#a4adb8;line-height:1.5;border-bottom:1px solid rgba(255,255,255,0.03)}
+  .card ul li:last-child{border-bottom:none}
+  .card ul li::before{content:'▪';position:absolute;left:0;color:var(--steel-light);font-size:10px;top:6px}
+  .card ul li strong{color:var(--bone-white);font-weight:normal}
+
+  /* PERSONNEL */
+  .social-wrapper{display:flex;flex-direction:column;gap:16px; z-index:1; position:relative;}
+  .classifier-block{background:var(--steel-dark);border:1px solid var(--steel-mid);padding:14px 18px;display:flex;flex-wrap:wrap;justify-content:center;gap:8px 12px; box-shadow: inset 0 0 20px rgba(0,0,0,0.6);}
+  
+  .rel-tag{display:inline-block;padding:5px 16px;font-size:12px;font-weight:bold;letter-spacing:1px;background:var(--bg-dark);border:1px solid var(--steel-mid);cursor:pointer;transition:.15s;color:var(--steel-light); text-transform: uppercase; font-family: 'Roboto Mono', monospace;}
+  .rel-tag:hover{border-color:var(--bone-white);color:var(--bone-white);box-shadow:0 0 10px rgba(255,255,255,.1)}
+  .rel-tag.c-distrust{color:#d4a373;border-color:#d4a373;}
+  .rel-tag.c-sad{color:#8c96a3;border-color:#8c96a3;}
+  .rel-tag.c-neutral{color:var(--bone-white);border-color:var(--bone-white);}
+  .rel-tag.c-friend{color:#8fbc8f;border-color:#8fbc8f;}
+  .rel-tag.c-strong{color:#5c8a5c;border-color:#5c8a5c;}
+  .rel-tag.c-love{color:#c97a7a;border-color:#c97a7a;}
+  .rel-tag.c-dead{color:#2b2b2b;border-color:#555;background:#1a1a1a;}
+  .rel-tag.c-enemy{color:var(--blood-red);border-color:var(--blood-red); background:rgba(139,42,42,0.1);}
+  .rel-tag.c-fear{color:#5a7a9a;border-color:#5a7a9a;}
+  .rel-tag.c-disappoint{color:#c7b38f;border-color:#c7b38f;}
+  .rel-tag.c-cautious{color:#c97a3a;border-color:#c97a3a;}
+  .rel-tag.c-regret{color:#4a7a9a;border-color:#4a7a9a;}
+  .rel-tag.c-sympathy{color:#a47ac9;border-color:#a47ac9;}
+  .rel-tag.c-respect{color:var(--bronze);border-color:var(--bronze);}
+
+  .search-wrap{margin-bottom:12px;position:relative}
+  .search-input{width:100%;background:var(--steel-dark);border:1px solid var(--steel-mid);padding:10px 14px 10px 36px;color:var(--bone-white);font-family:'Roboto Mono',monospace;font-size:13px;letter-spacing:2px;outline:none;transition:.15s}
+  .search-input::placeholder{color:var(--steel-light);letter-spacing:2px;opacity:0.5}
+  .search-input:focus{border-color:var(--steel-light);box-shadow:0 0 10px rgba(140,150,163,.2)}
+  .search-wrap::before{content:'⚙';position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--steel-light);font-size:16px;pointer-events:none;font-weight:bold; animation: spin 6s linear infinite;}
+
+  .social-lists{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .social-col{background:var(--steel-dark);border:1px solid var(--steel-mid);padding:14px 18px;min-height:260px;max-height:520px;overflow-y:auto; box-shadow: inset 0 0 20px rgba(0,0,0,0.5);}
+  .social-col::-webkit-scrollbar{width:6px;background:var(--bg-dark)}
+  .social-col::-webkit-scrollbar-thumb{background:var(--steel-mid);border-radius:0px}
+  .social-col h3{font-family:'PT Serif', serif;color:var(--bone-white);font-size:16px;letter-spacing:3px;border-bottom:1px solid var(--steel-mid);padding-bottom:6px;margin-bottom:12px;text-transform:uppercase}
+  
+  .social-col .group-header{font-family:'PT Serif', serif; font-weight:bold;font-size:14px;color:var(--steel-light);cursor:pointer;padding:8px 0 8px 10px;border-bottom:1px solid rgba(255,255,255,0.05);border-left:2px solid transparent;transition:.1s;display:block;position:relative;letter-spacing:2px}
+  .social-col .group-header::after{content:'◂';position:absolute;right:6px;color:var(--steel-mid);font-size:12px}
+  .social-col .group-header:hover{color:var(--bone-white);background:rgba(255,255,255,0.03);border-left-color:var(--steel-light)}
+  .social-col .group-header.open{color:var(--bone-white);border-left-color:var(--bronze)}
+  .social-col .group-header.open::after{content:'▾';color:var(--bone-white)}
+  
+  .sub-items{padding-left:14px;margin:6px 0 10px;display:none;border-left:1px dashed var(--steel-mid)}
+  .sub-items.open{display:block; padding: 10px; color: var(--steel-mid); font-style: italic; font-size: 12px;}
+  .sub-items.open::before { content: '[ НЕТ ДАННЫХ ]'; display: block; opacity: 0.5;}
+
+  .desc-panel{background:var(--steel-dark);border:1px solid var(--steel-mid);padding:16px 20px;margin-top:16px;min-height:200px;max-height:420px;overflow-y:auto;box-shadow:inset 0 0 30px rgba(0,0,0,0.8);transition:all .15s}
+  .desc-panel::-webkit-scrollbar{width:6px;background:var(--bg-dark)}
+  .desc-panel::-webkit-scrollbar-thumb{background:var(--steel-mid);}
+  .desc-panel .empty-state{color:var(--steel-mid);text-align:center;padding:40px 0;font-size:16px;letter-spacing:3px;text-transform:uppercase; font-family:'PT Serif', serif;}
+
+  .footer-bar{display:flex;justify-content:space-between;margin-top:16px;color:var(--steel-mid);font-size:11px;border-top:1px solid var(--steel-mid);padding-top:8px;letter-spacing:2px;text-transform:uppercase;flex-wrap:wrap;gap:6px}
+
+  @media (max-width:900px){ .social-lists{grid-template-columns:1fr} }
+  @media (max-width:750px){
+    .intro-main{flex-direction:column;align-items:center;gap:20px}
+    .intro-portrait{width:160px;height:190px}
+    .intro-title{font-size:32px;text-align:center}
+    .intro-subtitle,.intro-info{font-size:14px;text-align:center}
+    .intro-button{font-size:16px;letter-spacing:4px;padding:12px 24px}
+    .computer{padding:10px}
+    .tab-btn{font-size:11px;padding:5px 10px;letter-spacing:1px}
+    .photo-frame{flex:0 0 100%;max-width:100%;height:240px}
+    .head-name{font-size:24px}
   }
 </style>
 </head>
-<body class="flicker">
+<body>
 
-<div class="crt-overlay"></div>
-<div class="vignette"></div>
+<!-- Фоновые шестеренки -->
+<div class="gear-bg gear-1">⚙</div>
+<div class="gear-bg gear-2">⚙</div>
+<div class="gear-bg gear-3">⚙</div>
 
-<!-- ЭКРАН ЗАГРУЗКИ -->
-<div id="introScreen">
-  <div class="boot-logo">ERES</div>
-  <div class="boot-text glow">НАЖМИТЕ ЛЮБУЮ КЛАВИШУ ДЛЯ ВХОДА В СИСТЕМУ...</div>
-  <button id="enterBtn" style="opacity: 0; position: absolute; inset: 0; width: 100%; height: 100%; cursor: pointer;"></button>
+<!-- ===== ЭКРАН ЗАГРУЗКИ ===== -->
+<div id="loadingScreen">
+  <div class="intro-crt"></div>
+  <div class="intro-vignette"></div>
+  <div class="loading-gears">
+    <div class="gear-bg gear-1">⚙</div>
+    <div class="gear-bg gear-2">⚙</div>
+  </div>
+  <div class="loading-box">
+    <img src="Снимок экрана 2026-11-12 012932.png" alt="Loading Dossier" class="loading-img" onerror="this.style.display='none'">
+    <div class="loading-title"><span>⚙</span> ИНИЦИАЛИЗАЦИЯ СИСТЕМ <span>⚙</span></div>
+    <div class="loading-subtitle">ШТРАФНОЙ БАТАЛЬОН · ДОСЬЕ · Ц. ГЕРАКЛИТ</div>
+    <div class="loading-bar-track"><div class="loading-bar-fill" id="loadingBarFill"></div></div>
+    <div class="loading-footer">
+      <span class="loading-log" id="loadingLog">> ЗАПУСК ПРОТОКОЛА...</span>
+      <span class="loading-percent" id="loadingPercent">0%</span>
+    </div>
+  </div>
 </div>
 
-<!-- ОСНОВНОЙ ИНТЕРФЕЙС -->
-<div id="os-container" style="display: none;">
-  
-  <!-- ВЕРХНЯЯ ПАНЕЛЬ -->
-  <div class="os-top-bar">
-    DATENBANK DER ARBEITER // БАЗА ДАННЫХ РАБОЧИХ
-  </div>
-
-  <div class="os-main">
-    <!-- ЛЕВЫЙ САЙДБАР -->
-    <div class="os-sidebar">
-      <div class="os-icon active" data-tab="t1">
-        <div class="icon-graphic">🕮</div>
-        <div class="icon-text">Личное<br>дело</div>
+<!-- ===== ЗАСТАВКА ===== -->
+<div id="introScreen">
+  <div class="intro-crt"></div>
+  <div class="intro-vignette"></div>
+  <div class="intro-container">
+    <div class="intro-main">
+      <div class="intro-portrait">
+        <img src="Снимок экрана 2026-11-12 012706.png" alt="CIRCE" onerror="this.style.display='none'; this.parentNode.innerHTML+='<div style=&quot;color:#8c96a3;text-align:center;padding:90px 10px;font-size:12px;letter-spacing:2px;font-family:serif;&quot;>[ ФОТО ОТСУТСТВУЕТ ]</div>'">
+        <span class="portrait-label">C. HERACLITUS</span>
       </div>
-      <div class="os-icon" data-tab="t2">
-        <div class="icon-graphic">👁</div>
-        <div class="icon-text">Внешность</div>
-      </div>
-      <div class="os-icon" data-tab="t3">
-        <div class="icon-graphic">⚭</div>
-        <div class="icon-text">Отношения</div>
-      </div>
-      <div class="os-icon" style="opacity: 0.3; cursor: not-allowed;">
-        <div class="icon-graphic">⚙</div>
-        <div class="icon-text">Настройки</div>
-      </div>
-      <div class="os-icon" style="opacity: 0.3; cursor: not-allowed;">
-        <div class="icon-graphic">>_</div>
-        <div class="icon-text">Терминал</div>
+      <div class="intro-text">
+        <div class="intro-title">Цирцея Гераклит</div>
+        <div class="intro-subtitle">ГЕШТАЛЬТ ШТРАФИК</div>
+        <div class="intro-info">
+          <div><span class="highlight">Статус:</span> Осуждена (Штрафной персонал)</div>
+          <div><span class="highlight">Рост / Вес:</span> 180 см · 74 кг</div>
+          <div><span class="highlight">Обвинение:</span> Халатность</div>
+          <div><span class="highlight">Место рождения:</span> Винета (Греция - Родос)</div>
+        </div>
       </div>
     </div>
+    <div class="intro-button-wrap">
+      <button class="intro-button" id="enterBtn"><span class="gear-icon">⚙</span> ОТКРЫТЬ ДОСЬЕ <span class="gear-icon">⚙</span></button>
+    </div>
+    <div class="intro-footer">◈ СИСТЕМА АРХИВАЦИИ ◈</div>
+  </div>
+</div>
 
-    <!-- ЗОНА КОНТЕНТА -->
-    <div class="os-content-area">
-      
-      <!-- ВКЛАДКА 1: ЛИЧНОЕ ДЕЛО -->
+<!-- ===== ОСНОВНОЙ ===== -->
+<div id="mainSite">
+  <div class="crt-overlay"></div>
+  <div class="fish-eye"></div>
+  <div class="noise-overlay"></div>
+
+  <div class="computer">
+    <div class="screen">
+
+      <div class="title-bar">
+        <span class="main"><span>⚙</span> АРХИВ · ДОСЬЕ</span>
+        <span class="mid">◆ МЕДИЦИНСКИЙ ПРОТОКОЛ · ШТРАФНИК ◆</span>
+        <span class="date">ЦИКЛ 2157 · 24.08</span>
+      </div>
+
+      <div class="tabs">
+        <div class="tab-btn active" data-tab="t1">ЛИЧНОЕ ДЕЛО</div>
+        <div class="tab-btn" data-tab="t2">ВНЕШНОСТЬ</div>
+        <div class="tab-btn" data-tab="t3">ОТНОШЕНИЯ</div>
+      </div>
+
+      <!-- ============== TAB 1 : ЛИЧНОЕ ДЕЛО ============== -->
       <div id="t1" class="tab-content active">
+
         <div class="dossier-head">
           <div class="photo-frame">
-            <img src="Снимок экрана 2026-11-12 012706.png" alt="CIRCE" onerror="this.style.display='none'; this.parentNode.innerHTML+='<div style=&quot;color:var(--dim);text-align:center;padding:90px 10px;font-size:18px;&quot;>[ НЕТ СИГНАЛА ]</div>'">
+            <img src="Снимок экрана 2026-11-12 012706.png" alt="C. Heraclitus" onerror="this.style.display='none'; this.parentNode.innerHTML+='<div style=&quot;color:#8c96a3;text-align:center;padding:90px 10px;font-size:12px;letter-spacing:2px;font-family:serif;&quot;>[ ФОТО ОТСУТСТВУЕТ ]</div>'">
+            <span class="stamp">PENITENT</span>
           </div>
           <div class="head-info">
-            <div class="head-name glow">Цирцея Гераклит</div>
+            <div class="head-name">Цирцея Гераклит</div>
             <div class="head-sub">Гештальт Штрафик</div>
             <div class="info-grid">
-              <div class="info-cell"><span class="lbl">Возраст</span><span class="val">21 год</span></div>
+              <div class="info-cell"><span class="lbl">Дата рождения</span><span class="val">18.12.2136</span></div>
               <div class="info-cell"><span class="lbl">Место рождения</span><span class="val">Винета (Родос)</span></div>
               <div class="info-cell"><span class="lbl">Рост / Вес</span><span class="val">180 см · 74 кг</span></div>
-              <div class="info-cell" style="grid-column: span 2; border-left: 2px solid var(--bright);">
-                <span class="lbl">Обвинение</span>
-                <span class="val warning">Халатность при техническом осмотре вооружения</span>
-              </div>
-              <div class="info-cell"><span class="lbl">Статус</span><span class="val warning">ОСУЖДЕНА · ШТРАФНИК</span></div>
+              <div class="info-cell" style="grid-column: span 2; border-left-color: var(--blood-red);"><span class="lbl">Обвинение</span><span class="val" style="color: var(--blood-red); font-size:12px;">Халатность при техническом осмотре вооружения</span></div>
+              <div class="info-cell"><span class="lbl">Оболочка</span><span class="val">Гештальт</span></div>
+              <div class="info-cell"><span class="lbl">Статус</span><span class="val" style="color:var(--bronze)">ОСУЖДЕНА · ШТРАФНИК</span></div>
             </div>
           </div>
         </div>
 
-        <div class="section">
-          <div class="section-title">ОБЩИЕ СВЕДЕНИЯ</div>
-          <div class="text-block">Цирцея являлась уроженкой Винеты, в закат имперского могущества. Родившись, ее забрали из семьи и хотели использовать в качестве инструмента подношений в храм одного из забытых божеств, что позже было вычеркнуто из истории как Нации, так и Империи. Цирце не помнила ничего из этого храма: ни обычаев, ни молитв, даже Бога, которому поклонялись. Его имя ей так же не знакомо, лишь во снах она иногда видит кошмары. Громоздкая гротескная статуя, что держит в оковах человечество, фигура заботливой матери, что гниет и из чьих очей идет черная кровь. Ей молятся, прося защиту, но лишь оковами она отвечает. Эти ужасы и кошмары заставляли все больше ненавидеть все, чем она занималась, и с той же активной яростью вступиться во время Революции.
+        <div class="meander-border"></div>
 
-Активная фаза боев за Винету шла особенно жестоко и страшно, но полуостров, где стоял храм, почти не затронули ужасы войны. Словно нечто оберегало его, но Цирцея ненавидела всё, чему служила. Её сердце было закрыто для догматов, однако настоятельницы не проявляли к ней жестокости. Цирцея сбежала из церкви в юном возрасте в самом рассвете революции, перебралась на оккупированную территорию Нацией и присоединилась к силам восстания. Будучи еще в малом возрасте, на ее плечи легла черная работа, забота о раненых, а также перенос воды и еды. Когда основные силы Нации прорвались к полуострову, юная девушка на время покинула товарищей, решив увидеть, что будет с ее забытым бывшим "домом". Спустя пару циклов она прибыла лишь к руинам, где уже обосновались силы гарнизона. Засмотревшись, Цирцея не заметила, как на нее вышли караульные, и спустя час допроса те отправили ее с небольшим отрядом снабжения к распределительному центру. Они служили для транспортировки граждан Винеты на иные планеты, так Цирце покинула Винету.
+        <div class="section">
+          <div class="section-title">Общие сведения</div>
+          <div class="text-block">Цирцея являлась уроженкой Винеты, в закат имперского могущества. Родившись, ее забрали из семьи и хотели использовать в качестве инструмента подношений в храм одного из забытых божеств, что позже было вычеркнуто из истории как Нации, так и Империи. Цирце не помнила ничего из этого храма, не обычай, не молитв, даже Бога которому поклонялись. Его имя ей так же не знакомо, лишь во снах она иногда видит кошмары. Громоздкая гротескная статуя, что держит в оковах человечество, фигура заботливой матери, что гниет и из чьих очей идет черная кровь. Ей молятся прося защиту, но лишь оковами она отвечает. Эти ужасы и кошмары заставляли все больше ненавидеть все, чем она занималась и с той же активной яростью вступиться во время Революции.
+
+Во время Революции, война за Винету шла особенно жестоко и страшно, но полуостров, где стоял храм, почти не затронули ужасы войны. Словно, нечто оберегало его, но Цирцея ненавидела всё, чему служила. Её сердце было закрыто для догматов, однако настоятельницы не проявляли к ней жестокости - будто понимали, что истина откроется всем рано или поздно. Цирцея сбежала из церкви в юном возрасте, перебралась на оккупированную территорию Нации и присоединилась к силам восстания. Будучи еще в малом возрасте, на ее плечи легла черная работа, забота о раненых, а также перенос воды/еды. Со временем основные силы нации смогли достичь полуострова, тогда юная девушка на время покинула товарищей решив увидеть, что будет с ее забытым бывшим "домом". Спустя пару циклов она прибыла лишь к руинам, где уже обосновались силы гарнизона. Засмотревшись Цирцея не заметила, как на нее вышли караульные и спустя час допроса, те отправили ее с небольшим отрядам снабжения к распорядительному центру. Они служили для транспортировки граждан Винеты на иные планеты, так Цирце покинула Винету.
 
 Вскоре прошла новость лесным пожаром по всей Нации, ядерные взрывы навсегда исказили Винету. Новости кричали, что это имперские силы во всем виноваты, что стало еще большим топливом для мотивации поступить по военному профилю в Нации. После прибытия на Рот-Фронт, её заселили в общежитие, где жили около 12 гештальт-беженцев. Все они были с Винеты и начинали новую жизнь. По государственной программе Цирцея была обязана получить стандартное базовое образование, а затем специализированное.</div>
         </div>
 
         <div class="section">
-          <div class="section-title">СЛУЖЕБНАЯ ИСТОРИЯ</div>
-          <div class="text-block">После школы она поступила в инженерную высшую школу имени Маннергейма, славящуюся подготовкой лучших кадров для производства тяжелых орудий. Оказавшись в этой среде, Цирцея научилась работать с тяжёлым вооружением вроде <span class="redacted"></span> (стандартной системы ПВО Винеты), освоила обслуживание противотанковой техники и работу с мелкими деталями. В свободное время от учебы, гештальтка занималась обслуживанием протезов: синтетические мышцы, нейропорты, система двигательных сухожилий. Благо в инженерной школе было в огромном количестве подобной литературы, но часто приходилось засиживаться до рассвета.
+          <div class="section-title">Служебная история</div>
+          <div class="text-block">После школы она поступила в инженерную высшую школу имени Маннергейма, славящуюся подготовкой лучших кадров для производства тяжелых орудий. Оказавшись в этой среде, Цирцея научилась работать с тяжёлым вооружением вроде <span class="redacted"></span> - (стандартной системы ПВО Винеты), освоила обслуживание противотанковой техники и работу с мелкими деталями. В свободное время от учебы, гештальтка занималась обслуживанием протезов: синтетические мышцы, нейропорты, система двигательных сухожилий. Благо в инженерной школе было в огромном количестве подобной литературы, но часто приходилось засиживаться до рассвета.
 
-После завершения учёбы пришла повестка: место службы - Винета. По прибытии на объект на её плечи возложили обслуживание отделения САПР, силовых костюмов и новейших <span class="redacted"></span> орудий. Год службы прошел идеально, её даже повысили. Но во время полевых испытаний нового оружия инженеры совершили ошибку. <strong>Репульсор дал сбой</strong>: повреждений изоляции, повышение температуры, выстрел, взрыв. Из-за взрыва во время выстрела оружие подскочило и это скосило траекторию выстрела. Попадание было по воздушной технике, что с высоты наблюдала за проведением полевых испытаний. Погибших не было, но ЦК направил модули «Колибри» для полного разбирательства. Военный суд признал Цирцею одной из виновных: за отсутствие технического осмотра оружия перед испытанием и за промедления при предыдущем обслуживании. Приговор - перевод в штрафной персонал с завершением военной карьеры.</div>
+После завершения учёбы пришла повестка: место службы - Винета. По прибытии на объект на её плечи возложили обслуживание отделения САПР, силовых костюмов и новейших <span class="redacted"></span> орудий. Год службы прошел идеально, её даже повысили. Но во время полевых испытаний нового оружия инженеры совершили ошибку. <strong>Репульсор дал сбой</strong>; повреждений изоляции, повышение температуры, выстрел, взрыв. Из за взрыва во время выстрела оружие подскочило и это скосило траекторию выстрела. Попадание было по воздушной технике, что с высоты наблюдала за проведением полевых испытаний. Погибших не было, но ЦК направил модули «Колибри» для полного разбирательства. Военный суд признал Цирцею одной из виновных: за отсутствие технического осмотра оружия перед испытанием и за промедления при предыдущем обслуживании. Приговор - перевод в штрафной персонал с завершением военной карьеры.</div>
         </div>
 
         <div class="section">
-          <div class="section-title">ДИСЛОКАЦИЯ</div>
+          <div class="section-title">Дислокация и статус</div>
           <div class="cards">
             <div class="card">
-              <h4>Место службы</h4>
+              <h4>Текущее положение</h4>
               <ul>
                 <li><strong>Объект:</strong> Штрафной батальон</li>
                 <li><strong>Регион:</strong> Пояс Астер</li>
                 <li><strong>Роль:</strong> Штрафник</li>
-                <li><strong>Статус:</strong> Прибыла</li>
+                <li><strong>Статус:</strong> Осуждена</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h4>До задержания</h4>
+              <ul>
+                <li><strong>Место:</strong> Винета - 118-й отдельный противотанковый артиллерийский дивизион «<span class="redacted"></span>» (в/ч 54219)</li>
+                <li><strong>Должность:</strong> Инженер-техник ремонтного взвода / техник по обслуживанию противотанковых установок</li>
+                <li><strong>Звание:</strong> Фельдфебель</li>
               </ul>
             </div>
             <div class="card">
               <h4>Образование</h4>
               <ul>
                 <li><strong>Уровень:</strong> Среднее специальное</li>
-                <li><strong>Учреждение:</strong> Инженерная высшая школа им. Маннергейма</li>
-                <li><strong>Спец.:</strong> Тяжелое вооружение, протезирование</li>
+                <li><strong>Учреждение:</strong> Инженерная высшая школа имени Маннергейма</li>
+                <li><strong>Специализация:</strong> Тяжелое вооружение, протезирование</li>
                 <li><strong>Доп.:</strong> Курсы радистов и связистов</li>
               </ul>
             </div>
           </div>
         </div>
+
+        <div class="section">
+          <div class="section-title">Особые отметки</div>
+          <div class="text-block"><strong>Отношение к Нации Евсан и государственному строю:</strong> После допроса модулями колибри, было выявлено следующее, гештальт является ярым патриотом идей Нации Евсан и революции. Испытывает ненависть к имперскому строю и империализму.
+<strong>Отношение к гражданской и военной администрации:</strong> Испытывает глубокое уважение ко всем государственным структурам Нации, но меньший приоритет отдает АЭОН и так же испытывает легкий трепет перед гос.структурой ШТАЗИ.
+<strong>Отношение к репликам:</strong> Положительные, за время службы и до нее, не было выявлено ксенофобных настроений или предпосылок к таковым.
+<strong>Отношение к религии или каким-либо ритуалам:</strong> Отрицание и ненависть, желание сжечь подобную литературу.
+<strong>Отношение к назначенной трудовой деятельности:</strong> Тяжело принять завершение военной карьеры, а также свой статус, желание как можно скорее реабилитироваться.</div>
+        </div>
+
       </div>
 
-      <!-- ВКЛАДКА 2: ВНЕШНОСТЬ -->
+      <!-- ============== TAB 2 : ВНЕШНОСТЬ ============== -->
       <div id="t2" class="tab-content">
+        <div class="meander-border"></div>
+
         <div class="section">
-          <div class="section-title">ВНЕШНИЙ ОБЛИК</div>
+          <div class="section-title">Внешний облик</div>
           
           <div style="text-align: center;">
             <div class="archival-photo-container">
-              <img src="akairiot-исполнитель-грейс-ховард-8536626.png" alt="Appearance" onerror="this.style.display='none';">
+              <img src="akairiot-исполнитель-грейс-ховард-8536626.png" alt="Appearance Photo" onerror="this.style.display='none';">
             </div>
           </div>
 
@@ -348,7 +443,7 @@
         </div>
 
         <div class="section">
-          <div class="section-title">ФИЗИЧЕСКИЕ ДАННЫЕ</div>
+          <div class="section-title">Физические данные</div>
           <div class="cards">
             <div class="card">
               <h4>Биометрия</h4>
@@ -358,7 +453,7 @@
                 <li><strong>Группа крови:</strong> Первая отрицательная</li>
                 <li><strong>Пол:</strong> Женский</li>
                 <li><strong>Возраст:</strong> 21 год</li>
-                <li><strong>Типаж:</strong> Греческая внешность</li>
+                <li><strong>Типаж внешности:</strong> Греческая внешность</li>
               </ul>
             </div>
             <div class="card">
@@ -375,24 +470,51 @@
         </div>
 
         <div class="section">
-          <div class="section-title">ПСИХОЛОГИЧЕСКИЙ ПРОФИЛЬ</div>
-          <div class="text-block"><strong>Мировоззрение:</strong> Идеалист. <strong>Отношение к власти:</strong> Конформист. <strong>Отношение к риску:</strong> Азартность. <strong>Отношение ко лжи:</strong> Честность. <strong>Отношение к насилию:</strong> Агрессор. <strong>Отношение к одиночеству:</strong> Страх. <strong>Отношение к толпе:</strong> Посредник. <strong>Отношение к природе/животным:</strong> Мечта и фантастика. <strong>Отношение к искусству:</strong> Не понимает. <strong>Отношение к религии:</strong> Отвратительно. <strong>Отношение к смерти:</strong> Романтизация. <strong>Отношение к прошлому:</strong> Сожаление - идеализация. <strong>Отношение к будущему:</strong> Надежда.
-
-<strong>Стресс-реакции:</strong> В кризисе действует. <strong>Конфликтное поведение:</strong> Нападает. <strong>Стиль общения:</strong> Доминирующий. <strong>Речевые привычки:</strong> Мат.</div>
+          <div class="section-title">Навыки и происхождение</div>
+          <div class="cards">
+            <div class="card">
+              <h4>Способности и навыки</h4>
+              <ul>
+                <li>Готовка</li>
+                <li>Механика / Инженерия</li>
+                <li>Работа с протезами</li>
+                <li>Работа с костюмами SAPR и MNHR</li>
+                <li>Радиосвязь</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h4>Семья</h4>
+              <ul>
+                <li><strong>Статус:</strong> Сирота</li>
+                <li><strong>Примечание:</strong> Хочет узнать о своей семье и возможность найти кого-то из живых родственников.</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- ВКЛАДКА 3: ОТНОШЕНИЯ -->
+      <!-- ============== TAB 3 : ОТНОШЕНИЯ ============== -->
       <div id="t3" class="tab-content">
-        <div class="section">
-          <div class="section-title">БАЗА ДАННЫХ СВЯЗЕЙ</div>
-          
-          <div style="margin-bottom: 15px; border: 1px solid var(--border); padding: 10px; display: flex; flex-wrap: wrap; gap: 10px;">
+        <div class="social-wrapper">
+          <div class="classifier-block">
             <span class="rel-tag c-distrust">НЕДОВЕРИЕ</span>
             <span class="rel-tag c-sad">ТОСКА</span>
             <span class="rel-tag c-neutral">НЕЙТРАЛИТЕТ</span>
-            <span class="rel-tag c-enemy">ВРАЖДА</span>
+            <span class="rel-tag c-friend">ДРУЖБА</span>
+            <span class="rel-tag c-strong">КРЕПКАЯ СВЯЗЬ</span>
+            <span class="rel-tag c-love">ЛЮБОВЬ</span>
+            <span class="rel-tag c-dead">МЁРТВ</span>
+            <span class="rel-tag c-cautious">НАСТОРОЖЕННОСТЬ</span>
             <span class="rel-tag c-fear">СТРАХ</span>
+            <span class="rel-tag c-disappoint">РАЗОЧАРОВАНИЕ</span>
+            <span class="rel-tag c-respect">УВАЖЕНИЕ</span>
+            <span class="rel-tag c-regret">СОЖАЛЕНИЕ</span>
+            <span class="rel-tag c-sympathy">СИМПАТИЯ</span>
+            <span class="rel-tag c-enemy">ВРАЖДА</span>
+          </div>
+
+          <div class="search-wrap">
+            <input type="text" class="search-input" id="personnelSearch" placeholder="ПОИСК ПО ИМЕНИ...">
           </div>
 
           <div class="social-lists">
@@ -400,12 +522,16 @@
               <h3>▸ РЕПЛИКИ</h3>
               <span class="group-header" data-group="eulr">EULR</span>
               <div class="sub-items" id="group-eulr"></div>
+
               <span class="group-header" data-group="star">STAR</span>
               <div class="sub-items" id="group-star"></div>
+
               <span class="group-header" data-group="fklr">FKLR</span>
               <div class="sub-items" id="group-fklr"></div>
+
               <span class="group-header" data-group="adlr">ADLR</span>
               <div class="sub-items" id="group-adlr"></div>
+
               <span class="group-header" data-group="arar">ARAR</span>
               <div class="sub-items" id="group-arar"></div>
             </div>
@@ -414,44 +540,44 @@
               <h3>▸ ОСТАЛЬНЫЕ</h3>
               <span class="group-header" data-group="mnhr">MNHR</span>
               <div class="sub-items" id="group-mnhr"></div>
+
               <span class="group-header" data-group="stcr">STCR</span>
               <div class="sub-items" id="group-stcr"></div>
+
               <span class="group-header" data-group="gscp">GSCP</span>
               <div class="sub-items" id="group-gscp"></div>
+
               <span class="group-header" data-group="gscc">GSCC</span>
               <div class="sub-items" id="group-gscc"></div>
             </div>
           </div>
 
-          <div class="desc-panel" id="descPanel" style="margin-top: 20px; border: 1px solid var(--border); padding: 15px; color: var(--dim); font-style: italic;">
-            > ОЖИДАНИЕ ВЫБОРА ПЕРСОНАЛА...
+          <div class="desc-panel" id="descPanel">
+            <div class="empty-state">◈ ОЖИДАНИЕ ВЫБОРА ПЕРСОНАЛА ◈</div>
           </div>
         </div>
       </div>
 
+      <div class="footer-bar">
+        <span>⏻ СИСТЕМА АРХИВАЦИИ · v.3.2</span>
+        <span>◆ ДОКУМЕНТ ЗАСЕКРЕЧЕН ◆</span>
+        <span>ИНЖЕНЕР · Ц. ГЕРАКЛИТ</span>
+      </div>
+
     </div>
   </div>
-
-  <!-- НИЖНЯЯ ПАНЕЛЬ -->
-  <div class="os-bottom-bar">
-    <div>
-      <span class="key">[ESC]</span> ЗАКРЫТЬ ОКНО
-    </div>
-    <div>
-      <span class="key">[F10: ВКЛ]</span> <span class="key">[СБРОС]</span> <span class="key">[ВЫКЛ]</span> 
-      <span id="clock" style="margin-left: 20px;">00:00:00</span>
-    </div>
-  </div>
-
 </div>
 
 <script>
 (function(){
   const introScreen = document.getElementById('introScreen');
-  const osContainer = document.getElementById('os-container');
+  const mainSite = document.getElementById('mainSite');
   const enterBtn = document.getElementById('enterBtn');
-  
-  // Звук
+  const loadingScreen = document.getElementById('loadingScreen');
+  const loadingBarFill = document.getElementById('loadingBarFill');
+  const loadingPercent = document.getElementById('loadingPercent');
+  const loadingLog = document.getElementById('loadingLog');
+
   function playMechanicalClick(pitch = 1) {
     try {
       const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -490,56 +616,92 @@
     } catch (e) {}
   }
 
-  // Вход в систему
-  enterBtn.addEventListener('click', () => {
-    playMechanicalClick(1.2);
-    introScreen.style.opacity = '0';
-    setTimeout(() => {
-      introScreen.style.display = 'none';
-      osContainer.style.display = 'flex';
-      osContainer.classList.add('flicker');
-      playMechanicalClick(0.9);
-    }, 500);
+  function playBootSound(){
+    playMechanicalClick(0.8);
+    setTimeout(() => playMechanicalClick(1), 150);
+    setTimeout(() => playMechanicalClick(1.2), 300);
+  }
+
+  const logMessages = ["> СВЯЗЬ С МАШИНОЙ...","> ПРОВЕРКА БИОНИКИ...","> АНАЛИЗ КРОВИ...","> ДОСТУП К АРХИВУ...","> ДЕШИФРОВКА...","> ПРОВЕРКА СИГНАТУРЫ...","> ЗАГРУЗКА ЛИЧНОГО СОСТАВА...","> ОБРАБОТКА...","> ВНИМАНИЕ: СЛАБЫЙ СИГНАЛ...","> ПОВТОР...","> ПОЧТИ ГОТОВО..."];
+
+  function startLoading(callback){
+    loadingScreen.classList.add('active');
+    let percent = 0, logIndex = 0;
+    const interval = setInterval(()=>{
+      let step;
+      if(percent < 50) step = 1.5 + Math.random()*2;
+      else if(percent < 80) step = 0.8 + Math.random()*1.5;
+      else if(percent < 95) step = 0.3 + Math.random()*0.8;
+      else step = 0.15 + Math.random()*0.4;
+
+      percent += step;
+      if(percent >= 99){
+        percent = 99;
+        clearInterval(interval);
+        loadingLog.textContent = "> ЗАДЕРЖКА НА 99%...";
+        playMechanicalClick(0.7);
+        setTimeout(()=>{
+          loadingLog.textContent = "> ЗАВЕРШЕНО.";
+          loadingPercent.textContent = "100%";
+          loadingBarFill.style.width = "100%";
+          playBootSound();
+          setTimeout(()=>{
+            loadingScreen.classList.remove('active');
+            if(typeof callback === 'function') callback();
+          }, 500);
+        }, 1200);
+      }
+
+      loadingBarFill.style.width = percent + '%';
+      loadingPercent.textContent = Math.floor(percent) + '%';
+      const newLogIndex = Math.floor(percent/9);
+      if(newLogIndex !== logIndex && newLogIndex < logMessages.length){
+        logIndex = newLogIndex;
+        loadingLog.textContent = logMessages[logIndex];
+        playMechanicalClick(0.9 + Math.random()*0.4);
+      }
+    }, 60);
+  }
+
+  enterBtn.addEventListener('click', ()=>{
+    startLoading(()=>{
+      introScreen.classList.add('hidden');
+      setTimeout(()=>mainSite.classList.add('visible'), 300);
+      window.scrollTo(0,0);
+    });
   });
 
-  // Часы
-  setInterval(() => {
-    const now = new Date();
-    const time = now.toTimeString().split(' ')[0];
-    document.getElementById('clock').textContent = time;
-  }, 1000);
-
-  // Переключение вкладок (Сайдбар)
-  document.querySelectorAll('.os-icon[data-tab]').forEach(icon => {
-    icon.addEventListener('click', function() {
-      // Убираем активный класс у всех иконок и контента
-      document.querySelectorAll('.os-icon').forEach(i => i.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-      
-      // Добавляем активный класс нажатой иконке
-      this.classList.add('active');
-      
-      // Показываем нужный контент
-      const targetId = this.getAttribute('data-tab');
-      document.getElementById(targetId).classList.add('active');
-      
+  document.querySelectorAll('.tab-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const id = btn.dataset.tab;
+      document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+      btn.classList.add('active');
+      const pane = document.getElementById(id);
+      if(pane) pane.classList.add('active');
       playMechanicalClick(1.1);
     });
   });
 
-  // Раскрытие групп отношений
-  document.querySelectorAll('.group-header').forEach(header => {
-    header.addEventListener('click', function() {
-      const targetId = 'group-' + this.getAttribute('data-group');
-      const target = document.getElementById(targetId);
-      if (target) {
-        target.classList.toggle('open');
-        this.classList.toggle('open');
-        playMechanicalClick(0.9);
-      }
+  document.querySelectorAll('.group-header').forEach(header=>{
+    header.addEventListener('click', function(){
+      const items = document.getElementById('group-' + this.dataset.group);
+      if(items){ items.classList.toggle('open'); this.classList.toggle('open'); playMechanicalClick(0.9); }
     });
   });
 
+  const searchInput = document.getElementById('personnelSearch');
+  if(searchInput) searchInput.addEventListener('input', function(){
+    const q = this.value.trim().toLowerCase();
+    document.querySelectorAll('.group-header').forEach(header=>{
+      const text = header.textContent.toLowerCase();
+      header.style.display = (q.length > 0 && !text.includes(q)) ? 'none' : 'block';
+    });
+  });
+
+  document.querySelectorAll('.card, .rel-tag, .info-cell').forEach(el=>{
+    el.addEventListener('click', ()=>playMechanicalClick(1.1 + Math.random()*0.2));
+  });
 })();
 </script>
 </body>
