@@ -3,760 +3,415 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ДОСЬЕ · ШТРАФБАТ · Ц. ГЕРАКЛИТ</title>
+<title>AEON DOSSIER · Ц. ГЕРАКЛИТ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400&family=Roboto+Mono:wght@400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=PT+Serif:ital,wght@0,400;0,700&display=swap" rel="stylesheet">
 <style>
-  *{margin:0;padding:0;box-sizing:border-box;user-select:none}
-  .text-block, .desc-panel, .card ul li, .info-cell .val { user-select: text; }
-  
   :root {
-    --bg-dark: #0a0b0d;
-    --steel-dark: #14171a;
-    --steel-mid: #232830;
-    --steel-light: #8c96a3;
-    --bone-white: #e2e6eb;
-    --blood-red: #8b2a2a;
-    --bronze: #a37a4a;
+    --paper-bg: #f4f1ea;
+    --paper-dark: #e8e4db;
+    --ink-black: #1a1a1a;
+    --ink-gray: #4a4a4a;
+    --stamp-red: #8b2a2a;
+    --border-color: #333;
   }
 
-  html,body{width:100%;min-height:100vh;background:var(--bg-dark);overflow-x:hidden}
-  body{font-family:'Roboto Mono', monospace;color:var(--steel-light);position:relative}
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
-  /* ===== ВИДЕОПЛЕЕР ===== */
-  #youtube-player {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 220px;
-    height: 160px;
-    z-index: 10000;
-    border: 2px solid var(--steel-mid);
-    box-shadow: 0 0 20px rgba(0,0,0,0.9);
-    display: none; /* Скрыт до загрузки */
-    background: #000;
+  body {
+    background-color: #2c2c2c; /* Темный фон вокруг листа */
+    font-family: 'Courier Prime', monospace;
+    color: var(--ink-black);
+    padding: 40px 20px;
+    display: flex;
+    justify-content: center;
+    font-size: 14px;
+    line-height: 1.5;
   }
-  #youtube-player iframe {
+
+  /* Лист бумаги */
+  .document {
+    background-color: var(--paper-bg);
     width: 100%;
-    height: 100%;
-    border: none;
-  }
-
-  /* ===== АНИМИРОВАННЫЕ ШЕСТЕРЕНКИ ===== */
-  @keyframes spin { 100% { transform: rotate(360deg); } }
-  @keyframes spin-reverse { 100% { transform: rotate(-360deg); } }
-  
-  .gear-bg {
-    position: fixed;
-    font-size: 400px;
-    color: rgba(35, 40, 48, 0.2);
-    z-index: -1;
-    pointer-events: none;
-    line-height: 1;
-  }
-  .gear-1 { top: -100px; left: -100px; animation: spin 60s linear infinite; }
-  .gear-2 { bottom: -150px; right: -50px; animation: spin-reverse 80s linear infinite; font-size: 500px; }
-  .gear-3 { top: 40%; left: 60%; font-size: 200px; animation: spin 40s linear infinite; opacity: 0.1; }
-
-  /* ===== ДЕКОРАТИВНЫЕ ПАТТЕРНЫ ===== */
-  .meander-border {
-    height: 6px;
-    background: repeating-linear-gradient(90deg, transparent, transparent 4px, var(--steel-light) 4px, var(--steel-light) 8px, transparent 8px, transparent 12px, var(--steel-mid) 12px, var(--steel-mid) 16px);
-    opacity: 0.3;
-    margin: 15px 0;
-  }
-
-  /* Стиль для зацензуренного текста */
-  .redacted {
-    background-color: #000;
-    color: #000;
-    user-select: none;
-    padding: 0 6px;
-    display: inline-block;
-    font-family: 'Roboto Mono', monospace;
-    line-height: 1.2;
-    border: 1px solid #111;
-    box-shadow: inset 0 0 6px #000;
+    max-width: 850px;
+    padding: 50px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     position: relative;
+    background-image: 
+      radial-gradient(#0000000a 1px, transparent 1px),
+      radial-gradient(#0000000a 1px, transparent 1px);
+    background-size: 20px 20px;
+    background-position: 0 0, 10px 10px;
+  }
+
+  /* Штампы */
+  .stamp {
+    position: absolute;
+    border: 3px solid var(--stamp-red);
+    color: var(--stamp-red);
+    font-family: 'PT Serif', serif;
+    font-weight: bold;
+    font-size: 24px;
+    padding: 5px 15px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    transform: rotate(-12deg);
+    opacity: 0.8;
+    z-index: 10;
+    pointer-events: none;
+  }
+  .stamp-top-right { top: 40px; right: 40px; }
+  .stamp-middle { top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg); font-size: 40px; opacity: 0.4; border-width: 5px; }
+
+  /* Шапка документа */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 2px solid var(--ink-black);
+    padding-bottom: 10px;
+    margin-bottom: 30px;
+  }
+  .header-logo {
+    font-family: 'PT Serif', serif;
+    font-weight: bold;
+    font-size: 28px;
     letter-spacing: 2px;
-    border-radius: 1px;
-    vertical-align: middle;
   }
-  .redacted::after {
-    content: '████████';
-    color: #1a1a1a;
-    text-shadow: 0 0 2px #000;
+  .header-info {
+    text-align: right;
+    font-size: 12px;
+    color: var(--ink-gray);
   }
 
-  /* ===== ЗАСТАВКА ===== */
-  #introScreen{position:fixed;inset:0;background:var(--bg-dark);z-index:9999;display:flex;justify-content:center;align-items:center;transition:opacity .8s ease,visibility .8s ease}
-  #introScreen.hidden{opacity:0;visibility:hidden;pointer-events:none}
-  .intro-crt{position:fixed;inset:0;pointer-events:none;z-index:100;background:repeating-linear-gradient(0deg,rgba(0,0,0,.2) 0,rgba(0,0,0,0) 2px,rgba(0,0,0,.15) 4px,rgba(0,0,0,0) 6px);animation:scanMove 10s linear infinite}
-  @keyframes scanMove{0%{transform:translateY(0)}100%{transform:translateY(100%)}}
-  .intro-vignette{position:fixed;inset:0;pointer-events:none;z-index:99;background:radial-gradient(ellipse at center,transparent 30%,rgba(0,0,0,.9) 100%);box-shadow:inset 0 0 200px rgba(0,0,0,.9)}
-  
-  .intro-container{position:relative;z-index:5;width:1100px;max-width:95vw;display:flex;flex-direction:column;align-items:center;gap:30px;animation:introFadeIn 1s ease-out}
-  @keyframes introFadeIn{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
-  .intro-main{display:flex;align-items:flex-start;gap:40px;width:100%;padding:20px;position:relative}
-  
-  .intro-portrait{flex-shrink:0;width:220px;height:260px;border:2px solid var(--steel-light);background:var(--steel-dark);position:relative;box-shadow:0 0 30px rgba(140,150,163,.15),inset 0 0 30px rgba(0,0,0,1);overflow:hidden;padding:4px}
-  .intro-portrait::before { content: ''; position: absolute; inset: 0; border: 1px solid rgba(140,150,163,0.3); margin: 4px; pointer-events: none; z-index: 5; }
-  .intro-portrait img{width:100%;height:100%;object-fit:cover;object-position:center top;filter:grayscale(100%) contrast(1.3) brightness(0.8) sepia(0.2) hue-rotate(180deg)}
-  .portrait-label{position:absolute;bottom:8px;left:8px;font-size:11px;color:var(--bone-white);letter-spacing:2px;font-weight:bold;text-shadow:0 0 5px #000;z-index:10;background:rgba(0,0,0,0.8);padding:2px 6px;border-left:2px solid var(--blood-red)}
-  
-  .intro-text{flex:1;display:flex;flex-direction:column;gap:14px;padding-top:6px}
-  .intro-title{font-family: 'PT Serif', serif; font-size:52px; font-weight:700; color:var(--bone-white);letter-spacing:2px;line-height:1;text-shadow:0 0 15px rgba(226,230,235,.2)}
-  .intro-subtitle{font-size:16px;color:var(--steel-light);line-height:1.5;letter-spacing:1px;text-transform:uppercase}
-  .intro-info{margin-top:10px;display:flex;flex-direction:column;gap:8px;font-size:15px;color:var(--steel-light);letter-spacing:.5px}
-  .intro-info .highlight{color:var(--bone-white);font-weight:bold}
-  
-  .intro-button-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;width:100%;max-width:620px}
-  .intro-button{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:16px 38px;border:1px solid var(--steel-light);background:var(--steel-dark);color:var(--bone-white);font-family:'PT Serif', serif;font-size:20px;letter-spacing:4px;text-transform:uppercase;cursor:pointer;transition:all .3s ease;box-shadow:inset 0 0 0 1px rgba(0,0,0,0.5), 0 5px 15px rgba(0,0,0,0.8);position:relative;width:100%;max-width:620px; clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);}
-  .intro-button::after { content: ''; position: absolute; inset: 3px; border: 1px solid rgba(140,150,163,0.2); clip-path: inherit; pointer-events: none; }
-  .intro-button:hover{background:var(--steel-mid);color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,0.1), 0 0 25px rgba(140,150,163,.3)}
-  .intro-button:active{transform:scale(.98)}
-  .intro-button .gear-icon { font-size: 24px; animation: spin 4s linear infinite; }
-  
-  .intro-footer{font-size:12px;color:var(--steel-mid);letter-spacing:4px;margin-top:10px}
+  /* Заголовки */
+  h1 {
+    font-family: 'PT Serif', serif;
+    font-size: 24px;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+  }
+  h2 {
+    font-family: 'PT Serif', serif;
+    font-size: 18px;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border-color);
+    margin: 30px 0 15px 0;
+    padding-bottom: 5px;
+  }
 
-  /* ===== ЗАГРУЗКА ===== */
-  #loadingScreen{position:fixed;inset:0;z-index:99999;pointer-events:none;opacity:0;background:var(--bg-dark);display:flex;justify-content:center;align-items:center;transition:opacity .4s ease}
-  #loadingScreen.active{opacity:1;pointer-events:all}
-  
-  .loading-gears { position: absolute; inset: 0; display: flex; justify-content: center; align-items: center; overflow: hidden; z-index: 1; opacity: 0.05; }
-  .loading-gears .gear-bg { position: relative; top: auto; left: auto; right: auto; bottom: auto; }
-
-  .loading-box{position:relative;z-index:5;width:90%;max-width:620px;display:flex;flex-direction:column;gap:18px;color:var(--bone-white); align-items: center;}
-  
-  .loading-img {
-    max-width: 220px;
+  /* Таблицы */
+  table {
     width: 100%;
-    display: block;
-    filter: grayscale(100%) contrast(1.3) brightness(0.7);
-    border: 2px solid var(--steel-mid);
-    box-shadow: 0 0 20px rgba(0,0,0,0.9), inset 0 0 10px rgba(0,0,0,1);
-    margin-bottom: 10px;
-    padding: 4px;
-    background: var(--steel-dark);
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    font-size: 13px;
+  }
+  th, td {
+    border: 1px solid var(--border-color);
+    padding: 8px 12px;
+    text-align: left;
+    vertical-align: top;
+  }
+  th {
+    background-color: var(--paper-dark);
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 12px;
+  }
+  .td-label {
+    font-weight: bold;
+    width: 35%;
+    background-color: rgba(0,0,0,0.02);
   }
 
-  .loading-title{font-family:'PT Serif', serif; font-size:22px;letter-spacing:6px;text-align:center;text-transform:uppercase;color:var(--bone-white);animation:loadBlink 1.5s steps(2) infinite; display: flex; align-items: center; justify-content: center; gap: 10px;}
-  @keyframes loadBlink{0%,100%{opacity:1}50%{opacity:.6}}
-  .loading-subtitle{font-size:12px;letter-spacing:3px;text-align:center;color:var(--steel-light)}
-  .loading-bar-track{width:100%;height:12px;border:1px solid var(--steel-mid);background:var(--bg-dark);position:relative;overflow:hidden;box-shadow:inset 0 0 10px rgba(0,0,0,1)}
-  .loading-bar-fill{position:absolute;top:0;left:0;height:100%;width:0;background:var(--steel-light);box-shadow:0 0 10px var(--steel-light);transition:width .15s linear}
-  .loading-footer{display:flex;justify-content:space-between;font-size:13px;letter-spacing:1px;color:var(--steel-light); width: 100%;}
-  .loading-percent{font-weight:bold;color:var(--bone-white)}
-  .loading-log{font-size:12px;color:var(--steel-mid);min-height:16px;white-space:nowrap;overflow:hidden}
+  /* Текстовые блоки */
+  .text-content {
+    margin-bottom: 20px;
+    text-align: justify;
+  }
+  .text-content p { margin-bottom: 10px; }
 
-  /* ===== ОСНОВНОЙ ===== */
-  #mainSite{display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:20px;position:relative;opacity:0;transition:opacity 1s ease;background:var(--bg-dark)}
-  #mainSite.visible{opacity:1}
-  
-  .noise-overlay{position:fixed;inset:0;pointer-events:none;z-index:101;opacity:.06;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");mix-blend-mode:overlay}
-  .crt-overlay{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:100;background:repeating-linear-gradient(0deg,rgba(0,0,0,.15) 0,rgba(0,0,0,0) 1px,rgba(0,0,0,.1) 2px,rgba(0,0,0,0) 3px);animation:scanMove 8s linear infinite}
-  .fish-eye{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;background:radial-gradient(ellipse at center,transparent 40%,rgba(0,0,0,.7) 100%)}
-  
-  .computer{position:relative;width:1120px;max-width:96vw;background:var(--steel-dark);border:1px solid var(--steel-mid);border-radius:2px;padding:16px;box-shadow:0 0 50px rgba(0,0,0,0.9), inset 0 0 0 1px rgba(0,0,0,0.5), inset 0 0 30px rgba(0,0,0,0.8);z-index:2}
-  .computer::before, .computer::after { content: '⚙'; position: absolute; color:var(--steel-mid); font-size: 16px; line-height: 1; }
-  .computer::before { top: 6px; left: 6px; }
-  .computer::after { bottom: 6px; right: 6px; }
-  
-  .screen{background:var(--bg-dark);border:1px solid var(--steel-mid);padding:20px;box-shadow:inset 0 0 50px rgba(0,0,0,0.8)}
+  /* Красные пометки */
+  .danger-text { color: var(--stamp-red); font-weight: bold; }
 
-  .title-bar{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid var(--steel-mid);padding-bottom:10px;margin-bottom:15px;color:var(--steel-light);font-size:12px;letter-spacing:2px;gap:12px;flex-wrap:wrap;text-transform:uppercase; font-family: 'PT Serif', serif;}
-  .title-bar .main{color:var(--bone-white);font-weight:bold;font-size:18px; text-shadow:0 0 10px rgba(226,230,235,.3); display: flex; align-items: center; gap: 8px;}
-  .title-bar .main span { font-size: 22px; color: var(--bronze); }
-  .title-bar .mid{flex:1;text-align:center;font-size:11px;color:var(--steel-mid);letter-spacing:4px}
-  .title-bar .date{color:var(--steel-light);font-size:12px;letter-spacing:2px}
+  /* Схема тела */
+  .body-diagram {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin: 20px 0;
+    padding: 20px;
+    border: 1px dashed var(--ink-gray);
+  }
+  .body-diagram svg {
+    height: 200px;
+    fill: none;
+    stroke: var(--ink-black);
+    stroke-width: 1.5;
+  }
+  .marker { fill: var(--stamp-red); stroke: none; font-family: sans-serif; font-weight: bold; font-size: 14px; }
 
-  .tabs{display:flex;gap:6px;margin-bottom:15px;flex-wrap:wrap}
-  .tab-btn{background:var(--steel-dark);border:1px solid var(--steel-mid);border-bottom:none;padding:8px 20px 7px;font-family:'PT Serif', serif;font-size:14px;font-weight:bold;color:var(--steel-light);border-radius:2px 2px 0 0;cursor:pointer;transition:.2s;text-transform:uppercase;letter-spacing:2px; position:relative;}
-  .tab-btn::before { content: ''; position: absolute; top: 2px; left: 2px; right: 2px; bottom: 0; border: 1px solid rgba(255,255,255,0.03); pointer-events: none; }
-  .tab-btn:hover{background:var(--steel-mid);color:var(--bone-white)}
-  .tab-btn.active{background:var(--bg-dark);color:var(--bone-white);border-color:var(--steel-light);border-top:2px solid var(--bronze); box-shadow: 0 -4px 10px rgba(163,122,74,0.2);}
+  /* Подписи */
+  .signatures {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+    font-size: 13px;
+  }
+  .sig-block { display: flex; flex-direction: column; gap: 10px; width: 45%; }
+  .sig-line { border-bottom: 1px solid var(--ink-black); height: 20px; width: 80%; }
 
-  .tab-content{display:none;background:var(--bg-dark);border:1px solid var(--steel-mid);padding:20px;min-height:420px;color:#a4adb8;font-size:13px;line-height:1.7; position:relative;}
-  .tab-content::after { content: '⚙'; position: absolute; bottom: 10px; right: 15px; font-size: 40px; color: var(--steel-dark); z-index: 0; pointer-events: none; animation: spin 10s linear infinite; }
-  .tab-content.active{display:block;animation:paneFade .4s ease-out}
-  @keyframes paneFade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+  /* Навигация (Табы) */
+  .tabs {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--ink-black);
+  }
+  .tab-btn {
+    background: var(--paper-dark);
+    border: 1px solid var(--border-color);
+    border-bottom: none;
+    padding: 8px 20px;
+    font-family: 'Courier Prime', monospace;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    color: var(--ink-gray);
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { background: #ded9d0; color: var(--ink-black); }
+  .tab-btn.active {
+    background: var(--paper-bg);
+    color: var(--ink-black);
+    border-bottom: 2px solid var(--paper-bg);
+    margin-bottom: -2px;
+  }
 
-  /* DOSSIER HEAD */
-  .dossier-head{display:flex;flex-wrap:wrap;gap:24px;margin-bottom:20px;padding-bottom:20px;border-bottom:1px dashed var(--steel-mid); position:relative; z-index:1;}
-  .photo-frame{flex:0 0 220px;max-width:220px;height:270px;background:var(--steel-dark);border:2px solid var(--steel-mid);padding:6px;position:relative;overflow:hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.5);}
-  .photo-frame::before{content:'';position:absolute;inset:4px;border:1px solid var(--steel-light);pointer-events:none;z-index:3;}
-  .photo-frame::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, transparent 90%, var(--bronze) 90%); opacity: 0.8; z-index: 2; pointer-events: none; }
-  .photo-frame img{width:100%;height:100%;object-fit:cover;object-position:center 15%;filter:grayscale(100%) contrast(1.2) brightness(0.9);display:block}
-  .photo-frame .stamp{position:absolute;bottom:14px;right:14px;color:var(--bone-white);font-size:12px;letter-spacing:4px;border:2px solid var(--bone-white);padding:3px 10px;transform:rotate(-10deg);opacity:.8;font-weight:bold;z-index:5;background:rgba(0,0,0,.7); font-family:'PT Serif', serif;}
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
 
-  .head-info{flex:1;min-width:280px;display:flex;flex-direction:column;gap:12px; z-index:1;}
-  .head-name{font-family: 'PT Serif', serif; font-size:32px;color:var(--bone-white);letter-spacing:2px;font-weight:700;text-transform:uppercase; border-bottom: 1px solid var(--steel-mid); padding-bottom: 5px; display: inline-block;}
-  .head-sub{font-size:13px;color:var(--steel-light);letter-spacing:2px;border-left:3px solid var(--bronze);padding-left:12px; text-transform: uppercase;}
+  /* Списки */
+  ul { margin-left: 20px; margin-bottom: 15px; }
 
-  /* Выравнивание по центру в info-cell */
-  .info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:10px}
-  .info-cell{background:var(--steel-dark);border:1px solid var(--steel-mid);padding:8px 12px;display:flex;flex-direction:column;gap:4px; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); align-items: center; text-align: center;}
-  .info-cell .lbl{font-size:10px;color:var(--steel-light);letter-spacing:2px;text-transform:uppercase;font-weight:bold;}
-  .info-cell .val{font-size:14px;color:var(--bone-white);letter-spacing:.5px;}
-
-  .section{margin-bottom:20px; z-index:1; position:relative;}
-  .section-title{font-family: 'PT Serif', serif; font-size:16px;color:var(--bone-white);letter-spacing:3px;text-transform:uppercase;font-weight:bold;border-bottom:1px solid var(--steel-mid);padding-bottom:6px;margin-bottom:12px;display:flex;align-items:center;gap:10px}
-  .section-title::before{content:'⚙';color:var(--bronze);font-size:16px; animation: spin 5s linear infinite;}
-
-  /* Убираем white-space для корректного обтекания */
-  .text-block{color:#a4adb8;font-size:13.5px;line-height:1.8;letter-spacing:.3px; text-align: justify;}
-  .bio-text { white-space: pre-wrap; } /* Сохраняем переносы только для биографии */
-  
-  .text-block strong{color:var(--bone-white);font-weight:normal;letter-spacing:.5px; background: rgba(255,255,255,0.05); padding: 0 4px;}
-
-  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
-  .card{background:var(--steel-dark);border:1px solid var(--steel-mid);padding:14px 16px;position:relative;transition:.2s; box-shadow: inset 0 0 15px rgba(0,0,0,0.6);}
-  .card:hover{border-color:var(--steel-light);}
-  .card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: var(--steel-mid); transition: .2s; }
-  .card:hover::before { background: var(--bronze); }
-  .card h4{font-family:'PT Serif', serif; font-size:14px;color:var(--bone-white);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,0.1);font-weight:bold; display: flex; align-items: center; gap: 6px;}
-  .card h4::before { content: '⚙'; font-size: 12px; color: var(--steel-light); }
-  .card ul{list-style:none;padding:0}
-  .card ul li{padding:4px 0 4px 14px;position:relative;font-size:12.5px;color:#a4adb8;line-height:1.5;border-bottom:1px solid rgba(255,255,255,0.03)}
-  .card ul li:last-child{border-bottom:none}
-  .card ul li::before{content:'▪';position:absolute;left:0;color:var(--steel-light);font-size:10px;top:6px}
-  .card ul li strong{color:var(--bone-white);font-weight:normal}
-
-  /* PERSONNEL */
-  .social-wrapper{display:flex;flex-direction:column;gap:16px; z-index:1; position:relative;}
-  .classifier-block{background:var(--steel-dark);border:1px solid var(--steel-mid);padding:14px 18px;display:flex;flex-wrap:wrap;justify-content:center;gap:8px 12px; box-shadow: inset 0 0 20px rgba(0,0,0,0.6);}
-  
-  .rel-tag{display:inline-block;padding:5px 16px;font-size:12px;font-weight:bold;letter-spacing:1px;background:var(--bg-dark);border:1px solid var(--steel-mid);cursor:pointer;transition:.15s;color:var(--steel-light); text-transform: uppercase; font-family: 'Roboto Mono', monospace;}
-  .rel-tag:hover{border-color:var(--bone-white);color:var(--bone-white);box-shadow:0 0 10px rgba(255,255,255,.1)}
-  .rel-tag.c-distrust{color:#d4a373;border-color:#d4a373;}
-  .rel-tag.c-sad{color:#8c96a3;border-color:#8c96a3;}
-  .rel-tag.c-neutral{color:var(--bone-white);border-color:var(--bone-white);}
-  .rel-tag.c-friend{color:#8fbc8f;border-color:#8fbc8f;}
-  .rel-tag.c-strong{color:#5c8a5c;border-color:#5c8a5c;}
-  .rel-tag.c-love{color:#c97a7a;border-color:#c97a7a;}
-  .rel-tag.c-dead{color:#2b2b2b;border-color:#555;background:#1a1a1a;}
-  .rel-tag.c-enemy{color:var(--blood-red);border-color:var(--blood-red); background:rgba(139,42,42,0.1);}
-  .rel-tag.c-fear{color:#5a7a9a;border-color:#5a7a9a;}
-  .rel-tag.c-disappoint{color:#c7b38f;border-color:#c7b38f;}
-  .rel-tag.c-cautious{color:#c97a3a;border-color:#c97a3a;}
-  .rel-tag.c-regret{color:#4a7a9a;border-color:#4a7a9a;}
-  .rel-tag.c-sympathy{color:#a47ac9;border-color:#a47ac9;}
-  .rel-tag.c-respect{color:var(--bronze);border-color:var(--bronze);}
-
-  .search-wrap{margin-bottom:12px;position:relative}
-  .search-input{width:100%;background:var(--steel-dark);border:1px solid var(--steel-mid);padding:10px 14px 10px 36px;color:var(--bone-white);font-family:'Roboto Mono',monospace;font-size:13px;letter-spacing:2px;outline:none;transition:.15s}
-  .search-input::placeholder{color:var(--steel-light);letter-spacing:2px;opacity:0.5}
-  .search-input:focus{border-color:var(--steel-light);box-shadow:0 0 10px rgba(140,150,163,.2)}
-  .search-wrap::before{content:'⚙';position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--steel-light);font-size:16px;pointer-events:none;font-weight:bold; animation: spin 6s linear infinite;}
-
-  .social-lists{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-  .social-col{background:var(--steel-dark);border:1px solid var(--steel-mid);padding:14px 18px;min-height:260px;max-height:520px;overflow-y:auto; box-shadow: inset 0 0 20px rgba(0,0,0,0.5);}
-  .social-col::-webkit-scrollbar{width:6px;background:var(--bg-dark)}
-  .social-col::-webkit-scrollbar-thumb{background:var(--steel-mid);border-radius:0px}
-  .social-col h3{font-family:'PT Serif', serif;color:var(--bone-white);font-size:16px;letter-spacing:3px;border-bottom:1px solid var(--steel-mid);padding-bottom:6px;margin-bottom:12px;text-transform:uppercase}
-  
-  .social-col .group-header{font-family:'PT Serif', serif; font-weight:bold;font-size:14px;color:var(--steel-light);cursor:pointer;padding:8px 0 8px 10px;border-bottom:1px solid rgba(255,255,255,0.05);border-left:2px solid transparent;transition:.1s;display:block;position:relative;letter-spacing:2px}
-  .social-col .group-header::after{content:'◂';position:absolute;right:6px;color:var(--steel-mid);font-size:12px}
-  .social-col .group-header:hover{color:var(--bone-white);background:rgba(255,255,255,0.03);border-left-color:var(--steel-light)}
-  .social-col .group-header.open{color:var(--bone-white);border-left-color:var(--bronze)}
-  .social-col .group-header.open::after{content:'▾';color:var(--bone-white)}
-  
-  .sub-items{padding-left:14px;margin:6px 0 10px;display:none;border-left:1px dashed var(--steel-mid)}
-  .sub-items.open{display:block; padding: 10px; color: var(--steel-mid); font-style: italic; font-size: 12px;}
-  .sub-items.open::before { content: '[ НЕТ ДАННЫХ ]'; display: block; opacity: 0.5;}
-
-  .desc-panel{background:var(--steel-dark);border:1px solid var(--steel-mid);padding:16px 20px;margin-top:16px;min-height:200px;max-height:420px;overflow-y:auto;box-shadow:inset 0 0 30px rgba(0,0,0,0.8);transition:all .15s}
-  .desc-panel::-webkit-scrollbar{width:6px;background:var(--bg-dark)}
-  .desc-panel::-webkit-scrollbar-thumb{background:var(--steel-mid);}
-  .desc-panel .empty-state{color:var(--steel-mid);text-align:center;padding:40px 0;font-size:16px;letter-spacing:3px;text-transform:uppercase; font-family:'PT Serif', serif;}
-
-  .footer-bar{display:flex;justify-content:space-between;margin-top:16px;color:var(--steel-mid);font-size:11px;border-top:1px solid var(--steel-mid);padding-top:8px;letter-spacing:2px;text-transform:uppercase;flex-wrap:wrap;gap:6px}
-
-  @media (max-width:900px){ .social-lists{grid-template-columns:1fr} }
-  @media (max-width:750px){
-    .intro-main{flex-direction:column;align-items:center;gap:20px}
-    .intro-portrait{width:160px;height:190px}
-    .intro-title{font-size:32px;text-align:center}
-    .intro-subtitle,.intro-info{font-size:14px;text-align:center}
-    .intro-button{font-size:16px;letter-spacing:4px;padding:12px 24px}
-    .computer{padding:10px}
-    .tab-btn{font-size:11px;padding:5px 10px;letter-spacing:1px}
-    .photo-frame{flex:0 0 100%;max-width:100%;height:240px}
-    .head-name{font-size:24px}
+  /* Адаптивность */
+  @media (max-width: 600px) {
+    body { padding: 10px; }
+    .document { padding: 20px; }
+    .header { flex-direction: column; align-items: flex-start; gap: 10px; }
+    .header-info { text-align: left; }
+    .stamp-top-right { top: 10px; right: 10px; font-size: 16px; }
+    .signatures { flex-direction: column; gap: 20px; }
+    .sig-block { width: 100%; }
   }
 </style>
 </head>
 <body>
 
-<!-- Плеер YouTube (скрыт до окончания загрузки) -->
-<div id="youtube-player">
-  <iframe id="yt-iframe" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-</div>
+<div class="document">
+  
+  <!-- Штампы -->
+  <div class="stamp stamp-top-right">ОСУЖДЕНА</div>
+  <div class="stamp stamp-middle">AEON // АРХИВ</div>
 
-<!-- Фоновые шестеренки -->
-<div class="gear-bg gear-1">⚙</div>
-<div class="gear-bg gear-2">⚙</div>
-<div class="gear-bg gear-3">⚙</div>
-
-<!-- ===== ЭКРАН ЗАГРУЗКИ ===== -->
-<div id="loadingScreen">
-  <div class="intro-crt"></div>
-  <div class="intro-vignette"></div>
-  <div class="loading-gears">
-    <div class="gear-bg gear-1">⚙</div>
-    <div class="gear-bg gear-2">⚙</div>
-  </div>
-  <div class="loading-box">
-    <img src="Снимок экрана 2026-11-12 012932.png" alt="Loading Dossier" class="loading-img" onerror="this.style.display='none'">
-    <div class="loading-title"><span>⚙</span> ИНИЦИАЛИЗАЦИЯ СИСТЕМ <span>⚙</span></div>
-    <div class="loading-subtitle">ШТРАФНОЙ БАТАЛЬОН · ДОСЬЕ · Ц. ГЕРАКЛИТ</div>
-    <div class="loading-bar-track"><div class="loading-bar-fill" id="loadingBarFill"></div></div>
-    <div class="loading-footer">
-      <span class="loading-log" id="loadingLog">> ЗАПУСК ПРОТОКОЛА...</span>
-      <span class="loading-percent" id="loadingPercent">0%</span>
+  <!-- Шапка -->
+  <div class="header">
+    <div class="header-logo">AEON ARCHIV</div>
+    <div class="header-info">
+      <div>ФОРМА: DOS-427-HV-2157-027</div>
+      <div>ДОКУМЕНТ: ДЛЯ СЛУЖЕБНОГО ПОЛЬЗОВАНИЯ</div>
     </div>
   </div>
-</div>
 
-<!-- ===== ЗАСТАВКА ===== -->
-<div id="introScreen">
-  <div class="intro-crt"></div>
-  <div class="intro-vignette"></div>
-  <div class="intro-container">
-    <div class="intro-main">
-      <div class="intro-portrait">
-        <img src="Снимок экрана 2026-11-12 012706.png" alt="CIRCE" onerror="this.style.display='none'; this.parentNode.innerHTML+='<div style=&quot;color:#8c96a3;text-align:center;padding:90px 10px;font-size:12px;letter-spacing:2px;font-family:serif;&quot;>[ ФОТО ОТСУТСТВУЕТ ]</div>'">
-        <span class="portrait-label">C. HERACLITUS</span>
-      </div>
-      <div class="intro-text">
-        <div class="intro-title">Цирцея Гераклит</div>
-        <div class="intro-subtitle">ГЕШТАЛЬТ ШТРАФИК</div>
-        <div class="intro-info">
-          <div><span class="highlight">Статус:</span> Осуждена (Штрафной персонал)</div>
-          <div><span class="highlight">Рост / Вес:</span> 180 см · 74 кг</div>
-          <div><span class="highlight">Обвинение:</span> Халатность при исполнении рабочих обязанностей</div>
-          <div><span class="highlight">Место рождения:</span> Винета</div>
-        </div>
-      </div>
-    </div>
-    <div class="intro-button-wrap">
-      <button class="intro-button" id="enterBtn"><span class="gear-icon">⚙</span> ОТКРЫТЬ ДОСЬЕ <span class="gear-icon">⚙</span></button>
-    </div>
-    <div class="intro-footer">◈ СИСТЕМА АРХИВАЦИИ ◈</div>
+  <h1>ДОСЬЕ ШТРАФНОЙ ЕДИНИЦЫ</h1>
+
+  <!-- Навигация -->
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="t1">Личное дело</button>
+    <button class="tab-btn" data-tab="t2">Медкарта</button>
+    <button class="tab-btn" data-tab="t3">Отношения / Улики</button>
   </div>
-</div>
 
-<!-- ===== ОСНОВНОЙ ===== -->
-<div id="mainSite">
-  <div class="crt-overlay"></div>
-  <div class="fish-eye"></div>
-  <div class="noise-overlay"></div>
+  <!-- ================= TAB 1 ================= -->
+  <div id="t1" class="tab-content active">
+    
+    <h2>Личные данные</h2>
+    <table>
+      <tr><td class="td-label">ФАМИЛИЯ:</td><td>ГЕРАКЛИТ</td></tr>
+      <tr><td class="td-label">ИМЯ:</td><td>ЦИРЦЕЯ</td></tr>
+      <tr><td class="td-label">ДАТА РОЖДЕНИЯ:</td><td>18.12.2134</td></tr>
+      <tr><td class="td-label">МЕСТО РОЖДЕНИЯ:</td><td>ВИНЕТА</td></tr>
+      <tr><td class="td-label">РОСТ / ВЕС:</td><td>180 СМ · 74 КГ</td></tr>
+      <tr><td class="td-label">ПОЛ:</td><td>ЖЕНСКИЙ</td></tr>
+      <tr><td class="td-label">ФРАКЦИЯ:</td><td>НАЦИЯ</td></tr>
+      <tr><td class="td-label">ОБОЛОЧКА:</td><td>ГЕШТАЛЬТ</td></tr>
+      <tr><td class="td-label">СТАТУС:</td><td class="danger-text">ОСУЖДЕНА · ШТРАФНИК</td></tr>
+      <tr><td class="td-label">МЕСТО СОДЕРЖАНИЯ:</td><td>ШТРАФНОЙ БАТАЛЬОН · ПОЯС АСТЕР</td></tr>
+    </table>
 
-  <div class="computer">
-    <div class="screen">
+    <h2>Основание для осуждения</h2>
+    <div class="text-content">
+      <p>Военный суд признал субъекта виновным в <strong>халатности при исполнении рабочих обязанностей</strong> и промедлении при обслуживании. В ходе полевых испытаний нового оружия (репульсора) произошёл сбой, повлекший повреждение изоляции, возгорание и неконтролируемый выстрел. В результате инцидента был нанесён ущерб воздушной технике.</p>
+      <p>Приговор: перевод в штрафной персонал с завершением военной карьеры.</p>
+    </div>
 
-      <div class="title-bar">
-        <span class="main"><span>⚙</span> АРХИВ · ДОСЬЕ</span>
-        <span class="mid">◆ ПРОТОКОЛ · ШТРАФНИК ◆</span>
-        <span class="date">ЦИКЛ 12.11.2157</span>
-      </div>
-
-      <div class="tabs">
-        <div class="tab-btn active" data-tab="t1">ЛИЧНОЕ ДЕЛО</div>
-        <div class="tab-btn" data-tab="t2">ВНЕШНОСТЬ</div>
-        <div class="tab-btn" data-tab="t3">ОТНОШЕНИЯ</div>
-      </div>
-
-      <!-- ============== TAB 1 : ЛИЧНОЕ ДЕЛО ============== -->
-      <div id="t1" class="tab-content active">
-
-        <div class="dossier-head">
-          <div class="photo-frame">
-            <img src="Снимок экрана 2026-11-12 012706.png" alt="C. Heraclitus" onerror="this.style.display='none'; this.parentNode.innerHTML+='<div style=&quot;color:#8c96a3;text-align:center;padding:90px 10px;font-size:12px;letter-spacing:2px;font-family:serif;&quot;>[ ФОТО ОТСУТСТВУЕТ ]</div>'">
-            <span class="stamp">PENITENT</span>
-          </div>
-          <div class="head-info">
-            <div class="head-name">Цирцея Гераклит</div>
-            <div class="head-sub">Гештальт Штрафик</div>
-            <div class="info-grid">
-              <!-- Год рождения изменен на два года раньше (2134) -->
-              <div class="info-cell"><span class="lbl">Дата рождения</span><span class="val">18.12.2134</span></div>
-              <div class="info-cell"><span class="lbl">Место рождения</span><span class="val">Винета</span></div>
-              <div class="info-cell"><span class="lbl">Рост / Вес</span><span class="val">180 см · 74 кг</span></div>
-              
-              <div class="info-cell" style="grid-column: span 2; border-left-color: var(--blood-red);">
-                <span class="lbl">Обвинение</span>
-                <span class="val" style="color: var(--blood-red); font-size: 13px; font-weight: 900; letter-spacing: 1px;">Халатность при исполнении рабочих обязанностей</span>
-              </div>
-              
-              <div class="info-cell"><span class="lbl">Оболочка</span><span class="val">Гештальт</span></div>
-              <div class="info-cell"><span class="lbl">Статус</span><span class="val" style="color:var(--bronze)">ОСУЖДЕНА · ШТРАФНИК</span></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="meander-border"></div>
-
-        <div class="section">
-          <div class="section-title">Общие сведения</div>
-          <div class="text-block bio-text">Цирцея являлась уроженкой Винеты, в закат имперского могущества. Родившись, ее забрали из семьи и хотели использовать в качестве инструмента подношений в храм одного из забытых божеств, что позже было вычеркнуто из истории как Нации, так и Империи. Цирце не помнила ничего из этого храма, не обычай, не молитв, даже Бога которому поклонялись. Его имя ей так же не знакомо, лишь во снах она иногда видит кошмары. Громоздкая гротескная статуя, что держит в оковах человечество, фигура заботливой матери, что гниет и из чьих очей идет черная кровь. Ей молятся прося защиту, но лишь оковами она отвечает. Эти ужасы и кошмары заставляли все больше ненавидеть все, чем она занималась и с той же активной яростью вступиться во время Революции.
-
-Во время Революции, война за Винету шла особенно жестоко и страшно, но полуостров, где стоял храм, почти не затронули ужасы войны. Словно, нечто оберегало его, но Цирцея ненавидела всё, чему служила. Её сердце было закрыто для догматов, однако настоятельницы не проявляли к ней жестокости - будто понимали, что истина откроется всем рано или поздно. Цирцея сбежала из церкви в юном возрасте, перебралась на оккупированную территорию Нации и присоединилась к силам восстания. Будучи еще в малом возрасте, на ее плечи легла черная работа, забота о раненых, а также перенос воды/еды. Со временем основные силы нации смогли достичь полуострова, тогда юная девушка на время покинула товарищей решив увидеть, что будет с ее забытым бывшим "домом". Спустя пару циклов она прибыла лишь к руинам, где уже обосновались силы гарнизона. Засмотревшись Цирцея не заметила, как на нее вышли караульные и спустя час допроса, те отправили ее с небольшим отрядам снабжения к распорядительному центру. Они служили для транспортировки граждан Винеты на иные планеты, так Цирце покинула Винету.
-
-Вскоре прошла новость лесным пожаром по всей Нации, ядерные взрывы навсегда исказили Винету. Новости кричали, что это имперские силы во всем виноваты, что стало еще большим топливом для мотивации поступить по военному профилю в Нации. После прибытия на Рот-Фронт, её заселили в общежитие, где жили около 12 гештальт-беженцев. Все они были с Винеты и начинали новую жизнь. По государственной программе Цирцея была обязана получить стандартное базовое образование, а затем специализированное.</div>
-        </div>
-
-        <div class="section">
-          <div class="section-title">Служебная история</div>
-          <div class="text-block bio-text">После школы она поступила в инженерную высшую школу имени Маннергейма, славящуюся подготовкой лучших кадров для производства тяжелых орудий. Оказавшись в этой среде, Цирцея научилась работать с тяжёлым вооружением вроде <span class="redacted"></span> - (стандартной системы ПВО Винеты), освоила обслуживание противотанковой техники и работу с мелкими деталями. В свободное время от учебы, гештальтка занималась обслуживанием протезов: синтетические мышцы, нейропорты, система двигательных сухожилий. Благо в инженерной школе было в огромном количестве подобной литературы, но часто приходилось засиживаться до рассвета.
-
-После завершения учёбы пришла повестка: место службы - Винета. По прибытии на объект на её плечи возложили обслуживание отделения САПР, силовых костюмов и новейших <span class="redacted"></span> орудий. Год службы прошел идеально, её даже повысили. Но во время полевых испытаний нового оружия инженеры совершили ошибку. <strong>Репульсор дал сбой</strong>; повреждений изоляции, повышение температуры, выстрел, взрыв. Из за взрыва во время выстрела оружие подскочило и это скосило траекторию выстрела. Попадание было по воздушной технике, что с высоты наблюдала за проведением полевых испытаний. Погибших не было, но ЦК направил модули «Колибри» для полного разбирательства. Военный суд признал Цирцею одной из виновних: за отсутствие технического осмотра оружия перед испытанием и за промедления при предыдущем обслуживании. Приговор - перевод в штрафной персонал с завершением военной карьеры.</div>
-        </div>
-
-        <div class="section">
-          <div class="section-title">Дислокация и статус</div>
-          <div class="cards">
-            <div class="card">
-              <h4>Текущее положение</h4>
-              <ul>
-                <li><strong>Объект:</strong> Штрафной батальон</li>
-                <li><strong>Регион:</strong> Пояс Астер</li>
-                <li><strong>Роль:</strong> Штрафник</li>
-                <li><strong>Статус:</strong> Осуждена</li>
-              </ul>
-            </div>
-            <div class="card">
-              <h4>До задержания</h4>
-              <ul>
-                <li><strong>Место:</strong> Винета - 118-й отдельный противотанковый артиллерийский дивизион «<span class="redacted"></span>» (в/ч 54219)</li>
-                <li><strong>Должность:</strong> Инженер-техник ремонтного взвода / техник по обслуживанию противотанковых установок</li>
-                <li><strong>Звание:</strong> Фельдфебель</li>
-              </ul>
-            </div>
-            <div class="card">
-              <h4>Образование</h4>
-              <ul>
-                <li><strong>Уровень:</strong> Среднее специальное</li>
-                <li><strong>Учреждение:</strong> Инженерная высшая школа имени Маннергейма</li>
-                <li><strong>Специализация:</strong> Тяжелое вооружение, протезирование</li>
-                <li><strong>Доп.:</strong> Курсы радистов и связистов</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div class="section">
-          <div class="section-title">Особые отметки</div>
-          <div class="text-block bio-text"><strong>Отношение к Нации Евсан и государственному строю:</strong> После допроса модулями колибри, было выявлено следующее, гештальт является ярым патриотом идей Нации Евсан и революции. Испытывает ненависть к имперскому строю и империализму.
-<strong>Отношение к гражданской и военной администрации:</strong> Испытывает глубокое уважение ко всем государственным структурам Нации, но меньший приоритет отдает АЭОН и так же испытывает легкий трепет перед гос.структурой ШТАЗИ.
-<strong>Отношение к репликам:</strong> Положительные, за время службы и до нее, не было выявлено ксенофобных настроений или предпосылок к таковым.
-<strong>Отношение к религии или каким-либо ритуалам:</strong> Отрицание и ненависть, желание сжечь подобную литературу.
-<strong>Отношение к назначенной трудовой деятельности:</strong> Тяжело принять завершение военной карьеры, а также свой статус, желание как можно скорее реабилитироваться.</div>
-        </div>
-
-      </div>
-
-      <!-- ============== TAB 2 : ВНЕШНОСТЬ ============== -->
-      <div id="t2" class="tab-content">
-        <div class="meander-border"></div>
-
-        <div class="section">
-          <div class="section-title">Внешний облик</div>
-          
-          <div style="float: left; margin-right: 25px; margin-bottom: 15px;">
-            <div class="photo-frame" style="margin: 0;">
-              <img src="akairiot-artist-grace-howard-8536626.png" alt="Appearance Photo" onerror="this.style.display='none'; this.parentNode.innerHTML+='<div style=&quot;color:#8c96a3;text-align:center;padding:90px 10px;font-size:12px;letter-spacing:2px;font-family:serif;&quot;>[ ФОТО ОТСУТСТВУЕТ ]</div>'">
-              <span class="stamp">PENITENT</span>
-            </div>
-          </div>
-
-          <div class="text-block" style="padding-top: 5px;">
-            Волосы - темно-серые, практически черные, с холодным пепельным отливом; стрижка рваная, асимметричная, с небрежной челкой, закрывающей лоб, и коротким хвостом на затылке, при этом длинные пряди спадают на лицо. Глаза красно-янтарного оттенка, взгляд тяжелый, дерзкий. Фигура спортивная мускулистая с ярко выраженным рельефом (кубический пресс, развитые плечи и сильные руки). Кожа светлая, без изъянов, родинок практически нет, шрамы частые, малые и бледные. Легкий запах кофе (ранее).
-          </div>
-
-          <div style="clear: both;"></div>
-        </div>
-
-        <div class="section">
-          <div class="section-title">Физические данные</div>
-          <div class="cards">
-            <div class="card">
-              <h4>Биометрия</h4>
-              <ul>
-                <li><strong>Рост:</strong> 180 см</li>
-                <li><strong>Вес:</strong> 74 кг</li>
-                <li><strong>Группа крови:</strong> Первая отрицательная</li>
-                <li><strong>Пол:</strong> Женский</li>
-                <!-- Возраст изменен на 23 года -->
-                <li><strong>Возраст:</strong> 23 года</li>
-              </ul>
-            </div>
-            <div class="card">
-              <h4>Особенности</h4>
-              <ul>
-                <li><strong>Здоровье:</strong> Субклинический ОКР</li>
-                <li><strong>Вредные привычки:</strong> Ранее употребление алкоголя</li>
-                <li><strong>Темперамент:</strong> Сангвиник / Экстраверт</li>
-                <li><strong>Эмоц. устойчивость:</strong> Крайне повышенная</li>
-                <li><strong>Физподготовка:</strong> Стандартная военная</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div class="section">
-          <div class="section-title">Навыки и происхождение</div>
-          <div class="cards">
-            <div class="card">
-              <h4>Способности и навыки</h4>
-              <ul>
-                <li>Готовка</li>
-                <li>Механика / Инженерия</li>
-                <li>Работа с протезами</li>
-                <li>Работа с костюмами SAPR и MNHR</li>
-                <li>Радиосвязь</li>
-              </ul>
-            </div>
-            <div class="card">
-              <h4>Семья</h4>
-              <ul>
-                <li><strong>Статус:</strong> Сирота</li>
-                <li><strong>Примечание:</strong> Хочет узнать о своей семье и возможность найти кого-то из живых родственников.</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ============== TAB 3 : ОТНОШЕНИЯ ============== -->
-      <div id="t3" class="tab-content">
-        <div class="social-wrapper">
-          <div class="classifier-block">
-            <span class="rel-tag c-distrust">НЕДОВЕРИЕ</span>
-            <span class="rel-tag c-sad">ТОСКА</span>
-            <span class="rel-tag c-neutral">НЕЙТРАЛИТЕТ</span>
-            <span class="rel-tag c-friend">ДРУЖБА</span>
-            <span class="rel-tag c-strong">КРЕПКАЯ СВЯЗЬ</span>
-            <span class="rel-tag c-love">ЛЮБОВЬ</span>
-            <span class="rel-tag c-dead">МЁРТВ</span>
-            <span class="rel-tag c-cautious">НАСТОРОЖЕННОСТЬ</span>
-            <span class="rel-tag c-fear">СТРАХ</span>
-            <span class="rel-tag c-disappoint">РАЗОЧАРОВАНИЕ</span>
-            <span class="rel-tag c-respect">УВАЖЕНИЕ</span>
-            <span class="rel-tag c-regret">СОЖАЛЕНИЕ</span>
-            <span class="rel-tag c-sympathy">СИМПАТИЯ</span>
-            <span class="rel-tag c-enemy">ВРАЖДА</span>
-          </div>
-
-          <div class="search-wrap">
-            <input type="text" class="search-input" id="personnelSearch" placeholder="ПОИСК ПО ИМЕНИ...">
-          </div>
-
-          <div class="social-lists">
-            <div class="social-col">
-              <h3>▸ РЕПЛИКИ</h3>
-              <span class="group-header" data-group="eulr">EULR</span>
-              <div class="sub-items" id="group-eulr"></div>
-
-              <span class="group-header" data-group="arar">ARAR</span>
-              <div class="sub-items" id="group-arar"></div>
-
-              <span class="group-header" data-group="mnhr">MNHR</span>
-              <div class="sub-items" id="group-mnhr"></div>
-
-              <span class="group-header" data-group="star">STAR</span>
-              <div class="sub-items" id="group-star"></div>
-
-              <span class="group-header" data-group="stcr">STCR</span>
-              <div class="sub-items" id="group-stcr"></div>
-
-              <span class="group-header" data-group="adlr">ADLR</span>
-              <div class="sub-items" id="group-adlr"></div>
-
-              <span class="group-header" data-group="klbr">KLBR</span>
-              <div class="sub-items" id="group-klbr"></div>
-
-              <span class="group-header" data-group="fklr">FKLR</span>
-              <div class="sub-items" id="group-fklr"></div>
-            </div>
-
-            <div class="social-col">
-              <h3>▸ ГЕШТАЛЬТЫ</h3>
-              <span class="group-header" data-group="gscp">GSCP</span>
-              <div class="sub-items" id="group-gscp"></div>
-
-              <span class="group-header" data-group="gscc">GSCC</span>
-              <div class="sub-items" id="group-gscc"></div>
-            </div>
-          </div>
-
-          <div class="desc-panel" id="descPanel">
-            <div class="empty-state">◈ ОЖИДАНИЕ ВЫБОРА ПЕРСОНАЛА ◈</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="footer-bar">
-        <span>⏻ СИСТЕМА АРХИВАЦИИ · v.3.2</span>
-        <span>◆ ДОКУМЕНТ ЗАСЕКРЕЧЕН ◆</span>
-        <span>ИНЖЕНЕР · Ц. ГЕРАКЛИТ</span>
-      </div>
-
+    <h2>Биография</h2>
+    <div class="text-content">
+      <p>Цирцея являлась уроженкой Винеты, в закат имперского могущества. Родившись, ее забрали из семьи и хотели использовать в качестве инструмента подношений в храм одного из забытых божеств. Цирце не помнила ничего из этого храма, не обычаев, не молитв. Во время Революции она сбежала из церкви в юном возрасте, перебралась на оккупированную территорию Нации и присоединилась к силам восстания.</p>
+      <p>После прибытия на Рот-Фронт, её заселили в общежитие, где жили около 12 гештальт-беженцев. По государственной программе Цирцея была обязана получить стандартное базовое образование, а затем специализированное. Окончила инженерную высшую школу имени Маннергейма.</p>
+      <p>Служила в 118-м отдельном противотанковом артиллерийском дивизионе. После инцидента на полигоне была осуждена и направлена в штрафной батальон.</p>
     </div>
   </div>
+
+  <!-- ================= TAB 2 ================= -->
+  <div id="t2" class="tab-content">
+    <h2>Медицинская карточка</h2>
+    
+    <table>
+      <tr>
+        <td class="td-label">ФИЗИЧЕСКОЕ СОСТОЯНИЕ:</td>
+        <td>Удовлетворительное. Изменение показателей стабильно.</td>
+      </tr>
+      <tr>
+        <td class="td-label">ПСИХИЧЕСКОЕ СОСТОЯНИЕ:</td>
+        <td>Субклинический ОКР. Повышенная эмоциональная устойчивость.</td>
+      </tr>
+      <tr>
+        <td class="td-label">ГРУППА КРОВИ:</td>
+        <td>Первая отрицательная (I Rh-)</td>
+      </tr>
+    </table>
+
+    <h2>Диагностические показатели</h2>
+    <table>
+      <tr><td>АРТЕРИАЛЬНОЕ ДАВЛЕНИЕ</td><td>122/81 мм рт. ст.</td></tr>
+      <tr><td>ЧАСТОТА ПУЛЬСА</td><td>62 уд/мин</td></tr>
+      <tr><td>ТЕМПЕРАТУРА ТЕЛА</td><td>36.7 °C</td></tr>
+      <tr><td>ЧАСТОТА ДЫХАНИЯ</td><td>14 /мин</td></tr>
+      <tr><td>НАСЫЩЕНИЕ КИСЛОРОДОМ</td><td>98 %</td></tr>
+    </table>
+
+    <h2>Медицинский осмотр (Схема)</h2>
+    <div class="body-diagram">
+      <!-- Упрощенная SVG схема тела -->
+      <svg viewBox="0 0 100 250">
+        <circle cx="50" cy="20" r="15" />
+        <line x1="50" y1="35" x2="50" y2="120" />
+        <line x1="50" y1="50" x2="20" y2="90" />
+        <line x1="50" y1="50" x2="80" y2="90" />
+        <line x1="50" y1="120" x2="30" y2="200" />
+        <line x1="50" y1="120" x2="70" y2="200" />
+        
+        <!-- Метки -->
+        <text x="15" y="60" class="marker">X</text> <!-- Шрам на руке -->
+        <text x="75" y="60" class="marker">X</text> <!-- Шрам на руке -->
+        <text x="25" y="140" class="marker">O</text> <!-- Протез / Особое -->
+      </svg>
+      <svg viewBox="0 0 100 250">
+        <circle cx="50" cy="20" r="15" />
+        <line x1="50" y1="35" x2="50" y2="120" />
+        <line x1="50" y1="50" x2="20" y2="90" />
+        <line x1="50" y1="50" x2="80" y2="90" />
+        <line x1="50" y1="120" x2="30" y2="200" />
+        <line x1="50" y1="120" x2="70" y2="200" />
+        
+        <!-- Метки -->
+        <text x="75" y="150" class="marker">X</text> <!-- Шрам на ноге -->
+      </svg>
+    </div>
+    <div style="font-size: 12px; text-align: center; margin-bottom: 20px;">
+      ОБОЗНАЧЕНИЯ: ☐ - НОРМА | X - ШРАМ | O - ОСОБОЕ
+    </div>
+
+    <h2>Примечания медперсонала</h2>
+    <div class="text-content">
+      <p>Контакт формально доступен. Отмечается настороженность, избегающее поведение. Рекомендованы регулярные осмотры, контроль сна и оценка риска повторного дезертирства.</p>
+    </div>
+
+    <div class="signatures">
+      <div class="sig-block">
+        <div>ЛЕЧАЩИЙ ВРАЧ:</div>
+        <div class="sig-line"></div>
+        <div>Д-р Максимилиан Крогер</div>
+      </div>
+      <div class="sig-block">
+        <div>ДАТА:</div>
+        <div class="sig-line"></div>
+        <div>29.07.2157</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= TAB 3 ================= -->
+  <div id="t3" class="tab-content">
+    <h2>Классификатор отношений (Модули «Колибри»)</h2>
+    <table>
+      <tr>
+        <th>КАТЕГОРИЯ</th>
+        <th>СТАТУС</th>
+      </tr>
+      <tr><td>Отношение к Нации Евсан</td><td><span style="color: green; font-weight: bold;">ЯРЫЙ ПАТРИОТ</span></td></tr>
+      <tr><td>Отношение к администрации</td><td>УВАЖЕНИЕ (легкий трепет перед ШТАЗИ)</td></tr>
+      <tr><td>Отношение к репликам</td><td>ПОЛОЖИТЕЛЬНОЕ (ксенофобия не выявлена)</td></tr>
+      <tr><td>Отношение к религии</td><td class="danger-text">ОТРИЦАНИЕ И НЕНАВИСТЬ</td></tr>
+      <tr><td>Отношение к труду</td><td>Желание реабилитироваться</td></tr>
+    </table>
+
+    <h2>Лист улик</h2>
+    <table>
+      <tr>
+        <th>№</th>
+        <th>ОПИСАНИЕ</th>
+        <th>МЕСТО ИЗЪЯТИЯ</th>
+        <th>ДАТА</th>
+      </tr>
+      <tr><td>E-01</td><td>Военный идентификационный жетон</td><td>Объект V-12</td><td>12.11.2157</td></tr>
+      <tr><td>E-02</td><td>Служебное удостоверение 118-го дивизиона</td><td>Объект V-12</td><td>12.11.2157</td></tr>
+      <tr><td>E-03</td><td>Знаки воинского различия (фельдфебель)</td><td>Объект V-12</td><td>12.11.2157</td></tr>
+      <tr><td>E-04</td><td>Техническая документация на репульсор</td><td>Объект V-12</td><td>12.11.2157</td></tr>
+      <tr><td>E-05</td><td>Пачка сигарет (изъято)</td><td>Объект V-12</td><td>12.11.2157</td></tr>
+    </table>
+
+    <h2>Дополнительные сведения</h2>
+    <div class="text-content">
+      <p>Семья: Сирота. Выражает желание узнать о своей семье и возможность найти живых родственников.</p>
+      <p>Навыки: Механика / Инженерия, работа с протезами, работа с костюмами SAPR и MNHR, радиосвязь, готовка.</p>
+    </div>
+  </div>
+
+  <!-- Подвал -->
+  <div style="margin-top: 40px; border-top: 1px solid var(--border-color); padding-top: 10px; font-size: 11px; color: var(--ink-gray); display: flex; justify-content: space-between;">
+    <span>AEON-ARCHIV // DOS-427-HV-2157</span>
+    <span>СТР. 1 ИЗ 1</span>
+    <span>СИСТЕМА АРХИВАЦИИ v.3.2</span>
+  </div>
+
 </div>
 
 <script>
-(function(){
-  const introScreen = document.getElementById('introScreen');
-  const mainSite = document.getElementById('mainSite');
-  const enterBtn = document.getElementById('enterBtn');
-  const loadingScreen = document.getElementById('loadingScreen');
-  const loadingBarFill = document.getElementById('loadingBarFill');
-  const loadingPercent = document.getElementById('loadingPercent');
-  const loadingLog = document.getElementById('loadingLog');
-  const ytContainer = document.getElementById('youtube-player');
-  const ytIframe = document.getElementById('yt-iframe');
-
-  function playMechanicalClick(pitch = 1) {
-    try {
-      const AudioContext = window.AudioContext || window.webkitAudioContext;
-      const ctx = new AudioContext();
+  // Переключение табов
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      // Убираем активный класс со всех кнопок и контента
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
       
-      const bufferSize = ctx.sampleRate * 0.02; 
-      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-      const data = buffer.getChannelData(0);
-      for (let i = 0; i < bufferSize; i++) {
-          data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.1));
-      }
-      
-      const noise = ctx.createBufferSource();
-      noise.buffer = buffer;
-      
-      const filter = ctx.createBiquadFilter();
-      filter.type = 'highpass';
-      filter.frequency.value = 2000 * pitch;
-      
-      const gain = ctx.createGain();
-      gain.gain.setValueAtTime(0.05, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.03);
-      
-      noise.connect(filter);
-      filter.connect(gain);
-      gain.connect(ctx.destination);
-      noise.start();
-      
-      const osc = ctx.createOscillator();
-      const oscGain = ctx.createGain();
-      osc.type = 'sine'; 
-      osc.frequency.setValueAtTime(800 * pitch, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(400 * pitch, ctx.currentTime + 0.05);
-      
-      oscGain.gain.setValueAtTime(0.03, ctx.currentTime); 
-      oscGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
-      
-      osc.connect(oscGain);
-      oscGain.connect(ctx.destination);
-      
-      osc.start();
-      osc.stop(ctx.currentTime + 0.05);
-      
-    } catch (e) {}
-  }
-
-  function playBootSound(){
-    playMechanicalClick(0.8);
-    setTimeout(() => playMechanicalClick(1), 150);
-    setTimeout(() => playMechanicalClick(1.2), 300);
-  }
-
-  const logMessages = ["> СВЯЗЬ С МАШИНОЙ...","> ПРОВЕРКА БИОНИКИ...","> АНАЛИЗ КРОВИ...","> ДОСТУП К АРХИВУ...","> ДЕШИФРОВКА...","> ПРОВЕРКА СИГНАТУРЫ...","> ЗАГРУЗКА ЛИЧНОГО СОСТАВА...","> ОБРАБОТКА...","> ВНИМАНИЕ: СЛАБЫЙ СИГНАЛ...","> ПОВТОР...","> ПОЧТИ ГОТОВО..."];
-
-  function startLoading(callback){
-    loadingScreen.classList.add('active');
-    let percent = 0, logIndex = 0;
-    const interval = setInterval(()=>{
-      let step;
-      if(percent < 50) step = 1.5 + Math.random()*2;
-      else if(percent < 80) step = 0.8 + Math.random()*1.5;
-      else if(percent < 95) step = 0.3 + Math.random()*0.8;
-      else step = 0.15 + Math.random()*0.4;
-
-      percent += step;
-      if(percent >= 99){
-        percent = 99;
-        clearInterval(interval);
-        loadingLog.textContent = "> ЗАДЕРЖКА НА 99%...";
-        playMechanicalClick(0.7);
-        setTimeout(()=>{
-          loadingLog.textContent = "> ЗАВЕРШЕНО.";
-          loadingPercent.textContent = "100%";
-          loadingBarFill.style.width = "100%";
-          playBootSound();
-          setTimeout(()=>{
-            loadingScreen.classList.remove('active');
-            if(typeof callback === 'function') callback();
-          }, 500);
-        }, 1200);
-      }
-
-      loadingBarFill.style.width = percent + '%';
-      loadingPercent.textContent = Math.floor(percent) + '%';
-      const newLogIndex = Math.floor(percent/9);
-      if(newLogIndex !== logIndex && newLogIndex < logMessages.length){
-        logIndex = newLogIndex;
-        loadingLog.textContent = logMessages[logIndex];
-        playMechanicalClick(0.9 + Math.random()*0.4);
-      }
-    }, 60);
-  }
-
-  enterBtn.addEventListener('click', ()=>{
-    startLoading(()=>{
-      introScreen.classList.add('hidden');
-      setTimeout(()=>mainSite.classList.add('visible'), 300);
-      window.scrollTo(0,0);
-
-      // Активация видеоплеера
-      ytContainer.style.display = 'block';
-      ytIframe.src = "https://www.youtube.com/embed/-PRQWI5C5ps?autoplay=1&mute=0&controls=1&loop=1&playlist=-PRQWI5C5ps";
-      
-    });
-  });
-
-  document.querySelectorAll('.tab-btn').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      const id = btn.dataset.tab;
-      document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+      // Добавляем активный класс текущей кнопке
       btn.classList.add('active');
-      const pane = document.getElementById(id);
-      if(pane) pane.classList.add('active');
-      playMechanicalClick(1.1);
+      
+      // Показываем нужный контент
+      const targetId = btn.dataset.tab;
+      document.getElementById(targetId).classList.add('active');
     });
   });
-
-  document.querySelectorAll('.group-header').forEach(header=>{
-    header.addEventListener('click', function(){
-      const items = document.getElementById('group-' + this.dataset.group);
-      if(items){ items.classList.toggle('open'); this.classList.toggle('open'); playMechanicalClick(0.9); }
-    });
-  });
-
-  const searchInput = document.getElementById('personnelSearch');
-  if(searchInput) searchInput.addEventListener('input', function(){
-    const q = this.value.trim().toLowerCase();
-    document.querySelectorAll('.group-header').forEach(header=>{
-      const text = header.textContent.toLowerCase();
-      header.style.display = (q.length > 0 && !text.includes(q)) ? 'none' : 'block';
-    });
-  });
-
-  document.querySelectorAll('.card, .rel-tag, .info-cell').forEach(el=>{
-    el.addEventListener('click', ()=>playMechanicalClick(1.1 + Math.random()*0.2));
-  });
-})();
 </script>
+
 </body>
 </html>
